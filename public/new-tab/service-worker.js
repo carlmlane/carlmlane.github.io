@@ -1,5 +1,6 @@
-<!doctype html>
-<!-- This HTML must be kept in sync between index.html and service-worker.js. -->
+// This service worker serves index.html instantly without cache lookup for fast Chrome new-tab loading.
+// The HTML below must be kept in sync with src/app/new-tab/page-html.ts.
+const pageHtml = `<!doctype html>
 <html>
   <head>
     <meta charset="UTF-8" />
@@ -45,3 +46,22 @@
     registerServiceWorker();
   </script>
 </html>
+`;
+
+self.addEventListener('fetch', (event) => {
+  // We could serve index.html from the cache using `await caches.match(request)`. However, this
+  // takes remarkably long in Chrome as of 2025-08-09, such that there is a 1 second delay before
+  // the page is shown and ready for keyboard input. This is not the case with Firefox: the cached
+  // page is found and returned instantly. As a workaround, we just return the hardcoded contents of
+  // index.html without checking the cache.
+  const url = new URL(event.request.url);
+  if (url.pathname === '/new-tab/index.html' || url.pathname === '/new-tab/' || url.pathname === '/new-tab') {
+    event.respondWith(
+      new Response(pageHtml, {
+        headers: { 'Content-Type': 'text/html; charset=utf-8' },
+      }),
+    );
+    return;
+  }
+  // Otherwise, let the browser handle the fetch request.
+});
