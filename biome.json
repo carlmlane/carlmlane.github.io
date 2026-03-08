@@ -7,7 +7,7 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": ["**", "!node_modules", "!.next", "!dist", "!build", "!archive", "!.claude", "!next-env.d.ts"]
+    "includes": ["**", "!node_modules", "!.next", "!dist", "!build", "!archive", "!.claude", "!next-env.d.ts", "!cache"]
   },
   "formatter": {
     "enabled": true,
