@@ -35,6 +35,11 @@ const person: WithContext<Person> = {
     'Functional Programming',
     'Aerospace Engineering',
   ],
+  nationality: {
+    '@type': 'Country',
+    name: 'United States',
+  },
+  gender: 'Male',
   homeLocation: {
     '@type': 'City',
     name: 'San Francisco',

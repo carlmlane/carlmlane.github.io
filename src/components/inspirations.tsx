@@ -73,7 +73,7 @@ const Inspirations = () => (
       {inspirations.map(({ id, name, url, reason }) => (
         <p key={id} className="text-muted">
           <span className="mr-2 text-accent/60">&mdash;</span>
-          <a href={url} target="_blank" rel="noopener noreferrer" className={linkClass}>
+          <a href={url} target="_blank" rel="noopener noreferrer" title={name} className={linkClass}>
             {name}
           </a>
           {' — '}

@@ -14,7 +14,7 @@ const facts: readonly { id: string; content: ReactNode }[] = [
     content: (
       <>
         Spent over a decade at{' '}
-        <a href="https://www.wix.com" target="_blank" rel="noopener noreferrer" className={linkClass}>
+        <a href="https://www.wix.com" target="_blank" rel="noopener noreferrer" title="Wix.com" className={linkClass}>
           Wix.com
         </a>
       </>
@@ -25,7 +25,7 @@ const facts: readonly { id: string; content: ReactNode }[] = [
     content: (
       <>
         VP of Engineering and Product Development at{' '}
-        <a href="https://www.marqii.com" target="_blank" rel="noopener noreferrer" className={linkClass}>
+        <a href="https://www.marqii.com" target="_blank" rel="noopener noreferrer" title="Marqii" className={linkClass}>
           Marqii
         </a>
       </>

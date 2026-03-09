@@ -19,28 +19,6 @@ const links = [
       </svg>
     ),
   },
-  // {
-  //   label: 'Email',
-  //   href: 'mailto:carlmlane@gmail.com',
-  //   icon: (
-  //     <svg
-  //       viewBox="0 0 24 24"
-  //       fill="none"
-  //       stroke="currentColor"
-  //       strokeWidth={1.5}
-  //       className="size-5"
-  //       role="img"
-  //       aria-label="Email"
-  //     >
-  //       <title>Email</title>
-  //       <path
-  //         strokeLinecap="round"
-  //         strokeLinejoin="round"
-  //         d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
-  //       />
-  //     </svg>
-  //   ),
-  // },
 ] as const;
 
 const SocialLinks = () => (
@@ -50,7 +28,8 @@ const SocialLinks = () => (
         key={link.label}
         href={link.href}
         target={link.href.startsWith('mailto') ? undefined : '_blank'}
-        rel={link.href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
+        rel={link.href.startsWith('mailto') ? undefined : 'me noopener noreferrer'}
+        title={link.label}
         aria-label={link.label}
         className="text-muted transition-all duration-200 hover:text-accent"
       >
