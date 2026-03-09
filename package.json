@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Personal website for Carl M. Lane",
   "repository": "https://github.com/carlmlane/carlmlane.github.io.git",
-  "homepage": "https://github.carlmlane.com",
+  "homepage": "https://carlmlane.com",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
