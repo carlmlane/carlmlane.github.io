@@ -27,17 +27,19 @@ describe('BioFacts', () => {
     expect(dashes).toHaveLength(7);
   });
 
-  it('renders Wix link with correct href', () => {
+  it('renders Wix link with correct href and title', () => {
     const { getByRole } = render(<BioFacts />);
     const wixLink = getByRole('link', { name: 'Wix.com' });
     expect(wixLink).toHaveAttribute('href', 'https://www.wix.com');
     expect(wixLink).toHaveAttribute('target', '_blank');
+    expect(wixLink).toHaveAttribute('title', 'Wix.com');
   });
 
-  it('renders Marqii link with correct href', () => {
+  it('renders Marqii link with correct href and title', () => {
     const { getByRole } = render(<BioFacts />);
     const marqiiLink = getByRole('link', { name: 'Marqii' });
     expect(marqiiLink).toHaveAttribute('href', 'https://www.marqii.com');
     expect(marqiiLink).toHaveAttribute('target', '_blank');
+    expect(marqiiLink).toHaveAttribute('title', 'Marqii');
   });
 });
