@@ -8,14 +8,14 @@ const inspirations: readonly { id: string; name: string; url: string; reason: st
     name: 'Marie Curie',
     url: 'https://en.wikipedia.org/wiki/Marie_Curie',
     reason:
-      'Pioneered radioactivity research, first woman to win a Nobel Prize — and then won a second in a different field.',
+      'Pioneered radioactivity research, first woman to win a Nobel Prize, first person to win a Nobel Prize twice, and the only person to win in two different fields.',
   },
   {
     id: 'azana',
     name: 'Manuel Azaña',
     url: 'https://en.wikipedia.org/wiki/Manuel_Aza%C3%B1a',
     reason:
-      'Writer and liberal reformer who modernized Spain  — expanding secular education and curbing military and Church power.',
+      'Writer and liberal reformer who modernized Spain — expanding secular education and curbing military and Church power.',
   },
   {
     id: 'nimitz',
