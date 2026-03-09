@@ -11,29 +11,25 @@ const inspirations: readonly { id: string; name: string; url: string; reason: st
       'Pioneered radioactivity research, first woman to win a Nobel Prize — and then won a second in a different field.',
   },
   {
+    id: 'azana',
+    name: 'Manuel Azaña',
+    url: 'https://en.wikipedia.org/wiki/Manuel_Aza%C3%B1a',
+    reason:
+      'Writer and liberal reformer who modernized Spain  — expanding secular education and curbing military and Church power.',
+  },
+  {
     id: 'nimitz',
     name: 'Chester Nimitz',
     url: 'https://en.wikipedia.org/wiki/Chester_W._Nimitz',
     reason:
-      'Led the Pacific Fleet through WWII with calm, strategic brilliance under enormous pressure. Pioneered underway replenishment, keeping fleets supplied without returning to port.',
+      'Engineered modern naval underway replenishment, keeping fleets supplied without returning to port. Led the Pacific Fleet through WWII with calm, strategic brilliance under enormous pressure.',
   },
   {
-    id: 'shepard',
-    name: 'Alan Shepard',
-    url: 'https://en.wikipedia.org/wiki/Alan_Shepard',
-    reason: 'First American in space — grounded by illness, fought his way back, and walked on the Moon.',
-  },
-  {
-    id: 'kranz',
-    name: 'Gene Kranz',
-    url: 'https://en.wikipedia.org/wiki/Gene_Kranz',
-    reason: 'Mission control legend who defined what it means to be accountable. "Failure is not an option."',
-  },
-  {
-    id: 'yeager',
-    name: 'Chuck Yeager',
-    url: 'https://en.wikipedia.org/wiki/Chuck_Yeager',
-    reason: 'Broke the sound barrier with broken ribs. Pure fearlessness backed by skill.',
+    id: 'montseny',
+    name: 'Federica Montseny',
+    url: 'https://en.wikipedia.org/wiki/Federica_Montseny',
+    reason:
+      "Intellectual who became Spain's first female cabinet minister. Drafted abortion laws, expanded public health, and fought for women's liberation — all while a civil war raged.",
   },
   {
     id: 'hopper',
@@ -42,16 +38,34 @@ const inspirations: readonly { id: string; name: string; url: string; reason: st
     reason: 'Invented the first compiler and championed the idea that code should read like English.',
   },
   {
+    id: 'shepard',
+    name: 'Alan Shepard',
+    url: 'https://en.wikipedia.org/wiki/Alan_Shepard',
+    reason: 'First American in space — grounded by illness, fought his way back, and walked on the Moon.',
+  },
+  {
+    id: 'yeager',
+    name: 'Chuck Yeager',
+    url: 'https://en.wikipedia.org/wiki/Chuck_Yeager',
+    reason: 'Broke the sound barrier with broken ribs. Pure fearlessness backed by skill.',
+  },
+  {
+    id: 'kranz',
+    name: 'Gene Kranz',
+    url: 'https://en.wikipedia.org/wiki/Gene_Kranz',
+    reason: 'Mission control legend who defined what it means to be accountable. "Failure is not an option."',
+  },
+  {
     id: 'hamilton',
     name: 'Margaret Hamilton',
     url: 'https://en.wikipedia.org/wiki/Margaret_Hamilton_(software_engineer)',
     reason: 'Wrote the Apollo guidance software and coined "software engineering" as a discipline.',
   },
   {
-    id: 'torvalds',
-    name: 'Linus Torvalds',
-    url: 'https://en.wikipedia.org/wiki/Linus_Torvalds',
-    reason: 'Created Linux and Git — two tools that fundamentally shaped how software is built.',
+    id: 'zizek',
+    name: 'Slavoj Žižek',
+    url: 'https://en.wikipedia.org/wiki/Slavoj_%C5%BDi%C5%BEek',
+    reason: 'Makes philosophy accessible and provocative — challenges you to question what you take for granted.',
   },
   {
     id: 'wozniak',
@@ -60,10 +74,10 @@ const inspirations: readonly { id: string; name: string; url: string; reason: st
     reason: 'Built the Apple I and II essentially alone. Engineering for the pure joy of it.',
   },
   {
-    id: 'zizek',
-    name: 'Slavoj Žižek',
-    url: 'https://en.wikipedia.org/wiki/Slavoj_%C5%BDi%C5%BEek',
-    reason: 'Makes philosophy accessible and provocative — challenges you to question what you take for granted.',
+    id: 'torvalds',
+    name: 'Linus Torvalds',
+    url: 'https://en.wikipedia.org/wiki/Linus_Torvalds',
+    reason: 'Created Linux and Git — two tools that fundamentally shaped how software is built.',
   },
 ];
 
