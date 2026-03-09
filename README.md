@@ -1,36 +1,25 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hey, I'm Carl
 
-## Getting Started
+I'm a VP of Engineering & Product Development at [Marqii](https://www.marqii.com), based in San Francisco with my wife and our little one. I've been writing code since 1998 and building engineering teams for most of my career.
 
-First, run the development server:
+This is [carlmlane.com](https://carlmlane.com) — my personal corner of the internet. It's a place where I share a bit about who I am, what I believe in, and the people who inspire me.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## What you'll find on the site
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**A bit of my story** — I was born in the Bay Area, lived in Madrid after high school, studied aerospace engineering at SLU Parks College, and spent over a decade at Wix.com before landing at Marqii. My path from support rep to VP taught me that the best engineering leaders never lose touch with the people they build for.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**How I think about building teams** — I believe small, high-IQ teams beat large, bureaucratic ones every time. Engineering is a business lever, not a cost center. Speed is the only sustainable competitive advantage. And sincere enthusiasm is contagious.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+> Build customer obsessed teams that own outcomes, not tickets. Hire for curiosity, invest in growth, and create the conditions where people are inspired to do their best work.
 
-## Learn More
+**People who inspire me** — From Marie Curie and Grace Hopper to Linus Torvalds and Steve Wozniak, I keep a running list of the people whose work and thinking have shaped how I see the world.
 
-To learn more about Next.js, take a look at the following resources:
+## When I'm not at the keyboard
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+I'm usually in the kitchen chasing a new recipe, skinning uphill or riding a chairlift somewhere in the Sierra, or experiencing live music with friends.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Find me elsewhere
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [carlmlane.com](https://carlmlane.com)
+- [GitHub](https://github.com/carlmlane)
+- [LinkedIn](https://linkedin.com/in/carlmlane)
