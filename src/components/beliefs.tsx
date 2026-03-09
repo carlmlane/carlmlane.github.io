@@ -15,8 +15,8 @@ const Beliefs = () => (
     </blockquote>
     <div className="space-y-3 pt-2">
       {beliefs.map(({ id, content }) => (
-        <p key={id} className="text-muted">
-          <span className="mr-2 text-accent/60">&mdash;</span>
+        <p key={id} className="text-muted transition-all duration-200 hover:translate-x-1 hover:text-foreground/80">
+          <span className="mr-2 text-accent/60 transition-colors duration-200">&mdash;</span>
           {content}
         </p>
       ))}

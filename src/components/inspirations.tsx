@@ -84,10 +84,10 @@ const inspirations: readonly { id: string; name: string; url: string; reason: st
 
 const Inspirations = () => (
   <AnimatedSection label="// inspirations">
-    <div className="space-y-3">
+    <div className="grid gap-3 md:grid-cols-2 md:gap-x-8">
       {inspirations.map(({ id, name, url, reason }) => (
-        <p key={id} className="text-muted">
-          <span className="mr-2 text-accent/60">&mdash;</span>
+        <p key={id} className="text-muted transition-all duration-200 hover:translate-x-1 hover:text-foreground/80">
+          <span className="mr-2 text-accent/60 transition-colors duration-200">&mdash;</span>
           <a href={url} target="_blank" rel="noopener noreferrer" title={name} className={linkClass}>
             {name}
           </a>

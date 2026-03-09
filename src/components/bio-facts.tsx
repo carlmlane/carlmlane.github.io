@@ -36,12 +36,17 @@ const facts: readonly { id: string; content: ReactNode }[] = [
 
 const BioFacts = () => (
   <AnimatedSection label="// at a glance">
-    <div className="space-y-3">
-      {facts.map(({ id, content }) => (
-        <p key={id} className="text-muted">
-          <span className="mr-2 text-accent/60">&mdash;</span>
-          {content}
-        </p>
+    <div className="relative">
+      {facts.map(({ id, content }, index) => (
+        <div
+          key={id}
+          className={`relative pl-6 pb-4 ${index < facts.length - 1 ? 'border-l border-accent/20' : ''} ml-1`}
+        >
+          <span className="absolute -left-1 top-1.5 h-2 w-2 rounded-full bg-accent/60" />
+          <p className="text-muted transition-all duration-200 hover:translate-x-1 hover:text-foreground/80">
+            {content}
+          </p>
+        </div>
       ))}
     </div>
   </AnimatedSection>
