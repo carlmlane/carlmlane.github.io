@@ -22,7 +22,8 @@
     "@next/third-parties": "^16.1.6",
     "next": "16.1.6",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "schema-dts": "^1.1.5"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.6",

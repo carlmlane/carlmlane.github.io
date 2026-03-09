@@ -14,7 +14,8 @@ const inspirations: readonly { id: string; name: string; url: string; reason: st
     id: 'nimitz',
     name: 'Chester Nimitz',
     url: 'https://en.wikipedia.org/wiki/Chester_W._Nimitz',
-    reason: 'Led the Pacific Fleet through WWII with calm, strategic brilliance under enormous pressure.',
+    reason:
+      'Led the Pacific Fleet through WWII with calm, strategic brilliance under enormous pressure. Pioneered underway replenishment, keeping fleets supplied without returning to port.',
   },
   {
     id: 'shepard',
