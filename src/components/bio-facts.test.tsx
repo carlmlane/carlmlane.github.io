@@ -21,10 +21,16 @@ describe('BioFacts', () => {
     expect(getByText(/VP of Engineering/)).toBeInTheDocument();
   });
 
-  it('renders facts with em-dash prefix', () => {
+  it('renders timeline dots for each fact', () => {
     const { container } = render(<BioFacts />);
-    const dashes = container.querySelectorAll('span.text-accent\\/60');
-    expect(dashes).toHaveLength(7);
+    const dots = container.querySelectorAll('span.bg-accent\\/60');
+    expect(dots).toHaveLength(7);
+  });
+
+  it('renders connecting line on all items except the last', () => {
+    const { container } = render(<BioFacts />);
+    const items = container.querySelectorAll('.border-l');
+    expect(items).toHaveLength(6);
   });
 
   it('renders Wix link with correct href and title', () => {

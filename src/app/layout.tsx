@@ -44,13 +44,17 @@ export const metadata: Metadata = {
     type: 'website',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: 'Carl M. Lane — VP of Engineering',
     description: 'Engineering leader building high-performing teams.',
   },
   robots: {
     index: true,
     follow: true,
+  },
+  referrer: 'strict-origin-when-cross-origin',
+  other: {
+    'theme-color': '#0a0a0a',
   },
 };
 
@@ -61,6 +65,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
+        <meta
+          httpEquiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.googletagmanager.com; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com; font-src 'self';"
+        />
+      </head>
       <GoogleTagManager gtmId="GTM-M55D9MGW" />
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
     </html>

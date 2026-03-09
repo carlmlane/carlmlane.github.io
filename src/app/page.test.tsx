@@ -15,9 +15,9 @@ describe('Home', () => {
     expect(getByText('// philosophy')).toBeInTheDocument();
   });
 
-  it('renders writing section', () => {
+  it('renders inspirations section', () => {
     const { getByText } = render(<Home />);
-    expect(getByText('// writing')).toBeInTheDocument();
+    expect(getByText('// inspirations')).toBeInTheDocument();
   });
 
   it('renders personal section', () => {

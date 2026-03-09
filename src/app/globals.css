@@ -5,10 +5,16 @@
   --foreground: #ededed;
   --accent: #5b9ee1;
   --accent-hover: #7bb3ea;
+  --accent-warm: #e5a853;
+  --accent-warm-hover: #edb96a;
+  --accent-tertiary: #7c6fe0;
+  --accent-glow: rgba(91, 158, 225, 0.15);
+  --accent-warm-glow: rgba(229, 168, 83, 0.15);
   --muted: #999999;
   --subtle: #1a1a1a;
   --border: #222222;
   --surface: #111111;
+  --surface-elevated: #151515;
 }
 
 @theme inline {
@@ -16,18 +22,37 @@
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
+  --color-accent-warm: var(--accent-warm);
+  --color-accent-warm-hover: var(--accent-warm-hover);
+  --color-accent-tertiary: var(--accent-tertiary);
+  --color-accent-glow: var(--accent-glow);
+  --color-accent-warm-glow: var(--accent-warm-glow);
   --color-muted: var(--muted);
   --color-subtle: var(--subtle);
   --color-border: var(--border);
   --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 body {
   background: var(--background);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(91, 158, 225, 0.2), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(229, 168, 83, 0.12), transparent);
   color: var(--foreground);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 0;
 }
 
 @keyframes fadeIn {

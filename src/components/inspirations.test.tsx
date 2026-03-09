@@ -10,25 +10,27 @@ describe('Inspirations', () => {
     expect(getByText('// inspirations')).toBeInTheDocument();
   });
 
-  it('renders all ten inspirations', () => {
+  it('renders all twelve inspirations', () => {
     const { getAllByRole } = render(<Inspirations />);
     const links = getAllByRole('link');
-    expect(links).toHaveLength(10);
+    expect(links).toHaveLength(12);
   });
 
   it('each link has a title attribute matching the name', () => {
     const { getByRole } = render(<Inspirations />);
     const names = [
       'Marie Curie',
+      'Manuel Azaña',
       'Chester Nimitz',
-      'Alan Shepard',
-      'Gene Kranz',
-      'Chuck Yeager',
+      'Federica Montseny',
       'Grace Hopper',
+      'Alan Shepard',
+      'Chuck Yeager',
+      'Gene Kranz',
       'Margaret Hamilton',
-      'Linus Torvalds',
-      'Steve Wozniak',
       'Slavoj Žižek',
+      'Steve Wozniak',
+      'Linus Torvalds',
     ];
     for (const name of names) {
       const link = getByRole('link', { name });
