@@ -1,4 +1,4 @@
-import type { Person, WithContext } from 'schema-dts';
+import type { Person, ProfilePage, WebSite, WithContext } from 'schema-dts';
 
 const person: WithContext<Person> = {
   '@context': 'https://schema.org',
@@ -8,6 +8,7 @@ const person: WithContext<Person> = {
   familyName: 'Lane',
   jobTitle: 'VP of Engineering & Product Development',
   url: 'https://carlmlane.com',
+  image: 'https://carlmlane.com/opengraph-image.png',
   description:
     'Engineering leader building high-performing engineering teams. VP of Engineering & Product Development at Marqii. Based in San Francisco.',
   worksFor: {
@@ -50,6 +51,42 @@ const person: WithContext<Person> = {
   },
 };
 
-const PersonSchema = () => <script type="application/ld+json">{JSON.stringify(person)}</script>;
+const profilePage: WithContext<ProfilePage> = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  name: 'Carl M. Lane — VP of Engineering',
+  url: 'https://carlmlane.com',
+  mainEntity: {
+    '@type': 'Person',
+    name: 'Carl M. Lane',
+    url: 'https://carlmlane.com',
+  },
+};
+
+const webSite: WithContext<WebSite> = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Carl M. Lane',
+  url: 'https://carlmlane.com',
+  description:
+    'Personal site of Carl M. Lane, VP of Engineering & Product Development at Marqii. Based in San Francisco.',
+  publisher: {
+    '@type': 'Person',
+    name: 'Carl M. Lane',
+    url: 'https://carlmlane.com',
+  },
+};
+
+const schemas = [person, profilePage, webSite];
+
+const PersonSchema = () => (
+  <>
+    {schemas.map((schema) => (
+      <script key={schema['@type'] as string} type="application/ld+json">
+        {JSON.stringify(schema)}
+      </script>
+    ))}
+  </>
+);
 
 export default PersonSchema;
