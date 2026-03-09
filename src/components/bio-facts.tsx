@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react';
 import { AnimatedSection } from './section';
 
-const linkClass = 'text-accent underline underline-offset-2 hover:text-accent/80 transition-colors';
+const linkClass =
+  'text-accent underline underline-offset-2 hover:text-accent-hover hover:drop-shadow-[0_0_6px_var(--accent-glow)] transition-all duration-300';
 
 const facts: readonly { id: string; content: ReactNode }[] = [
   { id: 'bay-area', content: 'Born in the Bay Area, went to high school in San Diego' },

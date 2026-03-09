@@ -9,7 +9,7 @@ const beliefs: readonly { id: string; content: string }[] = [
 
 const Beliefs = () => (
   <AnimatedSection label="// philosophy">
-    <blockquote className="border-l-2 border-accent pl-4 text-lg leading-relaxed text-foreground/90 italic">
+    <blockquote className="border-l-2 border-accent-warm rounded-r-lg bg-surface-elevated/50 py-4 pl-4 pr-6 text-lg leading-relaxed text-foreground/90 italic">
       Build customer obsessed teams that own outcomes, not tickets. Hire for curiosity, invest in growth, and create the
       conditions where people are inspired to do their best work.
     </blockquote>

@@ -31,7 +31,7 @@ const SocialLinks = () => (
         rel={link.href.startsWith('mailto') ? undefined : 'me noopener noreferrer'}
         title={link.label}
         aria-label={link.label}
-        className="text-muted transition-all duration-200 hover:text-accent"
+        className="text-muted transition-all duration-300 hover:text-accent hover:drop-shadow-[0_0_8px_var(--accent-glow)]"
       >
         {link.icon}
       </a>

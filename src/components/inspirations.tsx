@@ -1,6 +1,7 @@
 import { AnimatedSection } from './section';
 
-const linkClass = 'text-accent underline underline-offset-2 hover:text-accent/80 transition-colors';
+const linkClass =
+  'text-accent underline underline-offset-2 hover:text-accent-hover hover:drop-shadow-[0_0_6px_var(--accent-glow)] transition-all duration-300';
 
 const inspirations: readonly { id: string; name: string; url: string; reason: string }[] = [
   {

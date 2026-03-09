@@ -16,7 +16,9 @@ const Home = () => (
       <Inspirations />
       <Writing />
       <Personal />
-      <footer className="pt-8 font-mono text-xs text-muted/50">&copy; {new Date().getFullYear()} Carl M. Lane</footer>
+      <footer className="border-t border-border pt-8 font-mono text-xs text-muted/50">
+        &copy; {new Date().getFullYear()} Carl M. Lane
+      </footer>
     </main>
   </div>
 );
