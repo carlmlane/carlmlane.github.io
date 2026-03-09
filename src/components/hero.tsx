@@ -13,6 +13,7 @@ const Hero = () => (
           href="https://www.marqii.com"
           target="_blank"
           rel="noopener noreferrer"
+          title="Marqii"
           className="text-foreground transition-colors duration-200 hover:text-accent"
         >
           Marqii

@@ -14,7 +14,8 @@ const inspirations: readonly { id: string; name: string; url: string; reason: st
     id: 'nimitz',
     name: 'Chester Nimitz',
     url: 'https://en.wikipedia.org/wiki/Chester_W._Nimitz',
-    reason: 'Led the Pacific Fleet through WWII with calm, strategic brilliance under enormous pressure.',
+    reason:
+      'Led the Pacific Fleet through WWII with calm, strategic brilliance under enormous pressure. Pioneered underway replenishment, keeping fleets supplied without returning to port.',
   },
   {
     id: 'shepard',
@@ -72,7 +73,7 @@ const Inspirations = () => (
       {inspirations.map(({ id, name, url, reason }) => (
         <p key={id} className="text-muted">
           <span className="mr-2 text-accent/60">&mdash;</span>
-          <a href={url} target="_blank" rel="noopener noreferrer" className={linkClass}>
+          <a href={url} target="_blank" rel="noopener noreferrer" title={name} className={linkClass}>
             {name}
           </a>
           {' — '}

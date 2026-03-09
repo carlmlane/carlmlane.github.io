@@ -22,6 +22,7 @@ describe('Hero', () => {
     expect(link).toHaveAttribute('href', 'https://www.marqii.com');
     expect(link).toHaveAttribute('target', '_blank');
     expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(link).toHaveAttribute('title', 'Marqii');
   });
 
   it('renders description text', () => {

@@ -17,7 +17,23 @@ export const metadata: Metadata = {
   title: 'Carl M. Lane — VP of Engineering',
   description:
     'Engineering leader building high-performing teams. VP of Engineering & Product Development at Marqii. Based in San Francisco.',
+  keywords: [
+    'Carl Lane',
+    'VP of Engineering',
+    'engineering leader',
+    'product development',
+    'San Francisco',
+    'Marqii',
+    'software engineering',
+    'TypeScript',
+    'team building',
+  ],
+  authors: [{ name: 'Carl M. Lane', url: 'https://carlmlane.com' }],
+  publisher: 'Carl M. Lane',
   metadataBase: new URL('https://carlmlane.com'),
+  alternates: {
+    canonical: 'https://carlmlane.com',
+  },
   openGraph: {
     title: 'Carl M. Lane — VP of Engineering',
     description:
