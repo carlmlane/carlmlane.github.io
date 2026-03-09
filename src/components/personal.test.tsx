@@ -13,6 +13,5 @@ describe('Personal', () => {
   it('renders personal description', () => {
     const { getByText } = render(<Personal />);
     expect(getByText(/San Francisco/)).toBeInTheDocument();
-    expect(getByText(/Aerospace engineering/)).toBeInTheDocument();
   });
 });

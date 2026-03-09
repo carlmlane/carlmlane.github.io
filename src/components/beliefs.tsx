@@ -1,11 +1,11 @@
 import { AnimatedSection } from './section';
 
-const beliefs = [
-  'Small, high-IQ teams beat large, bureaucratic ones every time.',
-  'Engineering is a business lever, not a cost center.',
-  'Speed is the only sustainable competitive advantage.',
-  'Sincere enthusiasm is contagious.',
-] as const;
+const beliefs: readonly { id: string; content: string }[] = [
+  { id: 'small-teams', content: 'Small, high-IQ teams beat large, bureaucratic ones every time.' },
+  { id: 'engineering-lever', content: 'Engineering is a business lever, not a cost center.' },
+  { id: 'speed', content: 'Speed is the only sustainable competitive advantage.' },
+  { id: 'enthusiasm', content: 'Sincere enthusiasm is contagious.' },
+];
 
 const Beliefs = () => (
   <AnimatedSection label="// philosophy">
@@ -14,10 +14,10 @@ const Beliefs = () => (
       conditions where people are inspired to do their best work.
     </blockquote>
     <div className="space-y-3 pt-2">
-      {beliefs.map((belief) => (
-        <p key={belief} className="text-muted">
+      {beliefs.map(({ id, content }) => (
+        <p key={id} className="text-muted">
           <span className="mr-2 text-accent/60">&mdash;</span>
-          {belief}
+          {content}
         </p>
       ))}
     </div>

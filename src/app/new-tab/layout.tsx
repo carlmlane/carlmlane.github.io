@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'New Tab',
   icons: { icon: 'data:,' },
+  robots: { index: false, follow: false },
   other: { 'color-scheme': 'light dark' },
 };
 

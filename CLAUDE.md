@@ -19,7 +19,7 @@ This is a personal GitHub Pages site built with **Next.js 16** (App Router) conf
 - **Styling:** Tailwind CSS v4 via PostCSS
 - **Linting/Formatting:** Biome (single quotes, 2-space indent, 120 char line width)
 - **React Compiler** enabled for automatic optimizations
-- **Custom domain:** github.carlmlane.com (see `CNAME`)
+- **Custom domain:** carlmlane.com (see `CNAME`)
 
 ### Source structure
 

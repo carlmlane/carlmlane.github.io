@@ -16,12 +16,12 @@ export const metadata: Metadata = {
   title: 'Carl M. Lane — VP of Engineering',
   description:
     'Engineering leader building high-performing teams. VP of Engineering & Product Development at Marqii. Based in San Francisco.',
-  metadataBase: new URL('https://github.carlmlane.com'),
+  metadataBase: new URL('https://carlmlane.com'),
   openGraph: {
     title: 'Carl M. Lane — VP of Engineering',
     description:
       'Engineering leader building high-performing teams. VP of Engineering & Product Development at Marqii.',
-    url: 'https://github.carlmlane.com',
+    url: 'https://carlmlane.com',
     siteName: 'Carl M. Lane',
     locale: 'en_US',
     type: 'website',
