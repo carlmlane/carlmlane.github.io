@@ -5,6 +5,8 @@
   "repository": "https://github.com/carlmlane/carlmlane.github.io.git",
   "homepage": "https://carlmlane.com",
   "scripts": {
+    "generate:service-worker": "tsx scripts/generate-service-worker.ts",
+    "prebuild": "pnpm generate:service-worker",
     "dev": "next dev --experimental-https",
     "build": "next build",
     "start": "next start",
@@ -38,6 +40,7 @@
     "happy-dom": "^20.8.3",
     "lefthook": "^2.1.3",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5",
     "vitest": "^4.0.18"
   }
