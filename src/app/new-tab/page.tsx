@@ -1,6 +1,5 @@
+import { TRANSPARENT_GIF } from './new-tab-constants';
 import RegisterServiceWorker from './register-service-worker';
-
-const TRANSPARENT_GIF = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
 
 const NewTabPage = () => (
   <>

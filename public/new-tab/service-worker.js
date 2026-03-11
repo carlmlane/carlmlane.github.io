@@ -1,52 +1,8 @@
-// This service worker serves index.html instantly without cache lookup for fast Chrome new-tab loading.
-// The HTML below must be kept in sync with src/app/new-tab/page-html.ts.
-const pageHtml = `<!doctype html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" href="data:," />
-    <meta name="color-scheme" content="light dark" />
-    <style type="text/css" media="screen">
-      body {
-        background-color: white;
-        color: black;
-      }
-      @media (prefers-color-scheme: dark) {
-        body {
-          background-color: black;
-          color: white;
-        }
-      }
-    </style>
-    <title>New Tab</title>
-  </head>
+// AUTO-GENERATED — do not edit directly.
+// Source: scripts/generate-service-worker.ts
+// Shared constants: src/app/new-tab/new-tab-constants.ts
 
-  <body id="vimium-new-tab-page">
-    <!--
-      In Chrome, empirically we must put some content in the body to avoid the browser delaying the
-      rendering of the page and the painting of the page's background color. The delay can be up to
-      1 second and makes the page appear sluggish, as if it's not yet loaded. This delay appears to
-      be a Chrome rendering pipeline optimization for the typical website.
-
-      For this, we use transparent blank 1x1 GIF. Some text would also suffice.
-    -->
-    <img
-      src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
-    />
-  </body>
-
-  <script>
-    async function registerServiceWorker() {
-      try {
-        await navigator.serviceWorker.register("./service-worker.js");
-      } catch (error) {
-        console.error("Service worker registration failed with error", error);
-      }
-    }
-    registerServiceWorker();
-  </script>
-</html>
-`;
+const pageHtml = "<!doctype html>\n<html>\n  <head>\n    <meta charset=\"UTF-8\" />\n    <link rel=\"icon\" href=\"data:,\" />\n    <meta name=\"color-scheme\" content=\"light dark\" />\n    <style type=\"text/css\" media=\"screen\">\n      body {\n        background-color: white;\n        color: black;\n      }\n      @media (prefers-color-scheme: dark) {\n        body {\n          background-color: black;\n          color: white;\n        }\n      }\n    </style>\n    <title>New Tab</title>\n  </head>\n\n  <body id=\"vimium-new-tab-page\">\n    <!--\n      In Chrome, empirically we must put some content in the body to avoid the browser delaying the\n      rendering of the page and the painting of the page's background color. The delay can be up to\n      1 second and makes the page appear sluggish, as if it's not yet loaded. This delay appears to\n      be a Chrome rendering pipeline optimization for the typical website.\n\n      For this, we use transparent blank 1x1 GIF. Some text would also suffice.\n    -->\n    <img\n      src=\"data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==\"\n    />\n  </body>\n\n  <script>\n    async function registerServiceWorker() {\n      try {\n        await navigator.serviceWorker.register(\"./service-worker.js\");\n      } catch (error) {\n        console.error(\"Service worker registration failed with error\", error);\n      }\n    }\n    registerServiceWorker();\n  </script>\n</html>\n";
 
 self.addEventListener('fetch', (event) => {
   // We could serve index.html from the cache using `await caches.match(request)`. However, this
