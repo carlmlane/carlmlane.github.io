@@ -14,7 +14,7 @@ const facts: readonly { id: string; content: ReactNode }[] = [
     id: 'wix',
     content: (
       <>
-        Spent over a decade at{' '}
+        Spent nearly a decade at{' '}
         <a href="https://www.wix.com" target="_blank" rel="noopener noreferrer" title="Wix.com" className={linkClass}>
           Wix.com
         </a>

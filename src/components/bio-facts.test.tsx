@@ -17,7 +17,7 @@ describe('BioFacts', () => {
     expect(getByText(/dreamed about spaceflight/)).toBeInTheDocument();
     expect(getByText(/aerospace engineering/)).toBeInTheDocument();
     expect(getByText(/Using computers since 1990/)).toBeInTheDocument();
-    expect(getByText(/Spent over a decade at/)).toBeInTheDocument();
+    expect(getByText(/Spent nearly a decade at/)).toBeInTheDocument();
     expect(getByText(/VP of Engineering/)).toBeInTheDocument();
   });
 
