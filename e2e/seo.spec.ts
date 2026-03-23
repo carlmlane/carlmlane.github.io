@@ -20,7 +20,10 @@ test.describe('SEO & Accessibility', () => {
     await page.goto('/blog/about-me');
     await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /.+/);
     await expect(page.locator('meta[property="og:type"]')).toHaveAttribute('content', 'article');
-    await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', /Hello, World/);
+    await expect(page.locator('meta[property="og:title"]')).toHaveAttribute(
+      'content',
+      /Support Rep to VP of Engineering/,
+    );
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /carlmlane\.com\/blog\/about-me/);
   });
 
