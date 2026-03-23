@@ -15,6 +15,7 @@ if (process.env.NODE_ENV === 'production') {
   if (result.success) {
     posthog.init(result.data.NEXT_PUBLIC_POSTHOG_KEY, {
       api_host: result.data.NEXT_PUBLIC_POSTHOG_HOST,
+      cross_subdomain_cookie: false,
       defaults: '2026-01-30',
     });
   } else {

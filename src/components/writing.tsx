@@ -15,9 +15,12 @@ const Writing = async () => {
                   {post.title}
                 </h3>
                 <span className="shrink-0 font-mono text-xs text-muted">
-                  {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: 'numeric' }).format(
-                    new Date(post.date),
-                  )}
+                  {new Intl.DateTimeFormat('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    timeZone: 'UTC',
+                  }).format(new Date(post.date))}
                 </span>
               </div>
               <p className="text-sm text-muted">{post.description}</p>
