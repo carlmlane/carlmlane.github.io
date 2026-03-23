@@ -59,6 +59,21 @@ export const metadata: Metadata = {
   },
 };
 
+const cspDirectives = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV !== 'production' ? " 'unsafe-eval'" : ''} https://www.googletagmanager.com https://www.google-analytics.com https://us-assets.i.posthog.com`,
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: https://www.googletagmanager.com",
+  "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://us.i.posthog.com",
+  "font-src 'self'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  'upgrade-insecure-requests',
+];
+
+const contentSecurityPolicy = cspDirectives.join('; ');
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -69,10 +84,7 @@ export default function RootLayout({
       <head>
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
-        <meta
-          httpEquiv="Content-Security-Policy"
-          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://us-assets.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.googletagmanager.com; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://us.i.posthog.com; font-src 'self';"
-        />
+        <meta httpEquiv="Content-Security-Policy" content={contentSecurityPolicy} />
       </head>
       <GoogleTagManager gtmId="GTM-M55D9MGW" />
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
