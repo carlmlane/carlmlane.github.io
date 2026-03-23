@@ -4,7 +4,7 @@ import robots from './robots';
 describe('robots', () => {
   it('allows all user agents', () => {
     const result = robots();
-    expect(result.rules).toEqual({ userAgent: '*', allow: '/' });
+    expect(result.rules).toEqual({ userAgent: '*', allow: '/', disallow: ['/new-tab/'] });
   });
 
   it('includes sitemap URL', () => {
