@@ -27,6 +27,7 @@ const createBlogPostingSchema = (post: BlogPost): WithContext<BlogPosting> => ({
   headline: post.title,
   url: `https://carlmlane.com/blog/${post.slug}`,
   datePublished: post.date,
+  ...(post.lastUpdated ? { dateModified: post.lastUpdated } : {}),
   description: post.description,
   author: {
     '@type': 'Person',
