@@ -14,19 +14,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - uses: pnpm/action-setup@v4
-        name: Install pnpm
-        with:
-          run_install: false
-
-      - name: Install Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm install
+      - name: Setup pnpm
+        uses: ./.github/actions/setup-pnpm
 
       - name: Audit dependencies
         run: pnpm audit --audit-level=high
@@ -69,19 +58,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - uses: pnpm/action-setup@v4
-        name: Install pnpm
-        with:
-          run_install: false
-
-      - name: Install Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm install
+      - name: Setup pnpm
+        uses: ./.github/actions/setup-pnpm
 
       - name: Install Playwright browsers
         run: pnpm exec playwright install chromium --with-deps
@@ -118,19 +96,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - uses: pnpm/action-setup@v4
-        name: Install pnpm
-        with:
-          run_install: false
-
-      - name: Install Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm install
+      - name: Setup pnpm
+        uses: ./.github/actions/setup-pnpm
 
       - name: Disable Next.js telemetry
         run: pnpm next telemetry disable
@@ -148,7 +115,7 @@ jobs:
 
       - name: Run Lighthouse CI
         run: |
-          npm install -g @lhci/cli
+          npm install -g @lhci/cli@0.14.x
           lhci autorun
 
       - name: Upload Lighthouse report

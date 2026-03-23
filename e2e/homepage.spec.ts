@@ -57,7 +57,8 @@ test.describe('Homepage', () => {
     expect(count).toBeGreaterThan(0);
 
     const content = await scripts.first().textContent();
-    const schema = JSON.parse(content!);
+    expect(content).not.toBeNull();
+    const schema = JSON.parse(content ?? '');
     expect(schema['@context']).toBe('https://schema.org');
   });
 });

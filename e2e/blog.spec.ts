@@ -45,7 +45,8 @@ test.describe('Blog Index', () => {
     expect(count).toBeGreaterThanOrEqual(1);
 
     const content = await scripts.first().textContent();
-    const schema = JSON.parse(content!);
+    expect(content).not.toBeNull();
+    const schema = JSON.parse(content ?? '');
     expect(schema['@type']).toBe('Blog');
     expect(schema.blogPost).toBeDefined();
   });
@@ -99,7 +100,8 @@ test.describe('Blog Post Page', () => {
     expect(count).toBeGreaterThanOrEqual(1);
 
     const content = await scripts.first().textContent();
-    const schema = JSON.parse(content!);
+    expect(content).not.toBeNull();
+    const schema = JSON.parse(content ?? '');
     expect(schema['@type']).toBe('BlogPosting');
     expect(schema.headline).toContain('About Me');
     expect(schema.author).toBeDefined();
