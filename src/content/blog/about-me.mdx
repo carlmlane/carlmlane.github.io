@@ -1,12 +1,12 @@
 export const metadata = {
-  title: 'Support Rep to VP of Engineering: An Unconventional Path',
-  date: '2026-03-22',
-  lastUpdated: '2026-03-23',
-  description:
-    'How answering support tickets at 2 AM led to managing 25+ engineers building for 250M users, and the lessons from a non-traditional engineering leadership path.',
-  tags: ['personal', 'career', 'engineering', 'leadership'],
-  published: true,
-  image: 'https://carlmlane.com/blog/about-me/hero.jpg',
+    title: 'Support Rep to VP of Engineering: An Unconventional Path',
+    date: '2026-03-22',
+    lastUpdated: '2026-03-23',
+    description:
+        'A customer-obsessed technologist\'s path from aerospace engineering and support to VP of Engineering, and what building successful teams taught me along the way.',
+    tags: ['personal', 'career', 'engineering', 'leadership'],
+    published: true,
+    image: 'https://carlmlane.com/blog/about-me/hero.jpg',
 };
 
 If you landed on the [homepage](/), you already got the bullet-point version of who I am. This is the longer cut.
@@ -21,13 +21,15 @@ If you landed on the [homepage](/), you already got the bullet-point version of 
 
 ## How Does a Pilot End Up in Engineering?
 
-According to the [Stack Overflow Developer Survey](https://survey.stackoverflow.co/2024/developer-profile) (2024), 82% of developers taught themselves to code through online resources. I started even earlier than that, on a BBS hosted at the local library. I was obsessed with NASA and spaceflight as a kid. Every shuttle launch, every mission transcript, every technical document I could get my hands on. I'd dial in on my mom's modem and spend hours reading everything the board had. That's also how I learned what long-distance calling charges were, but that's a story for a different post.
+Code and spaceflight were always part of the same obsession for me. As a kid I was glued to every NASA launch, every mission transcript, every technical document I could find. Most of that research happened on a BBS hosted at the local library, dialing in on my mom's modem and spending hours reading everything the board had. That's also how I learned what long-distance calling charges were, but that's a story for a different post.
 
-That obsession led me to aerospace engineering at Parks College at Saint Louis University. People assume I ended up in software despite studying aerospace. I think it's the opposite. Aerospace taught me the most important lessons they don't cover in a CS curriculum: security as a first principle, the discipline to say no when the go/no-go checklist fails, the culture of practice and rehearsal before anything goes live, and rigorous process that treats every failure mode as a design input. Those habits shaped how I build software today.
+According to the [Stack Overflow Developer Survey](https://survey.stackoverflow.co/2024/developer-profile) (2024), 82% of developers learned through online resources. For me, code was never something I "taught myself" in isolation. It was part of exploring everything that fascinated me: how systems work, how missions get planned, how things that absolutely cannot fail get built anyway.
+
+That curiosity led me to aerospace engineering at Parks College at Saint Louis University. People assume I ended up in software despite studying aerospace. I think it's the opposite. Aerospace taught me the most important lessons they don't cover in a CS curriculum: security as a first principle, the discipline to say no when the go/no-go checklist fails, the culture of practice and rehearsal before anything goes live, and rigorous process that treats every failure mode as a design input. Those habits shaped how I build software today.
 
 ![Hikers trekking a mountain trail toward snow-capped peaks, representing the winding path of an unconventional career](/blog/about-me/mountain-trail.jpg)
 
-I got my instrument rating in 2007. Single-engine, FAA certified, the whole thing. If you've never flown IFR, here's what it means in practice: you're in the clouds, you can't see the horizon, and you have to trust your instruments over every instinct telling you to pull up or bank left. It's the best training I ever got for engineering leadership.
+I got my instrument rating in 2007. Single-engine, FAA certified, the whole thing. If you've never flown IFR, here's what it means in practice: you're in the clouds, you can't see the horizon, and you have to trust your instruments over every instinct telling you to pull up or bank left. Flying IFR was my DevOps training before I knew what DevOps was: deploy quickly, deploy safely, deploy reliably, and always with the passenger in mind. Every preflight checklist, every approach briefing, every go-around decision was practice for the engineering leadership decisions I'd make later.
 
 Why does that matter? Because trusting instruments over instinct is exactly what good engineering leadership looks like. You watch the data. You resist the urge to react to noise. You hold course when the dashboard says you're fine, even when your gut is screaming otherwise.
 
@@ -37,73 +39,15 @@ Before all of that, right after high school, I moved to Madrid. Not for a semest
 
 {/* [PERSONAL EXPERIENCE] */}
 
-The aerospace mindset, process over intuition, checklists over assumptions, prepared me for engineering leadership in ways I didn't expect at the time. But the path from there to running an engineering org wasn't a straight line. My version started with a headset and a chat window.
+I always knew I had the DNA to be an engineer. The curiosity was there, the systems thinking was there, the obsession with how things work was there. I just needed someone to give me a chance. My first role at Wix was answering support tickets, and that turned out to be exactly the right place to start.
 
-I didn't *start* as an engineer. My first role at Wix was answering support tickets. I was the person on the other end of the chat when someone's website broke at 2 AM. From there I moved into QA, then team lead, then Head of Engineering.
+Not because support is a stepping stone. Because I needed to learn the business. I needed to understand scale: what 250 million users actually means for a product, how customers think, where things break when they break at scale. Support taught me all of that faster than any engineering onboarding could have.
 
-Eventually I was managing 25+ developers and QA engineers building tools for over 250 million users. Nearly a decade at Wix, and the most important thing I learned wasn't technical. It was that the people closest to the customer usually understand the problem better than anyone in the room with a whiteboard.
+From there I moved into QA, then team lead, then Head of Engineering, eventually leading successful engineering and QA teams building tools for a massive user base. Nearly a decade at Wix, and the most important thing I learned wasn't technical. It was that the people closest to the customer usually understand the problem better than anyone in the room with a whiteboard.
 
 {/* [UNIQUE INSIGHT] */}
 
 Have you ever noticed how the best product decisions come from people who've actually talked to users? That's not a coincidence. It's a pattern I've seen repeat across every team I've built.
-
-<figure style={{ margin: '2rem 0' }}>
-  <svg
-    viewBox="0 0 700 420"
-    width="100%"
-    xmlns="http://www.w3.org/2000/svg"
-    role="img"
-    aria-labelledby="bar-chart-title"
-    style={{ background: 'transparent', fontFamily: 'system-ui, sans-serif' }}
-  >
-    <title id="bar-chart-title">How Developers Actually Learn to Code</title>
-    <text x="350" y="30" textAnchor="middle" style={{ fill: '#e5e5e5', fontSize: '16px', fontWeight: 'bold' }}>
-      How Developers Actually Learn to Code
-    </text>
-    {[0, 20, 40, 60, 80, 100].map((v) => (
-      <g key={v}>
-        <line
-          x1={220 + (v / 100) * 440}
-          y1={50}
-          x2={220 + (v / 100) * 440}
-          y2={385}
-          stroke="#404040"
-          strokeWidth="1"
-          strokeDasharray="4 4"
-        />
-        <text x={220 + (v / 100) * 440} y={400} textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '11px' }}>
-          {v}%
-        </text>
-      </g>
-    ))}
-    {[
-      { label: 'Online resources', value: 82 },
-      { label: 'Books / physical media', value: 50 },
-      { label: 'E-courses / certifications', value: 50 },
-      { label: 'School (university/college)', value: 49 },
-      { label: 'On the job', value: 45 },
-      { label: 'Colleagues', value: 24 },
-      { label: 'Bootcamps', value: 11 },
-    ].map((item, i) => {
-      const y = 58 + i * 47;
-      const barWidth = (item.value / 100) * 440;
-      return (
-        <g key={item.label}>
-          <text x="215" y={y + 22} textAnchor="end" style={{ fill: '#e5e5e5', fontSize: '12px' }}>
-            {item.label}
-          </text>
-          <rect x="220" y={y + 8} width={barWidth} height="28" rx="4" ry="4" style={{ fill: '#f59e0b' }} />
-          <text x={220 + barWidth + 8} y={y + 27} style={{ fill: '#e5e5e5', fontSize: '12px', fontWeight: 'bold' }}>
-            {item.value}%
-          </text>
-        </g>
-      );
-    })}
-  </svg>
-  <figcaption style={{ textAlign: 'center', color: '#a3a3a3', fontSize: '0.8rem', marginTop: '0.5rem' }}>
-    Source: Stack Overflow Developer Survey, 2024
-  </figcaption>
-</figure>
 
 ## What Does Building From Zero Actually Look Like?
 
@@ -217,26 +161,4 @@ Most winter weekends you'll find me skinning uphill somewhere in the Sierra befo
 
 Does that sound like engineering leadership? It should. Every decision to ship or hold, to scale or wait, to hire or reorganize requires the same honest self-assessment. Can I trust the data I'm looking at? Have I prepared enough? Am I making this call because it's right, or because it's comfortable?
 
-The rest of the time I'm in the kitchen chasing some recipe I found at midnight, or at a show somewhere in the city with friends. I live in San Francisco with my wife and our little one.
-
-## Why Write
-
-The path from support rep to VP doesn't show up in most engineering leadership content. The lessons I picked up along that route, about customers, about building trust with a team, about knowing when to bet on someone's potential over their resume, those aren't in the management books. They're in the stories. The specific moments where something clicked or fell apart.
-
-This [blog](/blog) is where those stories go. Expect posts about [engineering leadership](/blog/tag/leadership), software architecture, [team building](/blog/tag/engineering), and the things I'm still figuring out. I'm not here to give advice from a mountaintop. I'm here to write down what I've learned before I forget what it felt like.
-
 Thanks for reading. More soon.
-
-## Frequently Asked Questions
-
-### How did you transition from support to engineering?
-
-I started at Wix answering support tickets, then moved into QA, team lead, Head of Engineering, and eventually VP. Each step grew naturally from the last. The customer-facing work gave me instincts about product quality that pure engineering backgrounds sometimes miss. It took nearly a decade, but the non-linear path turned out to be the strongest foundation.
-
-### What's your engineering leadership philosophy?
-
-Hire curious people, give them ownership, get out of their way. I've found that small, autonomous teams consistently outperform larger ones that rely on heavy process. Engineering should be a business lever, not a cost center. If your org isn't driving outcomes, the problem is structural, not motivational.
-
-### What technologies do you work with?
-
-At Marqii we rebuilt from serverless to Kubernetes, built a custom data platform and ETL tooling in-house, and shipped AI-powered features using LLMs for automated review response and location intelligence. I'm most interested in the architectural decisions behind the stack, not any particular tool. The right answer always depends on context.
