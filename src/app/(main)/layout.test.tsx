@@ -1,5 +1,16 @@
-import { describe, expect, it } from 'vitest';
-import { metadata } from './layout';
+import { cleanup, render } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import RootLayout, { metadata } from './layout';
+
+vi.mock('next/navigation', () => ({
+  usePathname: () => '/',
+}));
+
+vi.mock('@next/third-parties/google', () => ({
+  GoogleTagManager: () => null,
+}));
+
+afterEach(cleanup);
 
 describe('metadata', () => {
   it('has correct title', () => {
@@ -41,5 +52,67 @@ describe('metadata', () => {
 
   it('has publisher', () => {
     expect(metadata.publisher).toBe('Carl M. Lane');
+  });
+});
+
+describe('RootLayout', () => {
+  it('renders children', () => {
+    const { getByText } = render(
+      <RootLayout>
+        <span>test content</span>
+      </RootLayout>,
+    );
+    expect(getByText('test content')).toBeInTheDocument();
+  });
+
+  it('includes CSP meta tag with all required directives', () => {
+    render(
+      <RootLayout>
+        <span>child</span>
+      </RootLayout>,
+    );
+    // Head content gets hoisted to document.head by the DOM
+    const cspMeta = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
+    expect(cspMeta).not.toBeNull();
+    const content = cspMeta?.getAttribute('content') ?? '';
+
+    const expectedDirectives = [
+      "default-src 'self'",
+      "script-src 'self'",
+      "style-src 'self' 'unsafe-inline'",
+      'img-src',
+      'connect-src',
+      "font-src 'self'",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+      'upgrade-insecure-requests',
+    ];
+
+    for (const directive of expectedDirectives) {
+      expect(content).toContain(directive);
+    }
+  });
+
+  it('includes unsafe-eval in script-src outside production', () => {
+    render(
+      <RootLayout>
+        <span>child</span>
+      </RootLayout>,
+    );
+    const cspMeta = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
+    const content = cspMeta?.getAttribute('content') ?? '';
+    // In test environment (NODE_ENV=test, not production), unsafe-eval should be present
+    expect(content).toContain("'unsafe-eval'");
+  });
+
+  it('includes dns-prefetch and preconnect for GTM', () => {
+    render(
+      <RootLayout>
+        <span>child</span>
+      </RootLayout>,
+    );
+    expect(document.querySelector('link[rel="dns-prefetch"]')).not.toBeNull();
+    expect(document.querySelector('link[rel="preconnect"]')).not.toBeNull();
   });
 });
