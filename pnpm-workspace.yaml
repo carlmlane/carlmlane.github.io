@@ -3,5 +3,7 @@ ignoredBuiltDependencies:
   - unrs-resolver
 
 onlyBuiltDependencies:
+  - core-js
   - esbuild
   - lefthook
+  - protobufjs

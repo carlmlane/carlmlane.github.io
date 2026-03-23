@@ -1,13 +1,22 @@
 import { cleanup, render } from '@testing-library/react';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import Home from './page';
+
+vi.mock('@/components/writing', () => ({
+  default: () => <section>{'// writing'}</section>,
+}));
 
 afterEach(cleanup);
 
 describe('Home', () => {
   it('renders hero section', () => {
-    const { getByRole } = render(<Home />);
-    expect(getByRole('heading', { level: 1, name: 'Carl M. Lane' })).toBeInTheDocument();
+    const { getByText } = render(<Home />);
+    expect(getByText(/learning velocity over perfection/)).toBeInTheDocument();
+  });
+
+  it('renders writing section', () => {
+    const { getByText } = render(<Home />);
+    expect(getByText('// writing')).toBeInTheDocument();
   });
 
   it('renders beliefs section', () => {

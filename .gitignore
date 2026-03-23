@@ -145,3 +145,10 @@ vite.config.ts.timestamp-*
 .vite/
 
 certificates
+
+# Playwright
+test-results/
+playwright-report/
+
+# Lighthouse CI
+.lighthouseci/
