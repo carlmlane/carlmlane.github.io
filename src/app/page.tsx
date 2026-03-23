@@ -5,6 +5,7 @@ import Hero from '@/components/hero';
 import Inspirations from '@/components/inspirations';
 import PersonSchema from '@/components/person-schema';
 import Personal from '@/components/personal';
+import Writing from '@/components/writing';
 
 const Home = () => (
   <div className="flex min-h-screen items-start justify-center">
@@ -12,6 +13,7 @@ const Home = () => (
     <main className="w-full max-w-3xl space-y-16 px-6 py-20 sm:py-28">
       <Hero />
       <BioFacts />
+      <Writing />
       <Beliefs />
       <Inspirations />
       <Personal />
