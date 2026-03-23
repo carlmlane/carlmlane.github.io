@@ -25,6 +25,7 @@ export default defineConfig({
         'src/content/blog/index.ts',
         'src/app/blog/\\[slug\\]/page.tsx',
         'src/app/new-tab/register-service-worker.tsx',
+        'src/instrumentation-client.ts',
       ],
       thresholds: {
         lines: 90,

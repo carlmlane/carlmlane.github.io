@@ -65,11 +65,11 @@ test.describe('Blog Post Page', () => {
   });
 
   test('has correct title', async ({ page }) => {
-    await expect(page).toHaveTitle(/About Me.*Carl M\. Lane/);
+    await expect(page).toHaveTitle(/Hello, World.*Carl M\. Lane/);
   });
 
   test('renders post title as h1', async ({ page }) => {
-    await expect(page.locator('header h1')).toContainText('About Me');
+    await expect(page.locator('header h1')).toContainText('Hello, World');
   });
 
   test('renders publication date', async ({ page }) => {
@@ -79,7 +79,7 @@ test.describe('Blog Post Page', () => {
   test('renders tag chips', async ({ page }) => {
     const header = page.locator('header');
     await expect(header.getByRole('link', { name: 'personal' })).toBeVisible();
-    await expect(header.getByRole('link', { name: 'leadership' })).toBeVisible();
+    await expect(header.getByRole('link', { name: 'career' })).toBeVisible();
   });
 
   test('renders back to blog link', async ({ page }) => {
@@ -103,7 +103,7 @@ test.describe('Blog Post Page', () => {
     expect(content).not.toBeNull();
     const schema = JSON.parse(content ?? '');
     expect(schema['@type']).toBe('BlogPosting');
-    expect(schema.headline).toContain('About Me');
+    expect(schema.headline).toContain('Hello, World');
     expect(schema.author).toBeDefined();
   });
 
