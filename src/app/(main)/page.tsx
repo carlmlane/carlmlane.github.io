@@ -13,9 +13,9 @@ const Home = () => (
     <main className="w-full max-w-3xl space-y-16 px-6 py-12 sm:py-16">
       <Hero />
       <BioFacts />
-      <Writing />
       <Beliefs />
       <Inspirations />
+      <Writing />
       <Personal />
       <Footer />
     </main>
