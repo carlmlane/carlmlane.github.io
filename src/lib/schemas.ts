@@ -16,5 +16,5 @@ type BlogPost = PostMetadata & {
   readonly slug: string;
 };
 
-export { postMetadataSchema };
 export type { BlogPost, PostMetadata };
+export { postMetadataSchema };

@@ -23,8 +23,9 @@ export default defineConfig({
         'src/test-setup.ts',
         'src/lib/blog.ts',
         'src/content/blog/index.ts',
-        'src/app/blog/\\[slug\\]/page.tsx',
-        'src/app/new-tab/register-service-worker.tsx',
+        'src/app/\\(main\\)/blog/\\[slug\\]/page.tsx',
+        'src/app/\\(new-tab\\)/new-tab/register-service-worker.tsx',
+        'src/app/\\(main\\)/opengraph-image.tsx',
         'src/instrumentation-client.ts',
       ],
       thresholds: {

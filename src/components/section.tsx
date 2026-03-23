@@ -27,4 +27,4 @@ const AnimatedSection = ({ label, children, className = '' }: SectionProps) => (
   </FadeIn>
 );
 
-export { Section, AnimatedSection };
+export { AnimatedSection, Section };

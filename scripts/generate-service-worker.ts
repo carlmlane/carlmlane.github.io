@@ -1,6 +1,6 @@
 import { writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { buildNewTabHtml } from '../src/app/new-tab/page-html';
+import { buildNewTabHtml } from '../src/app/(new-tab)/new-tab/page-html';
 
 const serviceWorkerContent = `// AUTO-GENERATED — do not edit directly.
 // Source: scripts/generate-service-worker.ts
