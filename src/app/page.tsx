@@ -10,7 +10,7 @@ import Writing from '@/components/writing';
 const Home = () => (
   <div className="flex min-h-screen items-start justify-center">
     <PersonSchema />
-    <main className="w-full max-w-3xl space-y-16 px-6 py-20 sm:py-28">
+    <main className="w-full max-w-3xl space-y-16 px-6 py-12 sm:py-16">
       <Hero />
       <BioFacts />
       <Writing />

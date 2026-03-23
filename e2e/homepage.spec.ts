@@ -9,8 +9,8 @@ test.describe('Homepage', () => {
     await expect(page).toHaveTitle(/Carl M\. Lane/);
   });
 
-  test('renders hero heading', async ({ page }) => {
-    await expect(page.getByRole('heading', { level: 1, name: 'Carl M. Lane' })).toBeVisible();
+  test('renders site name in header', async ({ page }) => {
+    await expect(page.getByRole('link', { name: /Carl M\. Lane/ })).toBeVisible();
   });
 
   test('renders VP subtitle', async ({ page }) => {

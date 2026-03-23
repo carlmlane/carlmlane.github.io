@@ -10,8 +10,8 @@ afterEach(cleanup);
 
 describe('Home', () => {
   it('renders hero section', () => {
-    const { getByRole } = render(<Home />);
-    expect(getByRole('heading', { level: 1, name: 'Carl M. Lane' })).toBeInTheDocument();
+    const { getByText } = render(<Home />);
+    expect(getByText(/learning velocity over perfection/)).toBeInTheDocument();
   });
 
   it('renders writing section', () => {

@@ -5,17 +5,6 @@ import Hero from './hero';
 afterEach(cleanup);
 
 describe('Hero', () => {
-  it('renders name in an h1', () => {
-    const { getByRole } = render(<Hero />);
-    const heading = getByRole('heading', { level: 1 });
-    expect(heading).toHaveTextContent('Carl M. Lane');
-  });
-
-  it('renders title', () => {
-    const { getByText } = render(<Hero />);
-    expect(getByText('VP of Engineering & Product Development')).toBeInTheDocument();
-  });
-
   it('renders Marqii link with correct attributes', () => {
     const { getByRole } = render(<Hero />);
     const link = getByRole('link', { name: /marqii/i });

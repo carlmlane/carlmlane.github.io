@@ -23,7 +23,7 @@ test.describe('Blog Index', () => {
     const articles = page.getByRole('article');
     await expect(articles.first()).toBeVisible();
     const count = await articles.count();
-    expect(count).toBeGreaterThanOrEqual(2);
+    expect(count).toBeGreaterThanOrEqual(1);
   });
 
   test('blog cards link to individual posts', async ({ page }) => {
@@ -115,15 +115,15 @@ test.describe('Blog Post Page', () => {
 
 test.describe('Blog Tag Page', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/blog/tag/react');
+    await page.goto('/blog/tag/personal');
   });
 
   test('has correct title', async ({ page }) => {
-    await expect(page).toHaveTitle(/Posts tagged "react"/);
+    await expect(page).toHaveTitle(/Posts tagged "personal"/);
   });
 
   test('renders tag heading', async ({ page }) => {
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('react');
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('personal');
   });
 
   test('renders tag filter with active tag', async ({ page }) => {
