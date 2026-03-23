@@ -94,7 +94,7 @@ describe('RootLayout', () => {
     }
   });
 
-  it('includes unsafe-eval in script-src outside production', () => {
+  it('includes unsafe-eval in script-src for GTM compatibility', () => {
     render(
       <RootLayout>
         <span>child</span>
@@ -102,7 +102,6 @@ describe('RootLayout', () => {
     );
     const cspMeta = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
     const content = cspMeta?.getAttribute('content') ?? '';
-    // In test environment (NODE_ENV=test, not production), unsafe-eval should be present
     expect(content).toContain("'unsafe-eval'");
   });
 

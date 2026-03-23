@@ -18,7 +18,7 @@ const PostLayout = ({ metadata, children }: PostLayoutProps) => (
       <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">{metadata.title}</h1>
       <div className="flex flex-wrap items-center gap-4">
         <time dateTime={metadata.date} className="font-mono text-sm text-muted">
-          {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).format(
+          {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }).format(
             new Date(metadata.date),
           )}
         </time>

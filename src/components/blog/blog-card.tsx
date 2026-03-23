@@ -23,9 +23,12 @@ const BlogCard = ({ post, index }: BlogCardProps) => (
         <div className="flex items-baseline justify-between gap-4">
           <h3 className="font-semibold text-foreground transition-colors group-hover:text-accent">{post.title}</h3>
           <time dateTime={post.date} className="shrink-0 font-mono text-xs text-muted">
-            {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: 'numeric' }).format(
-              new Date(post.date),
-            )}
+            {new Intl.DateTimeFormat('en-US', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+              timeZone: 'UTC',
+            }).format(new Date(post.date))}
           </time>
         </div>
         <p className="text-sm leading-relaxed text-muted">{post.description}</p>
