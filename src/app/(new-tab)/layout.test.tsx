@@ -1,9 +1,22 @@
 import { cleanup, render } from '@testing-library/react';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, type MockInstance, vi } from 'vitest';
 import NewTabRootLayout from './layout';
 import { NEW_TAB_BODY_ID, NEW_TAB_THEME } from './new-tab/new-tab-constants';
 
-afterEach(cleanup);
+// Root layouts render <html>, which testing-library places inside a <div> container.
+// React warns about this invalid nesting — suppress it since it's a test-only artifact.
+let consoleErrorSpy: MockInstance;
+
+beforeEach(() => {
+  consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation((...args: unknown[]) => {
+    if (typeof args[0] === 'string' && args[0].includes('cannot be a child of')) return;
+  });
+});
+
+afterEach(() => {
+  consoleErrorSpy.mockRestore();
+  cleanup();
+});
 
 describe('NewTabRootLayout', () => {
   it('renders children', () => {

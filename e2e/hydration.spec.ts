@@ -2,19 +2,22 @@ import { expect, test } from '@playwright/test';
 
 const hydrationPattern = /hydrat|did not match|server.rendered|text content|#418|#423|#425/i;
 
-const collectConsoleErrors = (page: import('@playwright/test').Page): string[] => {
+const collectErrors = (page: import('@playwright/test').Page): string[] => {
   const errors: string[] = [];
   page.on('console', (msg) => {
     if (msg.type() === 'error') {
       errors.push(msg.text());
     }
   });
+  page.on('pageerror', (err) => {
+    errors.push(err.message);
+  });
   return errors;
 };
 
 test.describe('Hydration', () => {
   test('blog post page hydrates without errors', async ({ page }) => {
-    const errors = collectConsoleErrors(page);
+    const errors = collectErrors(page);
 
     await page.goto('/blog/about-me');
     await page.waitForLoadState('networkidle');
@@ -24,7 +27,7 @@ test.describe('Hydration', () => {
   });
 
   test('blog index page hydrates without errors', async ({ page }) => {
-    const errors = collectConsoleErrors(page);
+    const errors = collectErrors(page);
 
     await page.goto('/blog');
     await page.waitForLoadState('networkidle');
@@ -34,7 +37,7 @@ test.describe('Hydration', () => {
   });
 
   test('homepage hydrates without errors', async ({ page }) => {
-    const errors = collectConsoleErrors(page);
+    const errors = collectErrors(page);
 
     await page.goto('/');
     await page.waitForLoadState('networkidle');

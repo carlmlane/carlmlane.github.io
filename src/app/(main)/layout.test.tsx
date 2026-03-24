@@ -1,5 +1,5 @@
 import { cleanup, render } from '@testing-library/react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, type MockInstance, vi } from 'vitest';
 import RootLayout, { metadata } from './layout';
 
 vi.mock('next/navigation', () => ({
@@ -10,7 +10,20 @@ vi.mock('@next/third-parties/google', () => ({
   GoogleTagManager: () => null,
 }));
 
-afterEach(cleanup);
+// Root layouts render <html>, which testing-library places inside a <div> container.
+// React warns about this invalid nesting — suppress it since it's a test-only artifact.
+let consoleErrorSpy: MockInstance;
+
+beforeEach(() => {
+  consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation((...args: unknown[]) => {
+    if (typeof args[0] === 'string' && args[0].includes('cannot be a child of')) return;
+  });
+});
+
+afterEach(() => {
+  consoleErrorSpy.mockRestore();
+  cleanup();
+});
 
 describe('metadata', () => {
   it('has correct title', () => {
