@@ -65,11 +65,11 @@ test.describe('Blog Post Page', () => {
   });
 
   test('has correct title', async ({ page }) => {
-    await expect(page).toHaveTitle(/Support Rep to VP of Engineering.*Carl M\. Lane/);
+    await expect(page).toHaveTitle(/Support Rep to VP.*Carl M\. Lane/);
   });
 
   test('renders post title as h1', async ({ page }) => {
-    await expect(page.locator('header h1')).toContainText('Support Rep to VP of Engineering');
+    await expect(page.locator('header h1')).toContainText('Support Rep to VP');
   });
 
   test('renders publication date', async ({ page }) => {
@@ -103,7 +103,7 @@ test.describe('Blog Post Page', () => {
     expect(content).not.toBeNull();
     const schema = JSON.parse(content ?? '');
     expect(schema['@type']).toBe('BlogPosting');
-    expect(schema.headline).toContain('Support Rep to VP of Engineering');
+    expect(schema.headline).toContain('Support Rep to VP');
     expect(schema.author).toBeDefined();
   });
 

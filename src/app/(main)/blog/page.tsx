@@ -5,11 +5,13 @@ import TagFilter from '@/components/blog/tag-filter';
 import { formatPostDate, getAllTags, getBlogPosts } from '@/lib/blog';
 
 export const metadata: Metadata = {
-  title: 'Blog — Carl M. Lane',
-  description: 'Thoughts on engineering leadership, software development, and team building.',
+  title: 'Engineering Leadership Blog — Carl M. Lane',
+  description:
+    'Insights on engineering leadership, software development, and building high-performing teams from a VP of Engineering in San Francisco.',
   openGraph: {
-    title: 'Blog — Carl M. Lane',
-    description: 'Thoughts on engineering leadership, software development, and team building.',
+    title: 'Engineering Leadership Blog — Carl M. Lane',
+    description:
+      'Insights on engineering leadership, software development, and building high-performing teams from a VP of Engineering in San Francisco.',
     url: 'https://carlmlane.com/blog',
     type: 'website',
   },
@@ -30,7 +32,9 @@ const BlogPage = async () => {
       />
       <header className="mb-10 space-y-4">
         <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">Blog</h1>
-        <p className="text-muted">Thoughts on engineering leadership, software development, and team building.</p>
+        <p className="text-muted">
+          Insights on engineering leadership, software development, and building high-performing teams.
+        </p>
       </header>
       <div className="space-y-8">
         <TagFilter tags={tags} />

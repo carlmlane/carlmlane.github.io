@@ -59,7 +59,7 @@ describe('BlogPage', () => {
 
 describe('BlogPage metadata', () => {
   it('has correct title', () => {
-    expect(metadata.title).toBe('Blog — Carl M. Lane');
+    expect(metadata.title).toBe('Engineering Leadership Blog — Carl M. Lane');
   });
 
   it('has openGraph with website type', () => {

@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockInit = vi.fn();
 
@@ -6,22 +6,17 @@ vi.mock('posthog-js', () => ({
   default: { init: mockInit },
 }));
 
-const originalEnv = { ...process.env };
-
 beforeEach(() => {
   mockInit.mockClear();
   vi.resetModules();
-});
-
-afterEach(() => {
-  process.env = { ...originalEnv };
+  vi.unstubAllEnvs();
 });
 
 describe('instrumentation-client', () => {
   it('calls posthog.init in production with valid env vars', async () => {
-    process.env.NODE_ENV = 'production';
-    process.env.NEXT_PUBLIC_POSTHOG_KEY = 'phc_test123';
-    process.env.NEXT_PUBLIC_POSTHOG_HOST = 'https://i.carlmlane.com';
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('NEXT_PUBLIC_POSTHOG_KEY', 'phc_test123');
+    vi.stubEnv('NEXT_PUBLIC_POSTHOG_HOST', 'https://i.carlmlane.com');
 
     await import('./instrumentation-client');
 
@@ -33,9 +28,9 @@ describe('instrumentation-client', () => {
   });
 
   it('config does not contain invalid "defaults" key', async () => {
-    process.env.NODE_ENV = 'production';
-    process.env.NEXT_PUBLIC_POSTHOG_KEY = 'phc_test123';
-    process.env.NEXT_PUBLIC_POSTHOG_HOST = 'https://i.carlmlane.com';
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('NEXT_PUBLIC_POSTHOG_KEY', 'phc_test123');
+    vi.stubEnv('NEXT_PUBLIC_POSTHOG_HOST', 'https://i.carlmlane.com');
 
     await import('./instrumentation-client');
 
@@ -44,9 +39,9 @@ describe('instrumentation-client', () => {
   });
 
   it('config has cross_subdomain_cookie set to false', async () => {
-    process.env.NODE_ENV = 'production';
-    process.env.NEXT_PUBLIC_POSTHOG_KEY = 'phc_test123';
-    process.env.NEXT_PUBLIC_POSTHOG_HOST = 'https://i.carlmlane.com';
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('NEXT_PUBLIC_POSTHOG_KEY', 'phc_test123');
+    vi.stubEnv('NEXT_PUBLIC_POSTHOG_HOST', 'https://i.carlmlane.com');
 
     await import('./instrumentation-client');
 
@@ -55,9 +50,9 @@ describe('instrumentation-client', () => {
   });
 
   it('does not call posthog.init when env vars are missing', async () => {
-    process.env.NODE_ENV = 'production';
-    delete process.env.NEXT_PUBLIC_POSTHOG_KEY;
-    delete process.env.NEXT_PUBLIC_POSTHOG_HOST;
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('NEXT_PUBLIC_POSTHOG_KEY', '');
+    vi.stubEnv('NEXT_PUBLIC_POSTHOG_HOST', '');
 
     await import('./instrumentation-client');
 
@@ -65,9 +60,9 @@ describe('instrumentation-client', () => {
   });
 
   it('does not call posthog.init when host URL is invalid', async () => {
-    process.env.NODE_ENV = 'production';
-    process.env.NEXT_PUBLIC_POSTHOG_KEY = 'phc_test123';
-    process.env.NEXT_PUBLIC_POSTHOG_HOST = 'not-a-url';
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('NEXT_PUBLIC_POSTHOG_KEY', 'phc_test123');
+    vi.stubEnv('NEXT_PUBLIC_POSTHOG_HOST', 'not-a-url');
 
     await import('./instrumentation-client');
 
@@ -75,9 +70,9 @@ describe('instrumentation-client', () => {
   });
 
   it('does not call posthog.init in non-production environments', async () => {
-    process.env.NODE_ENV = 'development';
-    process.env.NEXT_PUBLIC_POSTHOG_KEY = 'phc_test123';
-    process.env.NEXT_PUBLIC_POSTHOG_HOST = 'https://i.carlmlane.com';
+    vi.stubEnv('NODE_ENV', 'development');
+    vi.stubEnv('NEXT_PUBLIC_POSTHOG_KEY', 'phc_test123');
+    vi.stubEnv('NEXT_PUBLIC_POSTHOG_HOST', 'https://i.carlmlane.com');
 
     await import('./instrumentation-client');
 
@@ -86,9 +81,9 @@ describe('instrumentation-client', () => {
 
   it('logs warning when env vars are invalid', async () => {
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    process.env.NODE_ENV = 'production';
-    delete process.env.NEXT_PUBLIC_POSTHOG_KEY;
-    delete process.env.NEXT_PUBLIC_POSTHOG_HOST;
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('NEXT_PUBLIC_POSTHOG_KEY', '');
+    vi.stubEnv('NEXT_PUBLIC_POSTHOG_HOST', '');
 
     await import('./instrumentation-client');
 
