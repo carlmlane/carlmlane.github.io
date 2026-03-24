@@ -4,10 +4,8 @@ import { motion } from 'framer-motion';
 import type { BlogPost } from '@/lib/schemas';
 import BlogCard from './blog-card';
 
-type BlogPostWithFormattedDate = BlogPost & { readonly formattedDate: string };
-
 type BlogGridProps = {
-  readonly posts: readonly BlogPostWithFormattedDate[];
+  readonly posts: readonly BlogPost[];
 };
 
 const containerVariants = {
@@ -22,7 +20,7 @@ const BlogGrid = ({ posts }: BlogGridProps) =>
   posts.length > 0 ? (
     <motion.div variants={containerVariants} initial="hidden" animate="visible" className="grid grid-cols-1 gap-4">
       {posts.map((post, index) => (
-        <BlogCard key={post.slug} post={post} formattedDate={post.formattedDate} index={index} />
+        <BlogCard key={post.slug} post={post} index={index} />
       ))}
     </motion.div>
   ) : (

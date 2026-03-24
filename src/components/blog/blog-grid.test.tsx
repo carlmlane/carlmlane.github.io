@@ -21,7 +21,6 @@ const mockPosts = [
     tags: ['a'],
     published: true,
     slug: 'post-1',
-    formattedDate: 'Mar 22, 2026',
   },
   {
     title: 'Post 2',
@@ -30,7 +29,6 @@ const mockPosts = [
     tags: ['b'],
     published: true,
     slug: 'post-2',
-    formattedDate: 'Mar 21, 2026',
   },
 ];
 

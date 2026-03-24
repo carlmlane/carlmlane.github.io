@@ -8,7 +8,6 @@ const mockPosts = [
 vi.mock('@/lib/blog', () => ({
   getPostsByTag: vi.fn().mockResolvedValue(mockPosts),
   getAllTags: vi.fn().mockResolvedValue(['react', 'typescript']),
-  formatPostDate: vi.fn().mockReturnValue('Mar 22, 2026'),
 }));
 
 vi.mock('@/components/blog/blog-grid', () => ({

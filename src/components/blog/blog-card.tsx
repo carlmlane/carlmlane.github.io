@@ -1,11 +1,11 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import FormattedDate from '@/components/formatted-date';
 import type { BlogPost } from '@/lib/schemas';
 
 type BlogCardProps = {
   readonly post: BlogPost;
-  readonly formattedDate: string;
   readonly index: number;
 };
 
@@ -14,7 +14,7 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' as const } },
 };
 
-const BlogCard = ({ post, formattedDate, index }: BlogCardProps) => (
+const BlogCard = ({ post, index }: BlogCardProps) => (
   <motion.article variants={itemVariants} custom={index} className="group">
     <a
       href={`/blog/${post.slug}`}
@@ -23,9 +23,7 @@ const BlogCard = ({ post, formattedDate, index }: BlogCardProps) => (
       <div className="space-y-3">
         <div className="flex items-baseline justify-between gap-4">
           <h3 className="font-semibold text-foreground transition-colors group-hover:text-accent">{post.title}</h3>
-          <time dateTime={post.date} className="shrink-0 font-mono text-xs text-muted">
-            {formattedDate}
-          </time>
+          <FormattedDate dateStr={post.date} style="short" className="shrink-0 font-mono text-xs text-muted" />
         </div>
         <p className="text-sm leading-relaxed text-muted">{post.description}</p>
         <div className="flex flex-wrap gap-2">

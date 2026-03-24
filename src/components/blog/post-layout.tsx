@@ -2,25 +2,23 @@
 
 import { motion } from 'framer-motion';
 import type { ReactNode } from 'react';
+import FormattedDate from '@/components/formatted-date';
 import type { PostMetadata } from '@/lib/schemas';
 import BackLink from './back-link';
 import TagChip from './tag-chip';
 
 type PostLayoutProps = {
   readonly metadata: PostMetadata;
-  readonly formattedDate: string;
   readonly children: ReactNode;
 };
 
-const PostLayout = ({ metadata, formattedDate, children }: PostLayoutProps) => (
+const PostLayout = ({ metadata, children }: PostLayoutProps) => (
   <motion.article initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
     <BackLink />
     <header className="mb-10 space-y-4">
       <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">{metadata.title}</h1>
       <div className="flex flex-wrap items-center gap-4">
-        <time dateTime={metadata.date} className="font-mono text-sm text-muted">
-          {formattedDate}
-        </time>
+        <FormattedDate dateStr={metadata.date} className="font-mono text-sm text-muted" />
         <div className="flex flex-wrap gap-2">
           {metadata.tags.map((tag) => (
             <TagChip key={tag} tag={tag} />

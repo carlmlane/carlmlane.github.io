@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { BlogPostingSchema, BreadcrumbSchema } from '@/components/blog/blog-schema';
 import PostLayout from '@/components/blog/post-layout';
 import slugs from '@/content/blog';
-import { formatPostDate, getPostBySlug } from '@/lib/blog';
+import { getPostBySlug } from '@/lib/blog';
 
 export const dynamicParams = false;
 
@@ -50,7 +50,7 @@ const BlogPostPage = async ({ params }: { params: Promise<{ slug: string }> }) =
           />
         </>
       )}
-      <PostLayout metadata={metadata} formattedDate={formatPostDate(metadata.date, 'long')}>
+      <PostLayout metadata={metadata}>
         <Content />
       </PostLayout>
     </>
