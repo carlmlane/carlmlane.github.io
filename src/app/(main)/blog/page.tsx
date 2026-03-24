@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import BlogGrid from '@/components/blog/blog-grid';
-import { BlogSchema } from '@/components/blog/blog-schema';
+import { BlogSchema, BreadcrumbSchema } from '@/components/blog/blog-schema';
 import TagFilter from '@/components/blog/tag-filter';
 import { getAllTags, getBlogPosts } from '@/lib/blog';
 
@@ -22,6 +22,12 @@ const BlogPage = async () => {
   return (
     <>
       <BlogSchema posts={posts} />
+      <BreadcrumbSchema
+        items={[
+          { name: 'Home', url: 'https://carlmlane.com' },
+          { name: 'Blog', url: 'https://carlmlane.com/blog' },
+        ]}
+      />
       <header className="mb-10 space-y-4">
         <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">Blog</h1>
         <p className="text-muted">Thoughts on engineering leadership, software development, and team building.</p>

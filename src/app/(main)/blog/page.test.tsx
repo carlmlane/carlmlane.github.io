@@ -20,6 +20,9 @@ vi.mock('@/components/blog/tag-filter', () => ({
 
 vi.mock('@/components/blog/blog-schema', () => ({
   BlogSchema: ({ posts }: { posts: unknown[] }) => <script data-testid="blog-schema">{JSON.stringify(posts)}</script>,
+  BreadcrumbSchema: ({ items }: { items: unknown[] }) => (
+    <script data-testid="breadcrumb-schema">{JSON.stringify(items)}</script>
+  ),
 }));
 
 const { default: BlogPage, metadata } = await import('./page');

@@ -1,4 +1,4 @@
-import type { Blog, BlogPosting, WithContext } from 'schema-dts';
+import type { Blog, BlogPosting, BreadcrumbList, WithContext } from 'schema-dts';
 import type { BlogPost } from '@/lib/schemas';
 
 const createBlogSchema = (posts: readonly BlogPost[]): WithContext<Blog> => ({
@@ -7,13 +7,14 @@ const createBlogSchema = (posts: readonly BlogPost[]): WithContext<Blog> => ({
   name: 'Carl M. Lane — Blog',
   url: 'https://carlmlane.com/blog',
   description: 'Thoughts on engineering leadership, software development, and team building.',
+  inLanguage: 'en-US',
   author: {
     '@type': 'Person',
     name: 'Carl M. Lane',
     url: 'https://carlmlane.com',
   },
   blogPost: posts.map((post) => ({
-    '@type': 'BlogPosting',
+    '@type': 'BlogPosting' as const,
     headline: post.title,
     url: `https://carlmlane.com/blog/${post.slug}`,
     datePublished: post.date,
@@ -29,6 +30,7 @@ const createBlogPostingSchema = (post: BlogPost): WithContext<BlogPosting> => ({
   datePublished: post.date,
   ...(post.lastUpdated ? { dateModified: post.lastUpdated } : {}),
   description: post.description,
+  inLanguage: 'en-US',
   author: {
     '@type': 'Person',
     name: 'Carl M. Lane',
@@ -45,6 +47,23 @@ const createBlogPostingSchema = (post: BlogPost): WithContext<BlogPosting> => ({
     '@id': `https://carlmlane.com/blog/${post.slug}`,
   },
   ...(post.image ? { image: post.image } : {}),
+  ...(post.wordCount ? { wordCount: post.wordCount } : {}),
+});
+
+type BreadcrumbItem = {
+  readonly name: string;
+  readonly url: string;
+};
+
+const createBreadcrumbSchema = (items: readonly BreadcrumbItem[]): WithContext<BreadcrumbList> => ({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: items.map((item, index) => ({
+    '@type': 'ListItem' as const,
+    position: index + 1,
+    name: item.name,
+    item: item.url,
+  })),
 });
 
 type BlogSchemaProps = {
@@ -63,4 +82,19 @@ const BlogPostingSchema = ({ post }: BlogPostingSchemaProps) => (
   <script type="application/ld+json">{JSON.stringify(createBlogPostingSchema(post))}</script>
 );
 
-export { BlogPostingSchema, BlogSchema, createBlogPostingSchema, createBlogSchema };
+type BreadcrumbSchemaProps = {
+  readonly items: readonly BreadcrumbItem[];
+};
+
+const BreadcrumbSchema = ({ items }: BreadcrumbSchemaProps) => (
+  <script type="application/ld+json">{JSON.stringify(createBreadcrumbSchema(items))}</script>
+);
+
+export {
+  BlogPostingSchema,
+  BlogSchema,
+  BreadcrumbSchema,
+  createBlogPostingSchema,
+  createBlogSchema,
+  createBreadcrumbSchema,
+};

@@ -3,7 +3,7 @@ import BioFacts from '@/components/bio-facts';
 import Footer from '@/components/footer';
 import Hero from '@/components/hero';
 import Inspirations from '@/components/inspirations';
-import PersonSchema from '@/components/person-schema';
+import { PersonSchema } from '@/components/person-schema';
 import Personal from '@/components/personal';
 import Writing from '@/components/writing';
 

@@ -1,6 +1,6 @@
 import { cleanup, render } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
-import PersonSchema from './person-schema';
+import { PersonSchema } from './person-schema';
 
 afterEach(cleanup);
 
