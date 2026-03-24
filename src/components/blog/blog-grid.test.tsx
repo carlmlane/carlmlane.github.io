@@ -14,8 +14,24 @@ vi.mock('framer-motion', () => ({
 afterEach(cleanup);
 
 const mockPosts = [
-  { title: 'Post 1', date: '2026-03-22', description: 'Desc 1', tags: ['a'], published: true, slug: 'post-1' },
-  { title: 'Post 2', date: '2026-03-21', description: 'Desc 2', tags: ['b'], published: true, slug: 'post-2' },
+  {
+    title: 'Post 1',
+    date: '2026-03-22',
+    description: 'Desc 1',
+    tags: ['a'],
+    published: true,
+    slug: 'post-1',
+    formattedDate: 'Mar 22, 2026',
+  },
+  {
+    title: 'Post 2',
+    date: '2026-03-21',
+    description: 'Desc 2',
+    tags: ['b'],
+    published: true,
+    slug: 'post-2',
+    formattedDate: 'Mar 21, 2026',
+  },
 ];
 
 describe('BlogGrid', () => {

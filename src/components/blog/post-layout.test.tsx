@@ -23,26 +23,38 @@ const mockMetadata = {
 
 describe('PostLayout', () => {
   it('renders the post title as h1', () => {
-    const { getByRole } = render(<PostLayout metadata={mockMetadata}>Content</PostLayout>);
+    const { getByRole } = render(
+      <PostLayout metadata={mockMetadata} formattedDate="March 22, 2026">
+        Content
+      </PostLayout>,
+    );
     expect(getByRole('heading', { level: 1 })).toHaveTextContent('Test Post Title');
   });
 
   it('renders time element with dateTime attribute', () => {
-    const { container } = render(<PostLayout metadata={mockMetadata}>Content</PostLayout>);
+    const { container } = render(
+      <PostLayout metadata={mockMetadata} formattedDate="March 22, 2026">
+        Content
+      </PostLayout>,
+    );
     const time = container.querySelector('time');
     expect(time).toBeInTheDocument();
     expect(time).toHaveAttribute('datetime', '2026-03-22');
   });
 
   it('renders tag chips for each tag', () => {
-    const { getByText } = render(<PostLayout metadata={mockMetadata}>Content</PostLayout>);
+    const { getByText } = render(
+      <PostLayout metadata={mockMetadata} formattedDate="March 22, 2026">
+        Content
+      </PostLayout>,
+    );
     expect(getByText('react')).toBeInTheDocument();
     expect(getByText('typescript')).toBeInTheDocument();
   });
 
   it('renders children in prose wrapper', () => {
     const { container } = render(
-      <PostLayout metadata={mockMetadata}>
+      <PostLayout metadata={mockMetadata} formattedDate="March 22, 2026">
         <p>Post content here</p>
       </PostLayout>,
     );
@@ -52,12 +64,20 @@ describe('PostLayout', () => {
   });
 
   it('renders back to blog link', () => {
-    const { getByText } = render(<PostLayout metadata={mockMetadata}>Content</PostLayout>);
+    const { getByText } = render(
+      <PostLayout metadata={mockMetadata} formattedDate="March 22, 2026">
+        Content
+      </PostLayout>,
+    );
     expect(getByText('Back to blog')).toBeInTheDocument();
   });
 
   it('renders header element', () => {
-    const { container } = render(<PostLayout metadata={mockMetadata}>Content</PostLayout>);
+    const { container } = render(
+      <PostLayout metadata={mockMetadata} formattedDate="March 22, 2026">
+        Content
+      </PostLayout>,
+    );
     expect(container.querySelector('header')).toBeInTheDocument();
   });
 });

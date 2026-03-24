@@ -16,7 +16,6 @@ if (process.env.NODE_ENV === 'production') {
     posthog.init(result.data.NEXT_PUBLIC_POSTHOG_KEY, {
       api_host: result.data.NEXT_PUBLIC_POSTHOG_HOST,
       cross_subdomain_cookie: false,
-      defaults: '2026-01-30',
     });
   } else {
     console.warn('[PostHog] Invalid environment variables:', result.error.flatten().fieldErrors);

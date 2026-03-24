@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import BlogGrid from '@/components/blog/blog-grid';
 import { BlogSchema, BreadcrumbSchema } from '@/components/blog/blog-schema';
 import TagFilter from '@/components/blog/tag-filter';
-import { getAllTags, getBlogPosts } from '@/lib/blog';
+import { formatPostDate, getAllTags, getBlogPosts } from '@/lib/blog';
 
 export const metadata: Metadata = {
   title: 'Blog — Carl M. Lane',
@@ -34,7 +34,7 @@ const BlogPage = async () => {
       </header>
       <div className="space-y-8">
         <TagFilter tags={tags} />
-        <BlogGrid posts={posts} />
+        <BlogGrid posts={posts.map((post) => ({ ...post, formattedDate: formatPostDate(post.date, 'short') }))} />
       </div>
     </>
   );
