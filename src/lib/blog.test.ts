@@ -74,12 +74,14 @@ const allPostsWithDraft: readonly BlogPost[] = [
   },
 ];
 
-vi.mock('./blog', () => {
+vi.mock('./blog', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('./blog')>();
   const publishedPosts = allPostsWithDraft
     .filter((p) => p.published)
     .toSorted((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   return {
+    formatPostDate: actual.formatPostDate,
     getBlogPosts: vi.fn(async () => publishedPosts),
     getPostsByTag: vi.fn(async (tag: string) => {
       const lower = tag.toLowerCase();
@@ -94,7 +96,9 @@ vi.mock('./blog', () => {
   };
 });
 
-const { getAllTags, getBlogPosts, getPostBySlug, getPostsByTag, getRecentPosts } = await import('./blog');
+const { formatPostDate, getAllTags, getBlogPosts, getPostBySlug, getPostsByTag, getRecentPosts } = await import(
+  './blog'
+);
 
 describe('getBlogPosts', () => {
   it('returns only published posts', async () => {
@@ -165,5 +169,34 @@ describe('getPostBySlug', () => {
   it('returns undefined for unknown slug', async () => {
     const post = await getPostBySlug('nonexistent');
     expect(post).toBeUndefined();
+  });
+});
+
+// --- formatPostDate tests ---
+
+describe('formatPostDate', () => {
+  it('formats with long style', () => {
+    expect(formatPostDate('2026-03-22', 'long')).toBe('March 22, 2026');
+  });
+
+  it('formats with short style', () => {
+    expect(formatPostDate('2026-03-22', 'short')).toBe('Mar 22, 2026');
+  });
+
+  it('defaults to long style', () => {
+    expect(formatPostDate('2026-03-22')).toBe('March 22, 2026');
+  });
+
+  it('handles month/year boundaries', () => {
+    expect(formatPostDate('2026-01-01', 'long')).toBe('January 1, 2026');
+    expect(formatPostDate('2025-12-31', 'long')).toBe('December 31, 2025');
+  });
+
+  it('uses UTC so dates never shift to adjacent day', () => {
+    // '2026-03-22' parsed as UTC midnight — should never become March 21 or 23
+    const result = formatPostDate('2026-03-22', 'long');
+    expect(result).toContain('22');
+    expect(result).not.toContain('21');
+    expect(result).not.toContain('23');
   });
 });
