@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { BlogPostingSchema } from '@/components/blog/blog-schema';
+import { BlogPostingSchema, BreadcrumbSchema } from '@/components/blog/blog-schema';
 import PostLayout from '@/components/blog/post-layout';
 import slugs from '@/content/blog';
 import { getPostBySlug } from '@/lib/blog';
@@ -38,7 +38,18 @@ const BlogPostPage = async ({ params }: { params: Promise<{ slug: string }> }) =
 
   return (
     <>
-      {post && <BlogPostingSchema post={post} />}
+      {post && (
+        <>
+          <BlogPostingSchema post={post} />
+          <BreadcrumbSchema
+            items={[
+              { name: 'Home', url: 'https://carlmlane.com' },
+              { name: 'Blog', url: 'https://carlmlane.com/blog' },
+              { name: post.title, url: `https://carlmlane.com/blog/${post.slug}` },
+            ]}
+          />
+        </>
+      )}
       <PostLayout metadata={metadata}>
         <Content />
       </PostLayout>

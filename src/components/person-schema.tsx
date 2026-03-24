@@ -89,4 +89,4 @@ const PersonSchema = () => (
   </>
 );
 
-export default PersonSchema;
+export { PersonSchema };
