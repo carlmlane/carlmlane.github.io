@@ -5,6 +5,7 @@ import type { BlogPost } from '@/lib/schemas';
 
 type BlogCardProps = {
   readonly post: BlogPost;
+  readonly formattedDate: string;
   readonly index: number;
 };
 
@@ -13,7 +14,7 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' as const } },
 };
 
-const BlogCard = ({ post, index }: BlogCardProps) => (
+const BlogCard = ({ post, formattedDate, index }: BlogCardProps) => (
   <motion.article variants={itemVariants} custom={index} className="group">
     <a
       href={`/blog/${post.slug}`}
@@ -23,12 +24,7 @@ const BlogCard = ({ post, index }: BlogCardProps) => (
         <div className="flex items-baseline justify-between gap-4">
           <h3 className="font-semibold text-foreground transition-colors group-hover:text-accent">{post.title}</h3>
           <time dateTime={post.date} className="shrink-0 font-mono text-xs text-muted">
-            {new Intl.DateTimeFormat('en-US', {
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric',
-              timeZone: 'UTC',
-            }).format(new Date(post.date))}
+            {formattedDate}
           </time>
         </div>
         <p className="text-sm leading-relaxed text-muted">{post.description}</p>

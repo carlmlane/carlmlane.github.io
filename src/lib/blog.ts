@@ -1,6 +1,16 @@
 import slugs from '@/content/blog';
 import { type BlogPost, postMetadataSchema } from './schemas';
 
+type DateStyle = 'long' | 'short';
+
+const formatPostDate = (dateStr: string, style: DateStyle = 'long'): string =>
+  new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: style,
+    day: 'numeric',
+    timeZone: 'UTC',
+  }).format(new Date(dateStr));
+
 const getBlogPosts = async (): Promise<readonly BlogPost[]> => {
   const posts = await Promise.all(
     slugs.map(async (slug) => {
@@ -37,4 +47,4 @@ const getPostBySlug = async (slug: string): Promise<BlogPost | undefined> => {
   return posts.find((post) => post.slug === slug);
 };
 
-export { getAllTags, getBlogPosts, getPostBySlug, getPostsByTag, getRecentPosts };
+export { formatPostDate, getAllTags, getBlogPosts, getPostBySlug, getPostsByTag, getRecentPosts };

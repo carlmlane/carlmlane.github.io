@@ -23,30 +23,30 @@ const mockPost = {
 
 describe('BlogCard', () => {
   it('renders post title', () => {
-    const { getByText } = render(<BlogCard post={mockPost} index={0} />);
+    const { getByText } = render(<BlogCard post={mockPost} formattedDate="Mar 22, 2026" index={0} />);
     expect(getByText('Test Post')).toBeInTheDocument();
   });
 
   it('renders post description', () => {
-    const { getByText } = render(<BlogCard post={mockPost} index={0} />);
+    const { getByText } = render(<BlogCard post={mockPost} formattedDate="Mar 22, 2026" index={0} />);
     expect(getByText('A test description.')).toBeInTheDocument();
   });
 
   it('renders formatted date', () => {
-    const { container } = render(<BlogCard post={mockPost} index={0} />);
+    const { container } = render(<BlogCard post={mockPost} formattedDate="Mar 22, 2026" index={0} />);
     const time = container.querySelector('time');
     expect(time).toBeInTheDocument();
     expect(time?.getAttribute('datetime')).toBe('2026-03-22');
   });
 
   it('renders tags', () => {
-    const { getByText } = render(<BlogCard post={mockPost} index={0} />);
+    const { getByText } = render(<BlogCard post={mockPost} formattedDate="Mar 22, 2026" index={0} />);
     expect(getByText('react')).toBeInTheDocument();
     expect(getByText('typescript')).toBeInTheDocument();
   });
 
   it('links to the correct blog post', () => {
-    const { getByRole } = render(<BlogCard post={mockPost} index={0} />);
+    const { getByRole } = render(<BlogCard post={mockPost} formattedDate="Mar 22, 2026" index={0} />);
     expect(getByRole('link')).toHaveAttribute('href', '/blog/test-post');
   });
 });
