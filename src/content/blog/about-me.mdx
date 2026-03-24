@@ -1,9 +1,9 @@
 export const metadata = {
-    title: 'Support Rep to VP of Engineering: An Unconventional Path',
+    title: 'Support Rep to VP: An Unconventional Path',
     date: '2026-03-22',
     lastUpdated: '2026-03-23',
     description:
-        'A customer-obsessed technologist\'s path from aerospace engineering and support to VP of Engineering, and what building successful teams taught me along the way.',
+        'A customer-obsessed technologist\'s path from aerospace engineering and support to VP of Engineering, and lessons from building successful teams.',
     tags: ['personal', 'career', 'engineering', 'leadership'],
     published: true,
     image: 'https://carlmlane.com/blog/about-me/hero.jpg',
@@ -84,54 +84,21 @@ I learned early that a small team of curious people will outrun a large team of 
   >
     <title id="donut-chart-title">Small Teams Disrupt, Large Teams Develop</title>
     <text x="250" y="30" textAnchor="middle" style={{ fill: '#e5e5e5', fontSize: '16px', fontWeight: 'bold' }}>
-      Small Teams Disrupt, Large Teams Develop
+      {'Small Teams Disrupt, Large Teams Develop'}
     </text>
     <path
-      d={(() => {
-        const cx = 250,
-          cy = 190,
-          r = 120,
-          ir = 70;
-        const angle = (72 / 100) * 2 * Math.PI;
-        const startAngle = -Math.PI / 2;
-        const endAngle = startAngle + angle;
-        const x1 = cx + r * Math.cos(startAngle);
-        const y1 = cy + r * Math.sin(startAngle);
-        const x2 = cx + r * Math.cos(endAngle);
-        const y2 = cy + r * Math.sin(endAngle);
-        const ix1 = cx + ir * Math.cos(endAngle);
-        const iy1 = cy + ir * Math.sin(endAngle);
-        const ix2 = cx + ir * Math.cos(startAngle);
-        const iy2 = cy + ir * Math.sin(startAngle);
-        return `M ${x1} ${y1} A ${r} ${r} 0 1 1 ${x2} ${y2} L ${ix1} ${iy1} A ${ir} ${ir} 0 1 0 ${ix2} ${iy2} Z`;
-      })()}
+      d="M 250 70 A 120 120 0 1 1 132.12552991255734 212.48575775028695 L 181.23989244899178 203.11669202100072 A 70 70 0 1 0 250 120 Z"
       style={{ fill: '#f59e0b' }}
     />
     <path
-      d={(() => {
-        const cx = 250,
-          cy = 190,
-          r = 120,
-          ir = 70;
-        const startAngle = -Math.PI / 2 + (72 / 100) * 2 * Math.PI;
-        const endAngle = -Math.PI / 2 + 2 * Math.PI;
-        const x1 = cx + r * Math.cos(startAngle);
-        const y1 = cy + r * Math.sin(startAngle);
-        const x2 = cx + r * Math.cos(endAngle);
-        const y2 = cy + r * Math.sin(endAngle);
-        const ix1 = cx + ir * Math.cos(endAngle);
-        const iy1 = cy + ir * Math.sin(endAngle);
-        const ix2 = cx + ir * Math.cos(startAngle);
-        const iy2 = cy + ir * Math.sin(startAngle);
-        return `M ${x1} ${y1} A ${r} ${r} 0 0 1 ${x2} ${y2} L ${ix1} ${iy1} A ${ir} ${ir} 0 0 0 ${ix2} ${iy2} Z`;
-      })()}
+      d="M 132.12552991255734 212.48575775028695 A 120 120 0 0 1 249.99999999999997 70 L 250 120 A 70 70 0 0 0 181.23989244899178 203.11669202100072 Z"
       style={{ fill: '#404040' }}
     />
     <text x="250" y="183" textAnchor="middle" style={{ fill: '#f59e0b', fontSize: '28px', fontWeight: 'bold' }}>
-      72%
+      {'72%'}
     </text>
     <text x="250" y="203" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '11px' }}>
-      disruptive ideas
+      {'disruptive ideas'}
     </text>
     <rect x="140" y="335" width="14" height="14" rx="3" style={{ fill: '#f59e0b' }} />
     <text x="160" y="347" style={{ fill: '#e5e5e5', fontSize: '12px' }}>
@@ -143,7 +110,7 @@ I learned early that a small team of curious people will outrun a large team of 
     </text>
   </svg>
   <figcaption style={{ textAlign: 'center', color: '#a3a3a3', fontSize: '0.8rem', marginTop: '0.5rem' }}>
-    Source: Wu, Wang & Evans, Nature, 2019
+    {'Source: Wu, Wang & Evans, Nature, 2019'}
   </figcaption>
 </figure>
 

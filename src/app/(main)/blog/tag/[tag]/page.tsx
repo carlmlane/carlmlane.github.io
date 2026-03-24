@@ -10,14 +10,30 @@ export const generateStaticParams = async () => {
   return tags.map((tag) => ({ tag }));
 };
 
+const tagDescriptions: Record<string, string> = {
+  career:
+    'Articles on career growth, navigating unconventional paths in tech, and lessons learned moving from individual contributor to engineering leadership.',
+  engineering:
+    'Posts on software engineering practices, architecture decisions, developer experience, and building reliable systems at scale.',
+  personal:
+    'Personal reflections on the intersection of life and work, continuous learning, and what shapes an engineering leader beyond the codebase.',
+  leadership:
+    'Thoughts on engineering leadership, building high-performing teams, fostering learning cultures, and scaling organizations effectively.',
+};
+
+const getTagDescription = (tag: string): string =>
+  tagDescriptions[tag] ??
+  `Articles and insights about ${tag} from Carl M. Lane, VP of Engineering. Explore thoughts on engineering leadership and software development.`;
+
 export const generateMetadata = async ({ params }: { params: Promise<{ tag: string }> }): Promise<Metadata> => {
   const { tag } = await params;
+  const description = getTagDescription(tag);
   return {
     title: `Posts tagged "${tag}" — Carl M. Lane`,
-    description: `Blog posts about ${tag}.`,
+    description,
     openGraph: {
       title: `Posts tagged "${tag}" — Carl M. Lane`,
-      description: `Blog posts about ${tag}.`,
+      description,
       url: `https://carlmlane.com/blog/tag/${tag}`,
       type: 'website',
     },

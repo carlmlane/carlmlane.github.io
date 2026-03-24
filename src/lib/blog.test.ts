@@ -74,7 +74,7 @@ const allPostsWithDraft: readonly BlogPost[] = [
   },
 ];
 
-vi.mock('./blog', () => {
+vi.mock('./blog', async () => {
   const publishedPosts = allPostsWithDraft
     .filter((p) => p.published)
     .toSorted((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());

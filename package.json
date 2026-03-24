@@ -17,7 +17,8 @@
     "typecheck": "tsc --noEmit",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "check-all": "pnpm run \"/^(build|lint|test|typecheck|test:e2e)$/\""
   },
   "author": "Carl M. Lane",
   "license": "MIT",

@@ -2,6 +2,7 @@ import SocialLinks from './social-links';
 
 const Hero = () => (
   <section className="animate-fade-in space-y-6">
+    <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">Carl M. Lane</h1>
     <p className="max-w-lg text-lg leading-relaxed text-muted">
       I build high-performing engineering teams that ship fast and are always learning. Currently I'm scaling{' '}
       <a

@@ -1,4 +1,5 @@
 import { getRecentPosts } from '@/lib/blog';
+import FormattedDate from './formatted-date';
 import { AnimatedSection } from './section';
 
 const Writing = async () => {
@@ -14,14 +15,7 @@ const Writing = async () => {
                 <h3 className="font-medium text-foreground transition-colors duration-200 group-hover:text-accent">
                   {post.title}
                 </h3>
-                <span className="shrink-0 font-mono text-xs text-muted">
-                  {new Intl.DateTimeFormat('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
-                    timeZone: 'UTC',
-                  }).format(new Date(post.date))}
-                </span>
+                <FormattedDate dateStr={post.date} style="short" className="shrink-0 font-mono text-xs text-muted" />
               </div>
               <p className="text-sm text-muted">{post.description}</p>
             </a>
