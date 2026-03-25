@@ -34,6 +34,9 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://carlmlane.com'),
   alternates: {
     canonical: 'https://carlmlane.com',
+    types: {
+      'application/rss+xml': 'https://carlmlane.com/feed.xml',
+    },
   },
   openGraph: {
     title: 'Carl M. Lane — VP of Engineering',
