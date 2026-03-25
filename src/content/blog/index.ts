@@ -1,3 +1,3 @@
-const slugs = ['about-me'] as const;
+const slugs = ['about-me', 'engineering-team-learning'] as const;
 
 export default slugs;

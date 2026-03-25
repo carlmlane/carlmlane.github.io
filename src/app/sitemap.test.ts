@@ -63,9 +63,17 @@ describe('sitemap', () => {
     expect(tsTag?.changeFrequency).toBe('weekly');
   });
 
+  it('includes the feed.xml entry', async () => {
+    const result = await sitemap();
+    const feed = result.find((e) => e.url === 'https://carlmlane.com/feed.xml');
+    expect(feed).toBeDefined();
+    expect(feed?.priority).toBe(0.3);
+    expect(feed?.changeFrequency).toBe('monthly');
+  });
+
   it('contains the expected total number of entries', async () => {
     const result = await sitemap();
-    // 2 static (home + blog index) + 2 posts + 2 tags = 6
-    expect(result).toHaveLength(6);
+    // 3 static (home + blog index + feed.xml) + 2 posts + 2 tags = 7
+    expect(result).toHaveLength(7);
   });
 });

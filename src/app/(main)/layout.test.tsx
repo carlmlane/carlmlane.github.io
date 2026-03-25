@@ -56,6 +56,11 @@ describe('metadata', () => {
     expect(metadata.alternates?.canonical).toBe('https://carlmlane.com');
   });
 
+  it('has RSS feed autodiscovery link', () => {
+    const types = metadata.alternates?.types as Record<string, string> | undefined;
+    expect(types?.['application/rss+xml']).toBe('https://carlmlane.com/feed.xml');
+  });
+
   it('has author', () => {
     const authors = metadata.authors as Array<{ name: string; url: string }>;
     expect(authors).toBeDefined();
