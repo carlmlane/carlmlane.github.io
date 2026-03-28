@@ -1,0 +1,257 @@
+export const metadata = {
+    title: "Why Your Team Can't Listen Until They've Been Heard",
+    date: '2026-03-30',
+    description:
+        "Leaders speak 150% more than their teams — and then wonder why nobody listens. Here's how to break the standoff where everyone's waiting to be heard first.",
+    tags: ['engineering', 'leadership', 'communication', 'psychological-safety', 'team-building'],
+    published: true,
+};
+
+There's a concept in negotiation that I keep running into in leadership: people can't listen until they've been heard.
+
+It sounds like a paradox, and it is one. Both sides sit across the table — or the Zoom call, or the Slack thread — waiting for the other to go first. "I'll listen to your concerns once you've acknowledged mine." Meanwhile, the other party is thinking the exact same thing. Nobody moves. Nothing gets resolved. The standup that was supposed to unblock the sprint turns into thirty minutes of people talking past each other.
+
+I've watched this dynamic play out in every engineering team I've led. I've [written before](/blog/engineering-team-learning) about how learning velocity is what separates great engineering teams from big ones. But learning can't happen if nobody's listening. And the thing most leaders get wrong isn't that they don't care about listening. It's that they think they already are.
+
+
+> **TLDR**
+>
+> - Leaders speak 150% more than team members and 300% more than observers — even without special authority ([CCL](https://www.ccl.org/articles/leading-effectively-articles/speaking-time-leadership/), 2025)
+> - Employees who feel heard are 4.6x more likely to feel equipped to do their best work ([Salesforce](https://a.sfdcstatic.com/content/dam/www/ocms-backup/assets/pdf/misc/salesforce-research-2017-workplace-equality-and-values-report.pdf))
+> - Only 26% of leaders exhibit behaviors that create psychological safety ([McKinsey](https://www.mckinsey.com/capabilities/people-and-organizational-performance/our-insights/psychological-safety-and-the-critical-role-of-leadership-development))
+> - The fix isn't listening harder — it's restructuring how your team communicates so quiet voices don't need to fight for airtime
+
+## Why Does Every Side Wait to Be Heard First?
+
+A [2025 study from the Center for Creative Leadership](https://www.ccl.org/articles/leading-effectively-articles/speaking-time-leadership/) found that designated leaders spoke 150% more than team members and 300% more than observers — even when the "leader" title conferred no special authority, information, or resources (CCL, 2025). In a typical five-person team, one person speaks more than three of the other members combined.
+
+That's not a meeting. That's a monologue with witnesses.
+
+{/* [UNIQUE INSIGHT] */}
+
+Here's the thing about the listening paradox: it isn't symmetrical. In engineering teams, the leader almost always has more airtime, more institutional power, and more perceived authority. The "standoff" isn't really a standoff at all. It's one person who's already being heard, wondering why the room seems disengaged, and four people who stopped trying to get a word in two meetings ago.
+
+[Salesforce research](https://a.sfdcstatic.com/content/dam/www/ocms-backup/assets/pdf/misc/salesforce-research-2017-workplace-equality-and-values-report.pdf) found that employees who feel their voice is heard at work are 4.6x more likely to feel equipped to perform their best work. That's not a marginal improvement. That's a different operating mode entirely. And yet the default structure of most engineering meetings — leader sets the agenda, leader speaks first, leader calls on people — actively works against it.
+
+So who's supposed to make the first move? The person with the power. Every time.
+
+## What Happens When Nobody Makes the First Move?
+
+[Gallup's 2025 State of the Global Workplace](https://www.gallup.com/workplace/349484/state-of-the-global-workplace.aspx) report found that global employee engagement fell to 21% in 2024, down from 23% the prior year. Seventy percent of the variance in team engagement is attributable to the manager (Gallup, 2025). When the leader doesn't break the listening standoff, everyone loses — slowly, and then all at once.
+
+The [APA's 2024 Work in America Survey](https://www.apa.org/pubs/reports/work-in-america/2024) made the consequences stark: workers with higher psychological safety are 10x less likely to describe their workplace as toxic (3% versus 30%) and far more likely to feel they belong (95% versus 69%) (APA, 2024).
+
+<figure style={{ margin: '2.5rem 0', textAlign: 'center', padding: '1.5rem', borderRadius: '12px' }}>
+  <svg
+    viewBox="0 0 580 320"
+    width="100%"
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-labelledby="psych-safety-bar-title"
+    style={{ background: 'transparent', fontFamily: 'system-ui, sans-serif' }}
+  >
+    <title id="psych-safety-bar-title">Impact of Psychological Safety on Workplace Experience</title>
+    <text x="290" y="28" textAnchor="middle" style={{ fill: '#e5e5e5', fontSize: '15px', fontWeight: 'bold' }}>
+      {'Impact of Psychological Safety on Workplace Experience'}
+    </text>
+    <text x="290" y="46" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '11px' }}>
+      {'Workers with high vs. low psychological safety'}
+    </text>
+
+    {/* Category labels */}
+    <text x="150" y="90" textAnchor="end" style={{ fill: '#e5e5e5', fontSize: '12px' }}>{'Feel they belong'}</text>
+    <text x="150" y="160" textAnchor="end" style={{ fill: '#e5e5e5', fontSize: '12px' }}>{'Comfortable being'}</text>
+    <text x="150" y="174" textAnchor="end" style={{ fill: '#e5e5e5', fontSize: '12px' }}>{'themselves'}</text>
+    <text x="150" y="240" textAnchor="end" style={{ fill: '#e5e5e5', fontSize: '12px' }}>{'Describe workplace'}</text>
+    <text x="150" y="254" textAnchor="end" style={{ fill: '#e5e5e5', fontSize: '12px' }}>{'as toxic'}</text>
+
+    {/* Grid lines */}
+    <line x1="160" y1="60" x2="560" y2="60" stroke="#222" strokeWidth="0.5" />
+    <line x1="160" y1="130" x2="560" y2="130" stroke="#222" strokeWidth="0.5" />
+    <line x1="160" y1="200" x2="560" y2="200" stroke="#222" strokeWidth="0.5" />
+    <line x1="160" y1="270" x2="560" y2="270" stroke="#222" strokeWidth="0.5" />
+
+    {/* Row 1: Feel they belong — High 95%, Low 69% */}
+    <rect x="160" y="72" width={380} height="16" rx="3" style={{ fill: '#5b9ee1' }} />
+    <text x={545} y="84" textAnchor="start" style={{ fill: '#5b9ee1', fontSize: '12px', fontWeight: 'bold' }}>{'95%'}</text>
+    <rect x="160" y="92" width={276} height="16" rx="3" style={{ fill: '#404040' }} />
+    <text x={441} y="104" textAnchor="start" style={{ fill: '#a3a3a3', fontSize: '12px' }}>{'69%'}</text>
+
+    {/* Row 2: Comfortable being themselves — High 95%, Low 75% */}
+    <rect x="160" y="142" width={380} height="16" rx="3" style={{ fill: '#5b9ee1' }} />
+    <text x={545} y="154" textAnchor="start" style={{ fill: '#5b9ee1', fontSize: '12px', fontWeight: 'bold' }}>{'95%'}</text>
+    <rect x="160" y="162" width={300} height="16" rx="3" style={{ fill: '#404040' }} />
+    <text x={465} y="174" textAnchor="start" style={{ fill: '#a3a3a3', fontSize: '12px' }}>{'75%'}</text>
+
+    {/* Row 3: Describe workplace as toxic — High 3%, Low 30% */}
+    <rect x="160" y="222" width={12} height="16" rx="3" style={{ fill: '#5b9ee1' }} />
+    <text x={177} y="234" textAnchor="start" style={{ fill: '#5b9ee1', fontSize: '12px', fontWeight: 'bold' }}>{'3%'}</text>
+    <rect x="160" y="242" width={120} height="16" rx="3" style={{ fill: '#e5a853' }} />
+    <text x={285} y="254" textAnchor="start" style={{ fill: '#e5a853', fontSize: '12px', fontWeight: 'bold' }}>{'30%'}</text>
+
+    {/* Legend */}
+    <rect x="180" y="288" width="12" height="12" rx="2" style={{ fill: '#5b9ee1' }} />
+    <text x="197" y="299" style={{ fill: '#e5e5e5', fontSize: '11px' }}>{'High psychological safety'}</text>
+    <rect x="350" y="288" width="12" height="12" rx="2" style={{ fill: '#404040' }} />
+    <text x="367" y="299" style={{ fill: '#e5e5e5', fontSize: '11px' }}>{'Low psychological safety'}</text>
+  </svg>
+  <figcaption style={{ textAlign: 'center', color: '#a3a3a3', fontSize: '0.8rem', marginTop: '0.5rem' }}>
+    {'Source: APA 2024 Work in America Survey (n = 2,027 U.S. adults)'}
+  </figcaption>
+</figure>
+
+{/* [PERSONAL EXPERIENCE] */}
+
+I've inherited teams where the silence in meetings wasn't agreement — it was surrender. People had learned that speaking up didn't change anything, so they stopped. The signals were obvious once you knew to look for them: PRs with no discussion, retros where the same three people talked, Slack threads where only senior engineers replied. The team wasn't quiet because they had nothing to say. They were quiet because nobody had demonstrated that saying something mattered.
+
+That's the cost of the listening standoff. It doesn't look like conflict. It looks like compliance. And compliance is where good engineering cultures go to die.
+
+## How Do You Lead Directly Without Drowning Out Quiet Voices?
+
+[Google's Project Aristotle](https://rework.withgoogle.com/intl/en/guides/understanding-team-effectiveness) studied 180+ teams and found that psychological safety — not talent, not resources, not seniority — was the number one predictor of team effectiveness (Google, 2015). But "create psychological safety" is advice roughly as useful as "be a better leader." What does it actually look like in an engineering standup at 9:15 on a Tuesday?
+
+Here are three structural changes that worked for me.
+
+### Speak Last, Not First
+
+The simplest change I've made as a leader is shutting up at the start of meetings. When the most senior person in the room speaks first, they anchor the entire conversation. Everyone else adjusts their position relative to the leader's, even subconsciously. The research backs this up: [MIT's Human Dynamics Lab](https://dl.acm.org/doi/fullHtml/10.1145/3461615.3485417) found that communication patterns — specifically, inclusive turn-taking where different team members speak in succession — predict team performance 5x more strongly than individual intelligence.
+
+So I speak last. In design reviews, I ask questions before stating opinions. In sprint planning, I let the team estimate before I weigh in. It feels uncomfortable at first. Good. That discomfort is the sound of the hierarchy loosening its grip on the conversation.
+
+### Use Written-First Formats
+
+Research from the [Association for Psychological Science](https://www.psychologicalscience.org/news/minds-business/theres-a-better-way-to-brainstorm.html) showed that brainwriting — where participants write ideas independently before sharing — consistently generates more ideas than verbal brainstorming (Paulus & Yang, 2000). The mechanism is simple: in a four-person group, four ideas get generated simultaneously instead of one at a time. Production blocking disappears. And introverts contribute equally to extroverts.
+
+{/* [UNIQUE INSIGHT] */}
+
+I've adapted this into what I call "written-first" engineering culture. Before any significant meeting, participants write their thoughts in a shared doc. RFCs get written and commented on asynchronously before the synchronous discussion. Retro items get submitted anonymously before the meeting starts. This does two things: it gives quiet thinkers time to formulate and it removes the advantage that fast talkers have in live settings. The best technical ideas I've seen in my career didn't come from whoever talked loudest in the room. They came from people who needed twenty minutes and a text editor.
+
+<figure style={{ margin: '2.5rem 0', textAlign: 'center', padding: '1.5rem', borderRadius: '12px' }}>
+  <svg
+    viewBox="0 0 580 310"
+    width="100%"
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-labelledby="lollipop-title"
+    style={{ background: 'transparent', fontFamily: 'system-ui, sans-serif' }}
+  >
+    <title id="lollipop-title">Speaking Time Distribution in a Typical 5-Person Team</title>
+    <text x="290" y="28" textAnchor="middle" style={{ fill: '#e5e5e5', fontSize: '15px', fontWeight: 'bold' }}>
+      {'Speaking Time Distribution in a 5-Person Team'}
+    </text>
+    <text x="290" y="46" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '11px' }}>
+      {'Designated leaders dominate even without special authority'}
+    </text>
+
+    {/* Y-axis labels */}
+    <text x="95" y="100" textAnchor="end" style={{ fill: '#e5e5e5', fontSize: '12px' }}>{'Leader'}</text>
+    <text x="95" y="145" textAnchor="end" style={{ fill: '#e5e5e5', fontSize: '12px' }}>{'Member A'}</text>
+    <text x="95" y="190" textAnchor="end" style={{ fill: '#e5e5e5', fontSize: '12px' }}>{'Member B'}</text>
+    <text x="95" y="235" textAnchor="end" style={{ fill: '#e5e5e5', fontSize: '12px' }}>{'Member C'}</text>
+    <text x="95" y="280" textAnchor="end" style={{ fill: '#e5e5e5', fontSize: '12px' }}>{'Observer'}</text>
+
+    {/* Grid lines */}
+    <line x1="105" y1="85" x2="540" y2="85" stroke="#222" strokeWidth="0.5" />
+    <line x1="105" y1="130" x2="540" y2="130" stroke="#222" strokeWidth="0.5" />
+    <line x1="105" y1="175" x2="540" y2="175" stroke="#222" strokeWidth="0.5" />
+    <line x1="105" y1="220" x2="540" y2="220" stroke="#222" strokeWidth="0.5" />
+    <line x1="105" y1="265" x2="540" y2="265" stroke="#222" strokeWidth="0.5" />
+
+    {/* Lollipop stems */}
+    <line x1="105" y1="96" x2="430" y2="96" stroke="#5b9ee1" strokeWidth="2" />
+    <line x1="105" y1="141" x2="255" y2="141" stroke="#7c6fe0" strokeWidth="2" />
+    <line x1="105" y1="186" x2="205" y2="186" stroke="#7c6fe0" strokeWidth="2" />
+    <line x1="105" y1="231" x2="170" y2="231" stroke="#7c6fe0" strokeWidth="2" />
+    <line x1="105" y1="276" x2="140" y2="276" stroke="#a3a3a3" strokeWidth="2" />
+
+    {/* Lollipop circles */}
+    <circle cx="430" cy="96" r="8" style={{ fill: '#5b9ee1' }} />
+    <circle cx="255" cy="141" r="8" style={{ fill: '#7c6fe0' }} />
+    <circle cx="205" cy="186" r="8" style={{ fill: '#7c6fe0' }} />
+    <circle cx="170" cy="231" r="8" style={{ fill: '#7c6fe0' }} />
+    <circle cx="140" cy="276" r="8" style={{ fill: '#a3a3a3' }} />
+
+    {/* Value labels */}
+    <text x="445" y="100" style={{ fill: '#5b9ee1', fontSize: '12px', fontWeight: 'bold' }}>{'~38%'}</text>
+    <text x="270" y="145" style={{ fill: '#7c6fe0', fontSize: '12px' }}>{'~18%'}</text>
+    <text x="220" y="190" style={{ fill: '#7c6fe0', fontSize: '12px' }}>{'~14%'}</text>
+    <text x="185" y="235" style={{ fill: '#7c6fe0', fontSize: '12px' }}>{'~10%'}</text>
+    <text x="155" y="280" style={{ fill: '#a3a3a3', fontSize: '12px' }}>{'~7%'}</text>
+
+    {/* Annotation */}
+    <text x="290" y="298" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px', fontStyle: 'italic' }}>
+      {'Leader speaks more than Members B + C + Observer combined'}
+    </text>
+  </svg>
+  <figcaption style={{ textAlign: 'center', color: '#a3a3a3', fontSize: '0.8rem', marginTop: '0.5rem' }}>
+    {'Source: Center for Creative Leadership (2025), 198 participants across 38 teams'}
+  </figcaption>
+</figure>
+
+### Rotate the First Move
+
+The listening paradox breaks when someone goes first. In most teams, that someone is always the same person — usually the loudest or most senior. So I rotate it. Different engineers lead different retros. Junior developers present their own design proposals. The on-call engineer runs the incident review, not the manager.
+
+This isn't about distributing workload. It's about distributing voice. When someone facilitates a conversation, they're structurally positioned as the person who gets heard. Rotate that position and you rotate who gets heard. This connects to a broader principle I think about a lot: [the teams that win aren't the biggest — they're the fastest learners](/blog/engineering-team-learning).
+
+## What Does "Being Heard" Actually Look Like in Practice?
+
+[McKinsey research](https://www.mckinsey.com/capabilities/people-and-organizational-performance/our-insights/psychological-safety-and-the-critical-role-of-leadership-development) found that only 26% of leaders exhibit behaviors that actually create psychological safety on their teams. Positive team climate — the strongest driver of psychological safety — exists in only 43% of teams surveyed (McKinsey, 2021). The gap between "I'm a good listener" and actually creating conditions where people feel heard is enormous.
+
+Being heard isn't a feeling. It's a set of observable behaviors. Here's what it looks like in practice:
+
+**Paraphrase before responding.** "What I'm hearing is that you think the migration timeline is too aggressive. Is that right?" This sounds basic. It is basic. And almost nobody does it consistently. Paraphrasing forces you to actually process what someone said instead of waiting for your turn to talk.
+
+**Credit ideas to their source.** "That's the approach Priya suggested in last week's RFC" does more for psychological safety than any all-hands speech about open culture. When people see that their contributions get remembered and attributed, they contribute more.
+
+{/* [PERSONAL EXPERIENCE] */}
+
+**Close the loop.** The most demoralizing experience in an engineering org isn't having your idea rejected. It's having it disappear. Someone raises a concern in a retro, the team nods, and nothing happens. No follow-up. No acknowledgment that it was even considered. I've made it a rule on my teams: every retro item gets a written response within a week, even if the response is "we heard this and decided not to act on it right now, here's why." The "here's why" is what separates being heard from being ignored.
+
+## Five Changes You Can Make This Sprint
+
+A disengaged employee costs an organization the equivalent of 34% of their annual salary ([Gallup](https://www.gallup.com/workplace/468233/employee-engagement-needs-rebound-2023.aspx), 2023). You don't need a culture transformation initiative to start fixing that. You need five changes to the way your next meeting runs.
+
+- **Ban the leader-speaks-first pattern.** In your next design review or planning session, explicitly say: "I'll share my thoughts after everyone else." Then actually do it. The team will notice.
+
+- **Add a written-first step to every recurring meeting.** Retro items, design feedback, planning estimates — all submitted in writing before the live session. Give people ten minutes and a shared doc. You'll hear from engineers who've been silent for months.
+
+- **Rotate facilitation.** Whoever runs the meeting controls the frame. Stop defaulting to the same person. Let junior engineers and quieter team members take the lead.
+
+- **Paraphrase one idea per meeting.** Pick someone's contribution and restate it back to them before responding. It takes ten seconds and it signals that you're actually processing what they said, not just waiting to talk.
+
+- **Close every open loop in writing.** If someone raised it, respond to it. Even if the answer is no. Especially if the answer is no. Silent rejection breeds silent disengagement.
+
+These aren't grand gestures. They're structural changes to who speaks, when, and how the team knows their input landed. The listening paradox doesn't break with good intentions. It breaks with different defaults.
+
+<FAQ>
+<div>
+### Doesn't "speak last" make the leader seem disengaged?
+
+It does the opposite. [Google's Project Aristotle](https://rework.withgoogle.com/intl/en/guides/understanding-team-effectiveness) found that psychological safety — built through inclusive participation patterns — was the top predictor of team effectiveness across 180+ teams (Google, 2015). When leaders speak last, the team speaks more freely, and the resulting discussion is richer. You seem more engaged because you're responding to what people actually said.
+</div>
+<div>
+### Won't written-first formats slow things down?
+
+Research shows [brainwriting generates more ideas than verbal brainstorming](https://www.psychologicalscience.org/news/minds-business/theres-a-better-way-to-brainstorm.html) in the same time period because it eliminates production blocking — four people think simultaneously instead of sequentially (Paulus & Yang, 2000). Meetings get shorter because the thinking happened asynchronously. You're trading slower setup for faster, higher-quality discussion.
+</div>
+<div>
+### How do you handle someone who dominates every conversation?
+
+Structure beats willpower. Round-robin formats, written-first submissions, and explicit time-boxing remove the need for the facilitator to play traffic cop. The [Center for Creative Leadership](https://www.ccl.org/articles/leading-effectively-articles/speaking-time-leadership/) found that speaking-time imbalance persists even without authority asymmetry (CCL, 2025). That means the fix isn't asking someone to talk less — it's changing the format so that everyone talks equally by default.
+</div>
+</FAQ>
+
+## The Leader Goes First — by Listening First
+
+The listening paradox feels like a trap, but it isn't. Someone has to go first. In an engineering team, that someone is you.
+
+Going first doesn't mean talking first. It means listening first — visibly, structurally, and consistently. It means designing meetings where quiet voices don't need permission to speak. It means closing loops so people know their input didn't vanish into the void.
+
+{/* [PERSONAL EXPERIENCE] */}
+
+The best engineering conversations I've been part of weren't the ones where I had the best ideas. They were the ones where I said the least and learned the most. That's not humility. That's the job.
+
+If your team isn't listening to each other, look at who's been doing all the talking. Then stop. Ask a question. Wait. The silence will be uncomfortable. Let it be. That's the sound of the standoff breaking.
+
+Read more about [why learning velocity beats headcount](/blog/engineering-team-learning) in engineering teams.

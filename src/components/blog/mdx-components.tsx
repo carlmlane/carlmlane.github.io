@@ -1,6 +1,7 @@
 import type { MDXComponents } from 'mdx/types';
 import type { ComponentPropsWithoutRef } from 'react';
 import { highlight } from 'sugar-high';
+import { FAQ } from './faq';
 
 const createHeading = (Tag: 'h1' | 'h2' | 'h3' | 'h4') => {
   const Heading = (props: ComponentPropsWithoutRef<typeof Tag>) => (
@@ -60,6 +61,7 @@ const blogMdxComponents: MDXComponents = {
   pre: Pre,
   blockquote: Blockquote,
   img: Img,
+  FAQ,
 };
 
 export { blogMdxComponents };
