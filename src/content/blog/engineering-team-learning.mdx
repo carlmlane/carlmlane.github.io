@@ -269,12 +269,12 @@ The real opportunity is what happens to the time AI frees up. At Marqii, we ship
     <text x="450" y="169" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px', fontWeight: 'bold' }}>{'42%'}</text>
 
     {/* Legend */}
-    <rect x="130" y="210" width="12" height="12" rx="2" style={{ fill: '#5b9ee1' }} />
-    <text x="147" y="221" style={{ fill: '#e5e5e5', fontSize: '11px' }}>{'Learning & domain expertise'}</text>
-    <rect x="295" y="210" width="12" height="12" rx="2" style={{ fill: '#e5a853' }} />
-    <text x="312" y="221" style={{ fill: '#e5e5e5', fontSize: '11px' }}>{'Implementation'}</text>
-    <rect x="410" y="210" width="12" height="12" rx="2" style={{ fill: '#404040', stroke: '#525252', strokeWidth: 1 }} />
-    <text x="427" y="221" style={{ fill: '#e5e5e5', fontSize: '11px' }}>{'Maintenance & tech debt'}</text>
+    <rect x="65" y="210" width="12" height="12" rx="2" style={{ fill: '#5b9ee1' }} />
+    <text x="82" y="221" style={{ fill: '#e5e5e5', fontSize: '11px' }}>{'Learning & domain expertise'}</text>
+    <rect x="250" y="210" width="12" height="12" rx="2" style={{ fill: '#e5a853' }} />
+    <text x="267" y="221" style={{ fill: '#e5e5e5', fontSize: '11px' }}>{'Implementation'}</text>
+    <rect x="370" y="210" width="12" height="12" rx="2" style={{ fill: '#404040', stroke: '#525252', strokeWidth: 1 }} />
+    <text x="387" y="221" style={{ fill: '#e5e5e5', fontSize: '11px' }}>{'Maintenance & tech debt'}</text>
   </svg>
   <figcaption style={{ textAlign: 'center', color: '#a3a3a3', fontSize: '0.8rem', marginTop: '0.5rem' }}>
     {'Source: Stripe Developer Coefficient (2018); Peng et al. (2023); author experience'}
@@ -310,19 +310,23 @@ This framework isn't universal. Regulated industries — healthcare, finance, ae
 
 Conway's law is descriptive, not prescriptive. Intentional org design is hard, and it doesn't always produce the architecture you envisioned. But the direction holds: teams that learn faster communicate better, and better communication produces better systems.
 
-## Frequently Asked Questions
-
+<FAQ>
+<div>
 ### Doesn't this just apply to startups?
 
 No. The learning velocity principle applies at any scale. Large organizations can create small, empowered teams with short feedback loops. The key is reducing communication distance between the people doing the work and the people experiencing the outcomes. Google's Project Aristotle studied 180+ teams across a massive org and found that [psychological safety](https://rework.withgoogle.com/intl/en/guides/understanding-team-effectiveness) — the foundation of learning — was the top predictor of effectiveness regardless of team size (Google, 2015).
-
+</div>
+<div>
 ### How do you actually measure learning velocity?
 
 Start with lead time from hypothesis to validated insight. Track how often teams run experiments, how quickly they process results, and how frequently architectural decisions get revisited based on new information. [DORA metrics](https://dora.dev/research/2024/dora-report/) are a useful proxy — elite performers learn from production faster, which shows up as 2,293x faster recovery and 127x shorter lead times (DORA, 2024).
-
+</div>
+<div>
 ### Won't AI tools just create more technical debt?
 
 They can, if you optimize purely for output speed. The argument here is different: use the time savings for learning and domain expertise, not just for shipping more code. More code without more understanding is exactly how you get the maintenance gravity problem described above. The 42% of time developers already spend on debt ([Stripe](https://stripe.com/files/reports/the-developer-coefficient.pdf), 2018) doesn't need to grow.
+</div>
+</FAQ>
 
 ## The Job Is Protecting the Team's Ability to Learn
 
