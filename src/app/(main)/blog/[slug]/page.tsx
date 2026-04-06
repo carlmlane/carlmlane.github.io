@@ -26,6 +26,13 @@ export const generateMetadata = async ({ params }: { params: Promise<{ slug: str
       type: 'article',
       publishedTime: post.date,
       tags: [...post.tags],
+      ...(post.image ? { images: [{ url: post.image }] } : {}),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.description,
+      ...(post.image ? { images: [post.image] } : {}),
     },
     alternates: { canonical: `https://carlmlane.com/blog/${post.slug}` },
   };

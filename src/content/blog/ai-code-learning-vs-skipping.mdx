@@ -1,0 +1,266 @@
+import { FAQ } from '@/components/blog/faq';
+
+export const metadata = {
+  title: 'Is AI Code Helping Your Team Learn or Helping Them Skip It?',
+  date: '2026-04-06',
+  description:
+    "AI PRs have 1.7x more issues than human code, but the real risk isn't quality. It's skipping the production experience that builds engineering judgment.",
+  tags: ['engineering', 'leadership', 'ai', 'team-building'],
+  published: true,
+  image: 'https://carlmlane.com/blog/ai-code-learning-vs-skipping/hero.jpg',
+};
+
+The debate about AI code in engineering organizations is almost always framed wrong.
+
+One camp says gate it heavily. AI code is risky, untested, written by a tool that doesn't understand your system. The other says adopt it everywhere because the productivity gains are too big to leave on the table. Both camps are arguing about the wrong thing.
+
+The real question isn't whether to let AI write code. It's what you're using that code *for*. AI is extraordinary at helping people show what they mean. It's a liability when it lets people skip the experience of owning what they shipped. And the difference between those two things is where most organizations get stuck.
+
+> **TLDR**
+>
+> - AI-generated PRs contain 1.7x more issues than human-written code, with security issues 2.74x higher ([CodeRabbit](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report), 2025), but the real risk isn't the code quality itself
+> - AI's highest ROI is letting anyone, technical or not, turn an idea into a working prototype that communicates clearly
+> - Production ownership requires judgment that only develops through on-call rotations, incident reviews, and maintaining real systems
+> - The gate should be between prototype and production, not between contributor and idea submission
+
+## What Does the Conventional Wisdom Say About AI Code?
+
+[Stack Overflow's 2025 Developer Survey](https://survey.stackoverflow.co/2025/ai) found that 84% of developers use or plan to use AI coding tools, with 51% using them daily (Stack Overflow, 2025). Adoption isn't a question anymore. But how organizations think about that adoption splits into two predictable camps.
+
+**The cautious camp** points to real problems. AI-generated code introduces security vulnerabilities, patterns that don't fit existing architecture, and a kind of confident wrongness that passes casual review. Engineering leaders who've been burned by an AI-generated PR that caused a production incident will tell you this concern is earned. Several organizations have introduced approval chains and domain-specific bans on AI-generated code.
+
+**The acceleration camp** points to real gains. Tasks get completed faster. Junior engineers ramp up quicker. The pressure to keep pace with competitors who are adopting AI tools is genuine and growing.
+
+Here's what both camps have in common: they're framing the entire conversation around the code output itself. Quality, speed, correctness. Neither is asking what the code is *for* or who is doing the learning.
+
+I've argued before that [learning velocity beats headcount in engineering teams](/blog/engineering-team-learning). That argument applies here with one twist: AI makes the output-versus-learning tradeoff more acute, not less.
+
+## Why Are Both Camps Missing the Point?
+
+[CodeRabbit's analysis](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report) of 470 GitHub PRs found that AI-generated pull requests contain 10.83 issues per PR compared to 6.45 for human-written code, a 1.7x difference (CodeRabbit, 2025). Security issues were 2.74x higher. Readability issues were 3x higher. Those numbers are real, and they matter. But they're also not the most important thing happening.
+
+<figure style={{ margin: '2.5rem 0', textAlign: 'center', padding: '1.5rem', borderRadius: '12px' }}>
+  <svg
+    viewBox="0 0 580 340"
+    width="100%"
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-labelledby="ai-vs-human-bar-title"
+    style={{ background: 'transparent', fontFamily: 'system-ui, sans-serif' }}
+  >
+    <title id="ai-vs-human-bar-title">AI-Generated vs Human-Written Code: Issues per Pull Request</title>
+    <text x="290" y="28" textAnchor="middle" style={{ fill: '#e5e5e5', fontSize: '15px', fontWeight: 'bold' }}>
+      {'AI-Generated vs Human-Written Code Quality'}
+    </text>
+    <text x="290" y="46" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '11px' }}>
+      {'Issues per pull request by category (470 PRs analyzed)'}
+    </text>
+
+    {/* Category labels */}
+    <text x="145" y="95" textAnchor="end" style={{ fill: '#e5e5e5', fontSize: '12px' }}>{'Overall Issues/PR'}</text>
+    <text x="145" y="145" textAnchor="end" style={{ fill: '#e5e5e5', fontSize: '12px' }}>{'Security (multiplier)'}</text>
+    <text x="145" y="195" textAnchor="end" style={{ fill: '#e5e5e5', fontSize: '12px' }}>{'Readability (multiplier)'}</text>
+    <text x="145" y="245" textAnchor="end" style={{ fill: '#e5e5e5', fontSize: '12px' }}>{'Logic/Correctness (mult.)'}</text>
+
+    {/* Grid lines */}
+    <line x1="155" y1="68" x2="560" y2="68" stroke="#222" strokeWidth="0.5" />
+    <line x1="155" y1="118" x2="560" y2="118" stroke="#222" strokeWidth="0.5" />
+    <line x1="155" y1="168" x2="560" y2="168" stroke="#222" strokeWidth="0.5" />
+    <line x1="155" y1="218" x2="560" y2="218" stroke="#222" strokeWidth="0.5" />
+    <line x1="155" y1="268" x2="560" y2="268" stroke="#222" strokeWidth="0.5" />
+
+    {/* Row 1: Overall — AI 10.83, Human 6.45 */}
+    <rect x="155" y="80" width={320} height="14" rx="3" style={{ fill: '#5b9ee1' }} />
+    <text x={480} y="92" textAnchor="start" style={{ fill: '#5b9ee1', fontSize: '11px', fontWeight: 'bold' }}>{'10.83'}</text>
+    <rect x="155" y="96" width={191} height="14" rx="3" style={{ fill: '#404040' }} />
+    <text x={351} y="108" textAnchor="start" style={{ fill: '#a3a3a3', fontSize: '11px' }}>{'6.45'}</text>
+
+    {/* Row 2: Security — 2.74x */}
+    <rect x="155" y="130" width={274} height="14" rx="3" style={{ fill: '#e5a853' }} />
+    <text x={434} y="142" textAnchor="start" style={{ fill: '#e5a853', fontSize: '11px', fontWeight: 'bold' }}>{'2.74x'}</text>
+    <rect x="155" y="146" width={100} height="14" rx="3" style={{ fill: '#404040' }} />
+    <text x={260} y="158" textAnchor="start" style={{ fill: '#a3a3a3', fontSize: '11px' }}>{'1x baseline'}</text>
+
+    {/* Row 3: Readability — 3x */}
+    <rect x="155" y="180" width={300} height="14" rx="3" style={{ fill: '#7c6fe0' }} />
+    <text x={460} y="192" textAnchor="start" style={{ fill: '#7c6fe0', fontSize: '11px', fontWeight: 'bold' }}>{'3.0x'}</text>
+    <rect x="155" y="196" width={100} height="14" rx="3" style={{ fill: '#404040' }} />
+    <text x={260} y="208" textAnchor="start" style={{ fill: '#a3a3a3', fontSize: '11px' }}>{'1x baseline'}</text>
+
+    {/* Row 4: Logic/Correctness — 1.75x */}
+    <rect x="155" y="230" width={175} height="14" rx="3" style={{ fill: '#5b9ee1' }} />
+    <text x={335} y="242" textAnchor="start" style={{ fill: '#5b9ee1', fontSize: '11px', fontWeight: 'bold' }}>{'1.75x'}</text>
+    <rect x="155" y="246" width={100} height="14" rx="3" style={{ fill: '#404040' }} />
+    <text x={260} y="258" textAnchor="start" style={{ fill: '#a3a3a3', fontSize: '11px' }}>{'1x baseline'}</text>
+
+    {/* Legend */}
+    <rect x="180" y="290" width="12" height="12" rx="2" style={{ fill: '#5b9ee1' }} />
+    <text x="197" y="301" style={{ fill: '#a3a3a3', fontSize: '11px' }}>{'AI-generated'}</text>
+    <rect x="300" y="290" width="12" height="12" rx="2" style={{ fill: '#404040' }} />
+    <text x="317" y="301" style={{ fill: '#a3a3a3', fontSize: '11px' }}>{'Human-written'}</text>
+  </svg>
+  <figcaption style={{ color: '#a3a3a3', fontSize: '12px', marginTop: '0.5rem' }}>
+    {'Source: CodeRabbit State of AI vs. Human Code Generation Report, December 2025'}
+  </figcaption>
+</figure>
+
+Three specific problems with the way this conversation usually goes.
+
+{/* [UNIQUE INSIGHT] */}
+
+**They're arguing about the wrong unit of analysis.** The output of an AI coding session isn't the thing that matters. What matters is whether the person using AI is learning or bypassing learning. A senior engineer using Copilot to scaffold a prototype they'll own, understand, and refactor is doing something categorically different from someone copy-pasting a Cursor-generated PR into a repo they've never read. The code might look identical. The organizational risk is completely different.
+
+**The cautious camp is protecting the wrong thing.** When organizations gate AI code, they're often protecting the code review process rather than the learning process. The risk isn't that AI writes incorrect code (though it does). The risk is that organizations let AI become a substitute for the experience of owning production systems. There's a specific kind of judgment that only develops through on-call rotations, incident retrospectives, and the slow accumulation of scar tissue that comes from shipping and maintaining real software.
+
+**The acceleration camp conflates velocity with capability.** [GitClear's analysis](https://www.gitclear.com/ai_assistant_code_quality_2025_research) of 211 million changed lines found that refactoring dropped from 25% to under 10% of changed lines between 2021 and 2024, while code duplication grew from 8.3% to 12.3% (GitClear, 2025). Teams are writing more code and improving less of it. Shipping faster is not the same as getting better at building software.
+
+## What Does the Evidence Show About AI and Learning?
+
+[Stack Overflow's 2025 survey](https://survey.stackoverflow.co/2025/ai) found that 66% of developers spend extra time fixing AI code that is "almost right, but not quite" (Stack Overflow, 2025). And a [study of open-source projects](https://arxiv.org/abs/2510.10165) found that experienced core developers saw a 19% drop in their own original code output after Copilot adoption, while productivity gains were primarily driven by less-experienced peripheral developers (arXiv, 2025). The tools are shifting who does what. The question is whether that shift builds capability or erodes it.
+
+{/* [PERSONAL EXPERIENCE] */}
+
+Here's what I think gets undervalued in this conversation: AI's best use in an engineering org isn't the code it generates. It's the ideas it lets anyone demonstrate.
+
+A product manager who can generate a working prototype to show what they mean in a design review changes the conversation entirely. A support engineer who can build a quick proof-of-concept to illustrate the workflow problem they've been trying to explain for three sprints suddenly has a voice. It's not about them writing production code. It's about collapsing the "I can see it but I can't show it" gap that buries good ideas in organizations where only senior engineers can speak credibly about implementation.
+
+That's where AI's real efficiency lives. Not in replacing engineering judgment, but in giving more people the ability to make ideas concrete.
+
+But here's the thing nobody wants to say out loud: making an idea concrete and owning it in production are completely different skills. The first one AI can help with right now. The second one, it can't.
+
+![A diverse team standing at a whiteboard during a collaborative planning and prototyping session](/blog/ai-code-learning-vs-skipping/prototyping-session.jpg)
+
+<figure style={{ margin: '2.5rem 0', textAlign: 'center', padding: '1.5rem', borderRadius: '12px' }}>
+  <svg
+    viewBox="0 0 560 420"
+    width="100%"
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-labelledby="quadrant-matrix-title"
+    style={{ background: 'transparent', fontFamily: 'system-ui, sans-serif' }}
+  >
+    <title id="quadrant-matrix-title">Where AI Code Assistance Creates Value vs Risk</title>
+    <text x="280" y="28" textAnchor="middle" style={{ fill: '#e5e5e5', fontSize: '15px', fontWeight: 'bold' }}>
+      {'Where AI Assistance Creates Value vs. Risk'}
+    </text>
+    <text x="280" y="46" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '11px' }}>
+      {'Match your AI policy to the blast radius of what gets shipped'}
+    </text>
+
+    {/* Axes */}
+    <line x1="80" y1="70" x2="80" y2="380" stroke="#555" strokeWidth="1.5" />
+    <line x1="80" y1="380" x2="530" y2="380" stroke="#555" strokeWidth="1.5" />
+
+    {/* Axis labels */}
+    <text x="20" y="225" textAnchor="middle" transform="rotate(-90, 20, 225)" style={{ fill: '#a3a3a3', fontSize: '12px' }}>
+      {'Production Blast Radius'}
+    </text>
+    <text x="40" y="100" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'High'}</text>
+    <text x="40" y="360" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'Low'}</text>
+    <text x="305" y="410" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '12px' }}>
+      {'AI Assistance Value'}
+    </text>
+    <text x="120" y="398" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'Low'}</text>
+    <text x="500" y="398" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'High'}</text>
+
+    {/* Quadrant dividers */}
+    <line x1="305" y1="70" x2="305" y2="380" stroke="#333" strokeWidth="1" strokeDasharray="6,4" />
+    <line x1="80" y1="225" x2="530" y2="225" stroke="#333" strokeWidth="1" strokeDasharray="6,4" />
+
+    {/* Q1: Top-left — Low value, High blast radius (AVOID) */}
+    <rect x="90" y="78" width="205" height="139" rx="8" style={{ fill: '#7c6fe0', opacity: 0.15 }} />
+    <text x="192" y="120" textAnchor="middle" style={{ fill: '#7c6fe0', fontSize: '13px', fontWeight: 'bold' }}>{'Avoid'}</text>
+    <text x="192" y="140" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'AI-generated code in critical'}</text>
+    <text x="192" y="154" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'paths without ownership'}</text>
+
+    {/* Q2: Top-right — High value, High blast radius (GATE CAREFULLY) */}
+    <rect x="315" y="78" width="205" height="139" rx="8" style={{ fill: '#e5a853', opacity: 0.15 }} />
+    <text x="417" y="120" textAnchor="middle" style={{ fill: '#e5a853', fontSize: '13px', fontWeight: 'bold' }}>{'Gate Carefully'}</text>
+    <text x="417" y="140" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'AI-assisted with full ownership,'}</text>
+    <text x="417" y="154" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'review, and on-call commitment'}</text>
+
+    {/* Q3: Bottom-left — Low value, Low blast radius (FINE, NOT THE POINT) */}
+    <rect x="90" y="233" width="205" height="139" rx="8" style={{ fill: '#404040', opacity: 0.3 }} />
+    <text x="192" y="280" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '13px', fontWeight: 'bold' }}>{'Fine, Not the Point'}</text>
+    <text x="192" y="300" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'Minor scripts, one-off tooling,'}</text>
+    <text x="192" y="314" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'internal experiments'}</text>
+
+    {/* Q4: Bottom-right — High value, Low blast radius (THE SWEET SPOT) */}
+    <rect x="315" y="233" width="205" height="139" rx="8" style={{ fill: '#5b9ee1', opacity: 0.2 }} />
+    <text x="417" y="270" textAnchor="middle" style={{ fill: '#5b9ee1', fontSize: '13px', fontWeight: 'bold' }}>{'The Sweet Spot'}</text>
+    <text x="417" y="290" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'Prototypes, POCs, demos,'}</text>
+    <text x="417" y="304" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'learning new frameworks'}</text>
+    <text x="417" y="322" textAnchor="middle" style={{ fill: '#5b9ee1', fontSize: '10px', fontStyle: 'italic' }}>{'Open this door wide'}</text>
+  </svg>
+  <figcaption style={{ color: '#a3a3a3', fontSize: '12px', marginTop: '0.5rem' }}>
+    {'The highest-value AI use cases have the lowest blast radius. Match your policy accordingly.'}
+  </figcaption>
+</figure>
+
+The highest-value use cases for AI in software development (prototyping, proof-of-concept, learning a new framework) are all low-blast-radius activities where velocity genuinely matters and the output doesn't go straight to production. The risk profile is completely different from AI-generated code in a payments flow or an authentication system.
+
+Production ownership still requires the kind of judgment that only develops through maintaining real systems. The pattern recognition that comes from debugging production incidents, the intuition to know when a perfectly-correct-looking PR will create a maintenance nightmare in six months. None of that comes from AI. It comes from people who have owned systems in production.
+
+## What Should the Better Approach Look Like?
+
+[Deloitte's 2026 State of AI report](https://www.deloitte.com/us/en/what-we-do/capabilities/applied-artificial-intelligence/content/state-of-ai-in-the-enterprise.html) found that only 1 in 5 companies has a mature model for governance of autonomous AI agents, even as worker access to AI increased 50% in 2025 (Deloitte, 2026). Most organizations are adopting the tools faster than they're building the frameworks to use them well.
+
+{/* [UNIQUE INSIGHT] */}
+
+I think of this as **the Prototype Gate**. The idea is simple: the gate should be between prototype and production, not between contributor and idea submission.
+
+**Open the prototype door.** Any contributor (product manager, designer, support engineer, junior developer) should be able to build and share a working prototype using AI. This is where AI genuinely shines and where the organizational cost of being wrong is near zero. The best ideas often come from people closest to the problem, not people closest to the codebase. I've [written about why quiet voices get lost in engineering orgs](/blog/listening-before-being-heard), and this is one more way it happens. Teams that can't hear those voices lose ideas that never get made.
+
+**Require a learning path before production ownership.** Someone whose first encounter with the codebase is an AI-generated PR isn't ready to own what they shipped. That's not gatekeeping. It's setting them up to succeed. The path doesn't have to be long. It has to be real: code review participation, on-call shadowing, reading the system's incident history. Think of it as the minimum viable experience base for production ownership.
+
+**Separate AI assistance tiers by blast radius.** Low blast radius (prototypes, internal tools, test environments): AI assistance welcome, minimal gates. High blast radius (payments, auth, data pipelines, customer-facing critical paths): AI assistance allowed, but ownership and review standards apply fully.
+
+## How Do You Put This Into Practice?
+
+[IAPP's 2025 AI Governance report](https://iapp.org/resources/article/at-a-glance-ai-governance-profession-report-2025) found that 77% of organizations are actively working on AI governance (IAPP, 2025). If you're among them, here's where to focus.
+
+**Audit where your gate is placed.** Is it at the idea stage or the production deployment stage? Most organizations that describe themselves as "cautious about AI code" have implicitly placed the gate at contribution time. That means they're filtering out ideas, not protecting production. Move the gate.
+
+**Create a prototype-safe space.** This can be as simple as a shared repo or environment where prototypes live and nothing deploys automatically. The signal you're sending: "Show me what you mean. Don't worry about it being perfect." This directly enables the non-technical stakeholder use case that I think is AI's most underrated contribution.
+
+![Two developers reviewing code together on a laptop screen during a pair programming session](/blog/ai-code-learning-vs-skipping/code-review-session.jpg)
+
+**Define production ownership criteria separately from your AI policy.** "You can use AI to write code" and "you can deploy to production" are two different permissions. Write them down separately. The first should be permissive. The second should require demonstrated understanding of the system you're deploying into.
+
+**Build the learning path explicitly.** If a junior engineer or non-technical contributor generates a prototype that looks promising, don't just say "now make it production-ready." Give them a defined path: pair with a senior engineer, shadow the on-call rotation for one cycle, read the relevant runbooks, participate in one incident review. Those aren't arbitrary hurdles. They're how engineering judgment actually gets built.
+
+**Protect the learning loops AI can't replace.** Incident reviews, architecture decision records, post-mortems. This is where production intuition develops. Don't let AI summarize these into bullet points and call it done. The discussion is the learning.
+
+## Where Does This Approach Break Down?
+
+This framework assumes your organization has senior engineers who can mentor and own production systems. If you're a two-person startup with twelve stakeholders, the prototype-to-production path looks different. Some teams don't have the luxury of structured learning paths.
+
+AI tooling is also moving faster than any governance framework can track. What's risky to deploy today may be auditable and safe in eighteen months. The principle (gate at blast radius, not at idea submission) should hold even as the tooling changes. The specific thresholds will need revisiting.
+
+And to be clear: this isn't a defense of poorly reviewed AI code. Bad code is bad code regardless of who or what wrote it. The argument is about where organizations should focus their policy energy: on learning and ownership, not on the tool used to generate the first draft.
+
+<FAQ>
+<div>
+### Isn't this just describing a normal code review process?
+
+<p>No, and the distinction matters. Code review checks correctness. What this framework describes is production ownership readiness, which is different. A PR can pass review and still be written by someone who doesn't understand the blast radius of what they shipped, the on-call implications, or the architectural context. AI amplifies the need for the second kind of gate, not just the first.</p>
+</div>
+<div>
+### Won't this slow down non-technical contributors and make them feel unwelcome?
+
+<p>The opposite, if you get it right. The prototype-safe space is explicitly designed to be welcoming and low-friction. The friction lives at the production deployment stage, not the idea stage. Most non-technical contributors don't want to own production deployments — they want to be heard and to see their ideas have impact. The Prototype Gate gives them that without putting them in a position they're not equipped for.</p>
+</div>
+<div>
+### What if the AI-generated prototype is good enough to deploy as-is?
+
+<p>Then the question isn't about the code. It's about whether someone who understands the system is taking ownership of it. "Good enough to deploy" and "safe to deploy without an owner who understands it" are different claims. The learning path before production isn't about fixing the code. It's about making sure someone can maintain, debug, and extend it when things go wrong.</p>
+</div>
+</FAQ>
+
+## The Gap Worth Protecting
+
+The teams I've seen get this right didn't debate whether AI code was good or bad. They decided what they were using AI *for*. They treated prototyping as a conversation starter, not a deployment path. They let everyone show what they meant. And they protected the experiences (the incidents, the on-call rotations, the hard architectural decisions) that turn contributors into engineers who can own what they built.
+
+AI can compress the distance between an idea and a working demonstration. It can't compress the distance between a working demonstration and someone who truly understands the system they're maintaining. That gap is where engineering judgment lives. Protect it.
+
+If you're rethinking how your team learns and grows, start with [why learning velocity beats headcount](/blog/engineering-team-learning).
