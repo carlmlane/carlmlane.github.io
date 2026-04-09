@@ -48,6 +48,6 @@ describe('buildNewTabHtml', () => {
   });
 
   it('includes service worker registration script', () => {
-    expect(html).toContain('navigator.serviceWorker.register("./service-worker.js")');
+    expect(html).toContain('navigator.serviceWorker.register("/service-worker.js", { scope: "/new-tab" })');
   });
 });
