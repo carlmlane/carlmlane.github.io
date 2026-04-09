@@ -45,7 +45,7 @@ export const buildNewTabHtml = (): string => `<!doctype html>
   <script>
     async function registerServiceWorker() {
       try {
-        await navigator.serviceWorker.register("./service-worker.js");
+        await navigator.serviceWorker.register("/service-worker.js", { scope: "/new-tab" });
       } catch (error) {
         console.error("Service worker registration failed with error", error);
       }

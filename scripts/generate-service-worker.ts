@@ -28,6 +28,6 @@ self.addEventListener('fetch', (event) => {
 `;
 
 const scriptDir = import.meta.dirname ?? new URL('.', import.meta.url).pathname;
-const outPath = resolve(scriptDir, '..', 'public', 'new-tab', 'service-worker.js');
+const outPath = resolve(scriptDir, '..', 'public', 'service-worker.js');
 writeFileSync(outPath, serviceWorkerContent);
 console.log(`Generated ${outPath}`);
