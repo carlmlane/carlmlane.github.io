@@ -3,6 +3,7 @@ const slugs = [
   'engineering-team-learning',
   'listening-before-being-heard',
   'ai-code-learning-vs-skipping',
+  'emergent-ai-overview-effect',
 ] as const;
 
 export default slugs;
