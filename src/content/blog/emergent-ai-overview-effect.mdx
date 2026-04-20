@@ -1,0 +1,189 @@
+import { FAQ } from '@/components/blog/faq';
+
+export const metadata = {
+  title: 'Can Emergent AI Give Us the Overview Effect?',
+  date: '2026-04-20',
+  description:
+    'Artemis II astronauts came back changed. Emergent AI capabilities also cross thresholds that surprise insiders. Does the parallel hold, or break on embodiment?',
+  tags: ['ai', 'leadership', 'engineering', 'perspective'],
+  published: true,
+  image: 'https://carlmlane.com/blog/emergent-ai-overview-effect/hero.jpg',
+};
+
+Ten days ago, Reid Wiseman, Victor Glover, Christina Koch, and Jeremy Hansen splashed down in the Pacific after nine days away. Artemis II was the first crewed mission to leave low Earth orbit since Apollo 17 in 1972. On the fourth day, from a lunar-flyby distance that set a new human record of 252,756 miles from Earth, Koch said something that has been said, in various forms, by almost every astronaut who has ever looked back ([NASA](https://www.nasa.gov/blogs/missions/2026/04/06/artemis-ii-flight-day-6-crew-wraps-historic-lunar-flyby/), 2026).
+
+> "The thing that changed for me, looking back at Earth, was that I found myself noticing not only the beauty of Earth, but how much blackness there was around it and how it just made it even more special. It truly emphasized how alike we are, how the same thing keeps every single person on planet Earth alive." — Christina Koch, April 8, 2026 ([Popular Science](https://www.popsci.com/science/artemis-ii-astronaut-christina-koch-quote/), 2026)
+
+That shift has a name. Frank White called it the Overview Effect in 1987. And the question I've been turning over since watching the flight is this: if a threshold can change a person the way orbit changes an astronaut, what do we do with the other threshold we keep crossing — the one where AI systems suddenly do things no one could predict from the curve below?
+
+{/* [PERSONAL EXPERIENCE] */}
+
+I grew up glued to every NASA launch I could reach on a 1990s library BBS, studied aerospace engineering at Parks College, and eventually landed in software ([more on that path](/blog/about-me)). I've watched both sides of this particular analogy for a long time. I don't think the comparison is wrong. I think it's half right, which is a more interesting place to live.
+
+> **TLDR**
+>
+> - Frank White's *The Overview Effect* (4th ed., 2021, AIAA) documents a consistent, transformative cognitive shift across 44 original astronaut interviews ([NSS review](https://nss.org/book-review-the-overview-effect-4th-edition/))
+> - Wei et al. (2022) cataloged 137 emergent abilities in large language models — capabilities that appear abruptly at scale and can't be predicted by extrapolating smaller models ([arXiv 2206.07682](https://arxiv.org/abs/2206.07682))
+> - The parallel is structural: both are threshold phenomena where experience above the line doesn't follow from the line below
+> - The parallel breaks where it counts — the Overview Effect works because astronauts can't look away; emergent AI offers perspective, but we can absolutely close the tab
+
+## What Is the Overview Effect, Actually?
+
+The Overview Effect is a cognitive and emotional shift, consistently reported by astronauts, that begins when Earth fills the window. Frank White's 2021 fourth edition interviews 44 astronauts directly and references more than 50 in total ([NSS review](https://nss.org/book-review-the-overview-effect-4th-edition/)). The reports converge on three features: an unexpected appreciation of beauty, emotion that outruns the person's ability to describe it, and a new sense of connection to Earth as a single system ([Yaden et al.](https://www.semanticscholar.org/paper/The-overview-effect:-Awe-and-self-transcendent-in-Yaden-Iwry/dfba52018952f981248510de4ab2e24e86f1704e), 2016).
+
+It isn't a poetic flourish. It's a behavioral shift. Voski (2020) interviewed 14 astronauts and found that every one of them described sustained post-flight changes in how they thought about and acted on environmental issues back on Earth ([Journal of Environmental Psychology](https://www.sciencedirect.com/science/article/abs/pii/S0272494420300517), 2020). Piff and colleagues, studying awe more broadly across five studies with 2,078 participants, found that awe inductions reliably increased generosity, ethical decision-making, and prosocial behavior — mediated by what they called a "small self" ([APA](https://www.apa.org/pubs/journals/releases/psp-pspi0000018.pdf), 2015).
+
+![Earth rising above the lunar surface during the Artemis II far-side flyby, an Artemis-era echo of the 1968 Apollo 8 Earthrise photograph](/blog/emergent-ai-overview-effect/artemis-earthrise.jpg)
+
+What's striking is that astronauts can rarely describe the experience in a way that transfers to people who haven't had it. William Anders said it on Apollo 8. Edgar Mitchell said it coming back from the Moon. Koch said it ten days ago, in different words. The experience is vivid, the vocabulary is thin, and the change appears to be durable. That combination — threshold, insider surprise, language failure, lasting change — is what makes it interesting as a category, not just a moment.
+
+## What Do We Mean by Emergent Capabilities in AI?
+
+Emergent capabilities are abilities that appear in large models, don't appear in smaller models, and can't be predicted by extrapolating the performance curve of the smaller ones. Wei and 15 co-authors published the most-cited version of this claim in 2022, and the companion analysis catalogs 137 such abilities across BIG-Bench (67 tasks) and MMLU (51 tasks), ranging from multi-step arithmetic to instruction following to coherent chains of tool use ([arXiv 2206.07682](https://arxiv.org/abs/2206.07682); [Jason Wei's list](https://www.jasonwei.net/blog/emergence)).
+
+It would be dishonest to cite that paper without citing the NeurIPS 2023 Outstanding Paper that pushed back on it. Schaeffer, Miranda, and Koyejo argued that emergence is less a property of models and more a property of the metrics we use to evaluate them ([NeurIPS](https://proceedings.neurips.cc/paper_files/paper/2023/hash/adc98a266f45005c403b8311ca7e8bd7-Abstract-Conference.html), 2023). Swap an exact-match accuracy score for a continuous one, and some "emergent" jumps flatten into smooth curves. The debate isn't settled.
+
+What is settled is that the last eighteen months produced capability jumps no smooth curve predicted cleanly. Per Stanford's 2025 AI Index, SWE-bench — a benchmark where AI agents fix real GitHub issues — went from 4.4% in 2023 to 71.7% in 2024 ([Stanford HAI](https://hai.stanford.edu/ai-index/2025-ai-index-report), 2025). On an IMO qualifying exam, OpenAI's o1 scored 74.4% against GPT-4o's 9.3% ([OpenAI](https://openai.com/index/learning-to-reason-with-llms/), 2024). DeepSeek-R1 matched that class of result in January 2025 on a dramatically smaller training budget ([arXiv 2501.12948](https://arxiv.org/abs/2501.12948)). METR's long-horizon task study found AI agents' 50% completion horizon doubling roughly every seven months since 2019 ([METR](https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/), 2025).
+
+<figure style={{ margin: '2.5rem 0', textAlign: 'center', padding: '1.5rem', borderRadius: '12px' }}>
+  <svg
+    viewBox="0 0 580 340"
+    width="100%"
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-labelledby="capability-jump-title"
+    style={{ background: 'transparent', fontFamily: 'system-ui, sans-serif' }}
+  >
+    <title id="capability-jump-title">Capability thresholds on three AI benchmarks, before and after</title>
+    <text x="290" y="28" textAnchor="middle" style={{ fill: '#e5e5e5', fontSize: '15px', fontWeight: 'bold' }}>
+      {'Below the Threshold vs. Above It'}
+    </text>
+    <text x="290" y="46" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '11px' }}>
+      {'Benchmark scores on three reasoning tests, before and after capability jumps'}
+    </text>
+
+    {/* Benchmark labels (left) */}
+    <text x="160" y="95" textAnchor="end" style={{ fill: '#a3a3a3', fontSize: '11px' }}>{'SWE-bench (2023)'}</text>
+    <text x="160" y="130" textAnchor="end" style={{ fill: '#e5e5e5', fontSize: '11px' }}>{'SWE-bench (2024)'}</text>
+    <text x="160" y="180" textAnchor="end" style={{ fill: '#a3a3a3', fontSize: '11px' }}>{'IMO qualifier (GPT-4o)'}</text>
+    <text x="160" y="215" textAnchor="end" style={{ fill: '#e5e5e5', fontSize: '11px' }}>{'IMO qualifier (o1)'}</text>
+    <text x="160" y="265" textAnchor="end" style={{ fill: '#a3a3a3', fontSize: '11px' }}>{'GPQA (Claude 3.5 Sonnet)'}</text>
+    <text x="160" y="300" textAnchor="end" style={{ fill: '#e5e5e5', fontSize: '11px' }}>{'GPQA (o1)'}</text>
+
+    {/* Bars — 100% = 400px wide, starting at x=165 */}
+    {/* SWE-bench 2023: 4.4% */}
+    <rect x="165" y="84" width={17.6} height="14" rx="3" style={{ fill: '#404040' }} />
+    <text x={190} y="96" style={{ fill: '#a3a3a3', fontSize: '11px' }}>{'4.4%'}</text>
+
+    {/* SWE-bench 2024: 71.7% */}
+    <rect x="165" y="119" width={286.8} height="14" rx="3" style={{ fill: '#5b9ee1' }} />
+    <text x={460} y="131" style={{ fill: '#5b9ee1', fontSize: '11px', fontWeight: 'bold' }}>{'71.7%'}</text>
+
+    {/* IMO GPT-4o: 9.3% */}
+    <rect x="165" y="169" width={37.2} height="14" rx="3" style={{ fill: '#404040' }} />
+    <text x={210} y="181" style={{ fill: '#a3a3a3', fontSize: '11px' }}>{'9.3%'}</text>
+
+    {/* IMO o1: 74.4% */}
+    <rect x="165" y="204" width={297.6} height="14" rx="3" style={{ fill: '#f59e0b' }} />
+    <text x={470} y="216" style={{ fill: '#f59e0b', fontSize: '11px', fontWeight: 'bold' }}>{'74.4%'}</text>
+
+    {/* GPQA Claude 3.5: 67.2% */}
+    <rect x="165" y="254" width={268.8} height="14" rx="3" style={{ fill: '#404040' }} />
+    <text x={441} y="266" style={{ fill: '#a3a3a3', fontSize: '11px' }}>{'67.2%'}</text>
+
+    {/* GPQA o1: 78.1% */}
+    <rect x="165" y="289" width={312.4} height="14" rx="3" style={{ fill: '#7c6fe0' }} />
+    <text x={485} y="301" style={{ fill: '#7c6fe0', fontSize: '11px', fontWeight: 'bold' }}>{'78.1%'}</text>
+
+    {/* Axis */}
+    <line x1="165" y1="80" x2="165" y2="315" stroke="#222" strokeWidth="0.5" />
+    <line x1="165" y1="315" x2="565" y2="315" stroke="#222" strokeWidth="0.5" />
+    <text x="165" y="328" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'0%'}</text>
+    <text x="565" y="328" textAnchor="end" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'100%'}</text>
+  </svg>
+  <figcaption style={{ color: '#a3a3a3', fontSize: '12px', marginTop: '0.5rem' }}>
+    {'Sources: Stanford AI Index 2025; OpenAI, Learning to Reason with LLMs (2024)'}
+  </figcaption>
+</figure>
+
+{/* [UNIQUE INSIGHT] */}
+
+Both astronauts and AI researchers report something similar when pressed: the experience below the threshold doesn't prepare you for what happens above it. That's a specific claim about prediction, and it's what makes the analogy worth examining carefully.
+
+## Where the Analogy Actually Holds
+
+The Overview Effect and emergent AI capabilities share three structural features that don't usually show up together. They're threshold phenomena, they surprise the people closest to them, and they resist easy translation to people who haven't crossed over.
+
+Threshold behavior is the obvious one. Six hundred people out of eight billion have been to space. A handful of labs have trained frontier-scale models. In both cases, the boundary is expensive and steep, and the experience on the other side isn't available to observers halfway up.
+
+Insider surprise matters more than it sounds. You'd expect astronauts, after years of training, to know roughly what Earth-gazing would feel like. They don't. You'd expect AI researchers, after years of staring at loss curves and scaling laws, to know which capabilities the next model will have. They don't, not reliably. The gap between simulation and arrival is the same in both places, even though the machinery is completely different.
+
+Language failure is the third. Ask Christina Koch to describe what she felt and she'll say the blackness made Earth more special — which is a paraphrase, not an explanation. Ask an AI researcher to explain how a model that scored 9% on a benchmark suddenly scores 74% and you'll get honest shrugs mixed with post-hoc theory. Both groups are telling the truth. Both are reaching for vocabulary that was developed below the threshold they crossed.
+
+## Where the Analogy Breaks (and Why It Matters)
+
+Here's the uncomfortable part for anyone who wants the comparison to be clean: the Overview Effect is involuntary and embodied. Emergent AI is mediated and optional. Those two differences are not small.
+
+Embodiment first. An astronaut is inside the perception. Earth isn't on a screen; Earth is what you're in. The vestibular system, peripheral vision, the silence in the capsule — all of it is part of the experience. When you "see" an emergent AI capability, you're watching text appear in a window. The delivery channel is thinner than a television program, never mind a lunar flyby.
+
+Compulsion is the bigger one. An astronaut can't unsee Earth from orbit. You and I can absolutely close the tab. We can treat a reasoning model like autocomplete, run it through its paces, and get back to our day without anything shifting. The Overview Effect is effective precisely because it can't be refused. That property doesn't carry over.
+
+{/* [UNIQUE INSIGHT] */}
+
+And there's a subtler split. Astronauts see Earth, which is an object of their attention. When we use AI, we're watching a kind of externalized cognition — something close to the thing doing our own kind of work, more or less well. That's a different psychological event than looking at a planet. It can be fascinating, unsettling, clarifying. It's rarely awe in the Piff-and-Keltner sense. A 2024 study of immersive VR awe experiences found that even embodied conditions had "minimal impact on emotion" compared to simpler presentations ([arXiv 2409.14853](https://arxiv.org/abs/2409.14853), 2024). Mediated awe exists. It just doesn't reliably produce the downstream behavioral shift that embodied awe does.
+
+The danger of conflating the two is that we start expecting AI to produce astronaut-grade perspective shifts on its own. It can't. Not because the capability is fake, but because the mechanism of the Overview Effect is confrontation you can't escape — and that's not what a chat window is.
+
+## What Perspective Shift Can AI Actually Offer?
+
+Not the Overview Effect. Something quieter, more conditional, and arguably more useful if we take it seriously: a view of intelligence from outside itself.
+
+Three examples. Translation at scale made the contingency of idiom legible — phrases we thought were universal turned out to be shaped by grammar, weather, and trade. Coding assistants are making engineering judgment visible; the parts of the job that used to live in senior heads can now be watched, questioned, and sometimes improved by juniors who never would have seen them before. Reasoning traces — the chain-of-thought output modern models produce — make "how we think" legible in a way that cognitive science has been trying to pin down for fifty years.
+
+{/* [PERSONAL EXPERIENCE] */}
+
+I've watched the second of those play out inside engineering teams. I wrote about it in [AI code, learning, and what most teams are getting wrong](/blog/ai-code-learning-vs-skipping). The shift isn't that AI produces better code. The shift is that a product manager can suddenly show the thing they've been trying to describe for weeks, and a support engineer pointing at a bug for three sprints can hand a working reproduction to anyone on the team. That's a perspective change for the organization, even if it isn't transcendence.
+
+But notice the prerequisite. In all three examples, the shift only happens if the person using the tool pauses long enough to let the output *teach them something*, rather than just consume it. The perspective is available. It isn't automatic. That distinction is the whole essay.
+
+## What Engineering Leaders Should Do With This
+
+Treat every capability threshold — in models, in teams, in careers — as a moment that demands a new frame, not just a new tool. Thresholds are the wrong moments to do only what the threshold makes easier. They're the right moments to ask what the threshold makes visible.
+
+Three practical moves.
+
+First, when a new capability arrives, spend time *on* the thing, not just *with* it. Most teams give a new model a use case and a Slack channel and move on. Better is to sit with what it revealed. What did it make easy that used to be hard? What does that say about what your people have been spending their time on?
+
+Second, notice what the capability exposes about the old way. The most useful finding from the AI wave in my own org wasn't that we could ship faster. It was that [a lot of what we called "engineering" was actually translation](/blog/engineering-team-learning) — turning product intent into working code. When AI absorbed a chunk of that, the shape of engineering judgment got clearer, not blurrier.
+
+Third, resist the reflex to absorb the capability without updating the mental model around it. The Overview Effect works because astronauts can't avoid the update. For us, the update is optional. Optional updates mostly don't happen. The leaders who get this right are the ones who make the update deliberate.
+
+## Frequently Asked Questions
+
+<FAQ>
+<div>
+### Is the Overview Effect scientifically real, or is it mostly poetic?
+
+<p>Both, and the poetry is real. Voski (2020) documented sustained pro-environmental behavioral change across every one of 14 astronauts interviewed after spaceflight (<a href="https://www.sciencedirect.com/science/article/abs/pii/S0272494420300517">Journal of Environmental Psychology</a>, 2020). Awe research by Piff et al. (N=2,078) links awe experiences to measurable increases in prosocial behavior (<a href="https://www.apa.org/pubs/journals/releases/psp-pspi0000018.pdf">APA</a>, 2015). The poetic descriptions are a reasonable first-person account of a documented psychological effect.</p>
+</div>
+
+<div>
+### Are emergent abilities in LLMs real, or are they a measurement artifact?
+
+<p>The honest answer is "disputed." Wei et al. (2022) cataloged 137 emergent abilities across BIG-Bench and MMLU (<a href="https://arxiv.org/abs/2206.07682">arXiv 2206.07682</a>). Schaeffer et al. (2023), which won a NeurIPS Outstanding Paper Award, argued that apparent emergence is largely an artifact of nonlinear metrics (<a href="https://proceedings.neurips.cc/paper_files/paper/2023/hash/adc98a266f45005c403b8311ca7e8bd7-Abstract-Conference.html">NeurIPS</a>). Regardless of which framing wins, recent capability jumps like SWE-bench going from 4.4% to 71.7% in a year (<a href="https://hai.stanford.edu/ai-index/2025-ai-index-report">Stanford HAI</a>, 2025) are real enough to plan around.</p>
+</div>
+
+<div>
+### Is this just AI hype wearing astronaut imagery?
+
+<p>The comparison is easy to misuse. My argument runs the other way: the Overview Effect and emergent AI share structure, but they differ on the thing that makes the Overview Effect matter — confrontation you can't escape. Calling AI a new Overview Effect without noticing that difference is borrowed gravity. Noticing the difference is the point.</p>
+</div>
+</FAQ>
+
+## What Artemis II Actually Teaches Us About AI
+
+Four people spent nine days past low Earth orbit and came home describing something they couldn't have described in advance. That's a threshold experience working the way threshold experiences are supposed to work. It changed them because it was inescapable.
+
+The AI threshold is different. It's available, it's documented, and we can walk right through it and not notice. The perspective shift is on offer. Whether we take it is a separate question, and an organizational one. The astronauts didn't have to choose to be changed. We do. That isn't a weaker version of the same thing. It's a different thing wearing a similar shape.
+
+If the question is whether emergent AI can give us the Overview Effect, the answer is no. If the question is whether the capability threshold we keep crossing is the kind of moment that could change how we think about ourselves and our work — yes, when we decide to stand in it long enough for that to happen.
