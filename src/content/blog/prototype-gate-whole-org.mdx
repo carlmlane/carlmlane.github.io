@@ -1,0 +1,277 @@
+import { FAQ } from '@/components/blog/faq';
+
+export const metadata = {
+  title: 'How Does R&D Open the Prototype Gate to the Whole Organization?',
+  date: '2026-04-27',
+  description:
+    "Org-wide AI adoption isn't a tooling problem; it's an enablement problem. How R&D welcomes everyone to prototype while still owning production.",
+  tags: ['ai', 'leadership', 'engineering', 'team-building'],
+  published: true,
+  image: 'https://carlmlane.com/blog/prototype-gate-whole-org/hero.jpg',
+};
+
+When my CEO asked me to lead AI adoption across the whole company, I almost made the same mistake every R&D leader makes. I started with the tools.
+
+Pick the model. Set up the workspace. Write the prompt library. Spin up a Slack channel for tips. Done, right? Except adoption didn't actually happen — not in the way it needed to. A few engineers got faster. Most of the company stayed where they were. The gap between "we have AI access" and "we use AI well" turned out to be the entire job.
+
+Here's what I've learned running this at Marqii: org-wide AI adoption isn't a tooling problem. It's an enablement problem stacked on a literacy problem stacked on a trust problem. And the thing technical leaders are most equipped to do — protect production — has to live alongside the thing they're least practiced at, which is throwing the door open for everyone else.
+
+> **TLDR**
+>
+> - 75% of knowledge workers now use AI at work, and 46% of them started in just the last six months ([Microsoft Work Trend Index](https://www.microsoft.com/en-us/worklab/work-trend-index/2025-the-year-the-frontier-firm-is-born), 2025) — most of the adoption isn't happening in engineering
+> - Only 14% of organizations have an enterprise AI governance framework, even though 80% are already using AI in operations ([ModelOp](https://www.modelop.com/ai-gov-benchmark-report), 2025)
+> - 18% of regular AI users at work have received zero training, and only 33% can describe what an AI agent actually is ([BCG](https://www.bcg.com/publications/2025/ai-at-work-momentum-builds-but-gaps-remain), 2025)
+> - The R&D job isn't picking the model. It's teaching literacy, opening prototype lanes wide, and protecting production with the same engineering rigor it always had
+
+## What does "org-wide" AI adoption actually mean?
+
+[Stanford HAI's 2026 AI Index](https://hai.stanford.edu/ai-index/2026-ai-index-report) reports that 88% of organizations now use AI in at least one business function, but only 23% have scaled enterprise agent systems — and [McKinsey's 2025 State of AI](https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai) found no business function exceeds 15% of work scaled on AI (Stanford HAI, 2026; McKinsey, 2025). The gap between "tried it" and "uses it well" is the actual adoption problem.
+
+{/* [PERSONAL EXPERIENCE] */}
+
+Adoption looks completely different across functions, and that surprised me. Engineers were early — they'd been using copilots for two years before anyone gave them permission. Marketing picked it up second, mostly for content drafts. Support found it third, for ticket summarization. Operations and finance came last, and not because they didn't want it. They couldn't see what it was *for*. Every function needed a different on-ramp.
+
+Once I stopped thinking of "the company adopting AI" as one project and started thinking of it as five or six different ones, the work got easier. Marketing wasn't in the same place as ops, and treating them the same is how you end up with a prompt library nobody reads.
+
+## What's the literacy floor everyone needs?
+
+Only 33% of employees can describe what an AI agent is, and 18% of regular AI users at work have received no training at all ([BCG](https://www.bcg.com/publications/2025/ai-at-work-momentum-builds-but-gaps-remain), 2025). Before anyone can use AI well, they need a small vocabulary they can actually hold onto.
+
+Four concepts cover most of it:
+
+- **Chat.** A conversation with the model. Stateful while the window is open, forgotten when it closes.
+- **Context.** Everything the model can see in the conversation right now. When it "forgets," that almost always means the context got truncated, not that the model failed.
+- **Tokens.** The unit of context. Roughly three-quarters of a word. The reason long conversations start to drift.
+- **Skills, MCPs, agents.** When the chat needs to *do* something — read your CSV, query a database, call an internal API — these are how it does it. The differences between them are mostly plumbing.
+
+You don't need engineers in this conversation. You need just enough vocabulary that people understand the failure modes. When I taught one of our team leads that "the model forgot the brand voice" actually meant "you opened a new chat without the brand context," she stopped retyping the voice every morning. That was the whole win.
+
+{/* [UNIQUE INSIGHT] */}
+
+The literacy floor isn't a course. It's a 30-minute conversation, repeated, in the language of the people having it. Engineers want the implementation details. Everyone else wants the analogies. Both deserve to be taught well.
+
+## When do you reach for a skill, an MCP, or just a CSV?
+
+Customer-support agents using a generative AI assistant resolved 14% more issues per hour overall, with novice agents gaining 34% — but [a separate METR study](https://arxiv.org/abs/2507.09089) found experienced developers were 19% *slower* with AI assistance even though they expected to be faster ([Brynjolfsson, Li & Raymond](https://www.nber.org/papers/w31161), 2025; METR, 2025). The right tool isn't always agentic. Sometimes it's a thirty-line script and ten minutes with the numbers.
+
+The framework I teach is simpler than most:
+
+- **Just chat.** One-off question, brainstorming, drafting, reviewing. No setup cost, no shared state.
+- **Chat plus a skill.** Same workflow, same shape, every time. Worth the upfront cost of writing the skill once so you stop reinventing it.
+- **An MCP.** When the model needs to actually reach into a system you control — your database, your design tool, an internal API.
+- **A script the model writes for you.** When the answer lives in a CSV, don't make this an agent. Have the model write Python, run it once, look at the output, move on.
+- **No AI at all.** When the cost of being wrong is higher than the time you'd save, skip the model entirely.
+
+<figure style={{ margin: '2.5rem 0', textAlign: 'center', padding: '1.5rem', borderRadius: '12px' }}>
+  <svg
+    viewBox="0 0 580 420"
+    width="100%"
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-labelledby="ai-tool-decision-title"
+    style={{ background: 'transparent', fontFamily: 'system-ui, sans-serif' }}
+  >
+    <title id="ai-tool-decision-title">When to use chat, a skill, an MCP, or a script the model writes for you</title>
+    <text x="290" y="28" textAnchor="middle" style={{ fill: '#e5e5e5', fontSize: '15px', fontWeight: 'bold' }}>
+      {'When to Reach for Which AI Tool'}
+    </text>
+    <text x="290" y="46" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '11px' }}>
+      {'Match the tool to how often you do it and who else needs it'}
+    </text>
+
+    {/* Axes */}
+    <line x1="80" y1="70" x2="80" y2="380" stroke="#555" strokeWidth="1.5" />
+    <line x1="80" y1="380" x2="540" y2="380" stroke="#555" strokeWidth="1.5" />
+
+    {/* Axis labels */}
+    <text x="20" y="225" textAnchor="middle" transform="rotate(-90, 20, 225)" style={{ fill: '#a3a3a3', fontSize: '12px' }}>
+      {'Who Uses It'}
+    </text>
+    <text x="40" y="100" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'Team'}</text>
+    <text x="40" y="365" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'Just me'}</text>
+    <text x="310" y="410" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '12px' }}>
+      {'How Often You Do It'}
+    </text>
+    <text x="190" y="398" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'One-off'}</text>
+    <text x="430" y="398" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'Recurring'}</text>
+
+    {/* Quadrant dividers */}
+    <line x1="310" y1="70" x2="310" y2="380" stroke="#333" strokeWidth="1" strokeDasharray="6,4" />
+    <line x1="80" y1="225" x2="540" y2="225" stroke="#333" strokeWidth="1" strokeDasharray="6,4" />
+
+    {/* Q1: Top-left — Team / One-off */}
+    <rect x="90" y="78" width="210" height="139" rx="8" style={{ fill: '#7c6fe0', opacity: 0.18 }} />
+    <text x="195" y="118" textAnchor="middle" style={{ fill: '#7c6fe0', fontSize: '13px', fontWeight: 'bold' }}>{'Generate & Hand Off'}</text>
+    <text x="195" y="140" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'A draft, a script, an artifact —'}</text>
+    <text x="195" y="154" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'document the prompt that made it,'}</text>
+    <text x="195" y="168" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'share the output, not the chat'}</text>
+
+    {/* Q2: Top-right — Team / Recurring */}
+    <rect x="320" y="78" width="210" height="139" rx="8" style={{ fill: '#5b9ee1', opacity: 0.20 }} />
+    <text x="425" y="118" textAnchor="middle" style={{ fill: '#5b9ee1', fontSize: '13px', fontWeight: 'bold' }}>{'MCP or Hosted Skill'}</text>
+    <text x="425" y="140" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'Multiple people, every week.'}</text>
+    <text x="425" y="154" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'Worth real engineering: auth,'}</text>
+    <text x="425" y="168" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'observability, version control'}</text>
+
+    {/* Q3: Bottom-left — Just me / One-off */}
+    <rect x="90" y="233" width="210" height="139" rx="8" style={{ fill: '#404040', opacity: 0.35 }} />
+    <text x="195" y="270" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '13px', fontWeight: 'bold' }}>{'Just Chat'}</text>
+    <text x="195" y="292" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'Or have the model write a script,'}</text>
+    <text x="195" y="306" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'run it once, read the output,'}</text>
+    <text x="195" y="320" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'and move on. Don’t over-engineer.'}</text>
+
+    {/* Q4: Bottom-right — Just me / Recurring */}
+    <rect x="320" y="233" width="210" height="139" rx="8" style={{ fill: '#e5a853', opacity: 0.18 }} />
+    <text x="425" y="270" textAnchor="middle" style={{ fill: '#e5a853', fontSize: '13px', fontWeight: 'bold' }}>{'Personal Skill'}</text>
+    <text x="425" y="292" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'Same shape every time.'}</text>
+    <text x="425" y="306" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'Save the prompt, give it a name,'}</text>
+    <text x="425" y="320" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'reuse it. No infra needed.'}</text>
+  </svg>
+  <figcaption style={{ color: '#a3a3a3', fontSize: '12px', marginTop: '0.5rem' }}>
+    {'A quick decision frame. Most teams over-build for the bottom-right and under-build for the top-right.'}
+  </figcaption>
+</figure>
+
+The mistake I see most often is people building an MCP for something that should've been a one-off script, and skipping the script for something that genuinely needed a hosted skill. Match the tool to how often you'll do it and who else needs it.
+
+## Where do technical and non-technical adoption diverge?
+
+Only 36% of employees say their AI training has been "enough" — the rest are figuring it out on their own ([BCG](https://www.bcg.com/publications/2025/ai-at-work-momentum-builds-but-gaps-remain), 2025). Engineers and non-engineers learn the same tool through opposite failure modes, and the teaching has to flip accordingly.
+
+Engineers fail by being too skeptical. They wait for AI to be perfect before trusting it. They hand-write what could've been generated. They miss the prototyping moment because they're judging the model against the bar they set for themselves on a good day. The teaching that works for engineers is showing them where the speed-up actually is — boilerplate, exploring an unfamiliar codebase, throwaway scripts, the documentation they were never going to write anyway.
+
+Non-engineers fail by being too trusting. They take confident wrong answers at face value. They skip the verification step a developer would do reflexively. The teaching that works for them is the opposite: teach skepticism first. Show them the "almost right" pattern. Have them catch a hallucination on day one so they know it's their job to look.
+
+Forty percent of AI productivity gains are lost to rework ([Workday via CIO](https://www.cio.com/article/4157471/40-of-ai-productivity-gains-lost-to-rework-for-errors.html), 2025), and most of that rework lives at the boundary between confidence and verification. Both populations have to learn it. They just start from opposite sides.
+
+## What patterns actually ramp people up?
+
+[Harvard Business School research](https://www.library.hbs.edu/working-knowledge/gen-ai-boosts-productivity-but-cant-turn-novices-into-experts) found that generative AI helps non-experts narrow the gap with experts on adjacent skills, but it can't turn a novice into an expert by itself (HBS, 2024-2025). The teams that ramp people up fastest don't try to skip the intermediate rungs.
+
+The ladder I use looks like this:
+
+<figure style={{ margin: '2.5rem 0', textAlign: 'center', padding: '1.5rem', borderRadius: '12px' }}>
+  <svg
+    viewBox="0 0 580 400"
+    width="100%"
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-labelledby="ai-fluency-ladder-title"
+    style={{ background: 'transparent', fontFamily: 'system-ui, sans-serif' }}
+  >
+    <title id="ai-fluency-ladder-title">The five rungs of AI fluency from observer to production owner</title>
+    <text x="290" y="28" textAnchor="middle" style={{ fill: '#e5e5e5', fontSize: '15px', fontWeight: 'bold' }}>
+      {'The AI Fluency Ladder'}
+    </text>
+    <text x="290" y="46" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '11px' }}>
+      {'Most people stop at rung 3 and that’s usually the right answer'}
+    </text>
+
+    {/* Vertical axis line */}
+    <line x1="60" y1="70" x2="60" y2="370" stroke="#333" strokeWidth="1" />
+
+    {/* Rung 1: Observer — bottom */}
+    <line x1="60" y1="340" x2="180" y2="340" stroke="#404040" strokeWidth="2" />
+    <circle cx="180" cy="340" r="10" style={{ fill: '#404040' }} />
+    <text x="200" y="338" style={{ fill: '#e5e5e5', fontSize: '13px', fontWeight: 'bold' }}>{'1. Observer'}</text>
+    <text x="200" y="354" style={{ fill: '#a3a3a3', fontSize: '11px' }}>{'Watches a teammate use AI on a real task'}</text>
+
+    {/* Rung 2: Prompter */}
+    <line x1="60" y1="280" x2="220" y2="280" stroke="#5b9ee1" strokeWidth="2" />
+    <circle cx="220" cy="280" r="10" style={{ fill: '#5b9ee1' }} />
+    <text x="240" y="278" style={{ fill: '#e5e5e5', fontSize: '13px', fontWeight: 'bold' }}>{'2. Prompter'}</text>
+    <text x="240" y="294" style={{ fill: '#a3a3a3', fontSize: '11px' }}>{'Uses chat for their own daily work'}</text>
+
+    {/* Rung 3: Prototyper */}
+    <line x1="60" y1="220" x2="300" y2="220" stroke="#5b9ee1" strokeWidth="2" />
+    <circle cx="300" cy="220" r="11" style={{ fill: '#5b9ee1' }} />
+    <text x="320" y="218" style={{ fill: '#5b9ee1', fontSize: '13px', fontWeight: 'bold' }}>{'3. Prototyper'}</text>
+    <text x="320" y="234" style={{ fill: '#a3a3a3', fontSize: '11px' }}>{'Builds a working artifact — sheet, workflow, small app'}</text>
+
+    {/* Dotted divider — the gate */}
+    <line x1="60" y1="180" x2="540" y2="180" stroke="#e5a853" strokeWidth="1" strokeDasharray="4,4" opacity="0.6" />
+    <text x="540" y="176" textAnchor="end" style={{ fill: '#e5a853', fontSize: '10px', fontStyle: 'italic' }}>{'— The Prototype Gate —'}</text>
+
+    {/* Rung 4: Builder */}
+    <line x1="60" y1="140" x2="340" y2="140" stroke="#e5a853" strokeWidth="2" />
+    <circle cx="340" cy="140" r="10" style={{ fill: '#e5a853' }} />
+    <text x="360" y="138" style={{ fill: '#e5a853', fontSize: '13px', fontWeight: 'bold' }}>{'4. Builder'}</text>
+    <text x="360" y="154" style={{ fill: '#a3a3a3', fontSize: '11px' }}>{'Owns a small internal tool end-to-end'}</text>
+
+    {/* Rung 5: Production owner — top */}
+    <line x1="60" y1="80" x2="380" y2="80" stroke="#7c6fe0" strokeWidth="2" />
+    <circle cx="380" cy="80" r="10" style={{ fill: '#7c6fe0' }} />
+    <text x="400" y="78" style={{ fill: '#7c6fe0', fontSize: '13px', fontWeight: 'bold' }}>{'5. Production Owner'}</text>
+    <text x="400" y="94" style={{ fill: '#a3a3a3', fontSize: '11px' }}>{'CI, observability, on-call — engineering rules'}</text>
+
+    {/* Side legend */}
+    <text x="60" y="395" style={{ fill: '#a3a3a3', fontSize: '10px', fontStyle: 'italic' }}>{'Below the line: open to all. Above the line: R&D ownership applies.'}</text>
+  </svg>
+  <figcaption style={{ color: '#a3a3a3', fontSize: '12px', marginTop: '0.5rem' }}>
+    {'The unlock for most people is rung 3. Most people don’t want rung 5 — and that’s the right outcome.'}
+  </figcaption>
+</figure>
+
+{/* [PERSONAL EXPERIENCE] */}
+
+The unlock for most people is rung 3, not rung 5. The product manager who builds a working prototype to show what they meant in a design review. The analyst who has the model write a script to crunch the quarterly numbers. The support lead who automates the first pass of ticket triage. None of them want to own production. They wanted to make their idea concrete, and AI gave them that. Once you see how transformative that is for the people closest to the customer, you stop being precious about who gets to build things.
+
+![Colleagues gathered around a single laptop, one person pointing at the screen to teach the others](/blog/prototype-gate-whole-org/team-learning.jpg)
+
+The teams that get this right have a real pattern for each rung. Observers shadow a working session. Prompters get a buddy and a Slack channel for messy questions. Prototypers get a sandbox where nothing they build can hurt anything. Builders get pair time with R&D when they ask. Production owners follow the rules every other production owner follows. I've argued before that [learning velocity beats headcount in engineering teams](/blog/engineering-team-learning) — the ladder is what that idea looks like once you operationalize it for the whole company.
+
+## Where do we draw the line?
+
+80% of organizations are using AI in operations but only 14% have an enterprise governance framework ([ModelOp](https://www.modelop.com/ai-gov-benchmark-report), 2025). The line we draw isn't about who's allowed to use AI. It's about what counts as production — and we draw that line firmly.
+
+The Prototype Gate, [as I first described it for engineering](/blog/ai-code-learning-vs-skipping), still applies. The framework just expanded to the whole org.
+
+Anyone can prototype. Anyone can write a script, automate their reporting, build an internal tool, generate content, sketch out a workflow. No approval needed. No filtering ideas at the door. The cost of being wrong on a prototype is roughly zero, and the cost of *not* letting people prototype is that ideas die in the heads of the people closest to the problem.
+
+Production has rules. Production means customers depend on it, downtime hurts, data integrity matters, and on-call is a real human at 2 a.m. Production runs on R&D's standards: CI, observability, runbooks, ownership. None of that becomes optional just because the first version of the thing came out of a chat window.
+
+The promotion path is explicit. When a prototype works and someone wants it to become a production thing, R&D shows up to help. The contributor doesn't have to know how to set up alerting — they have to be willing to be in the room when it's set up, and to take ownership of the system once it ships. That's the deal. It's a generous deal, and it's also a firm one.
+
+## How does R&D stay supportive instead of becoming the AI police?
+
+Twenty percent of all data breaches in 2025 involved unauthorized AI tools, and 97% of organizations that suffered an AI-model breach lacked proper AI access controls ([IBM Cost of a Data Breach Report](https://www.ibm.com/reports/data-breach), 2025). The temptation when those numbers land on your desk is to tighten everything down. The right move is the opposite: be so welcoming that nothing has to go around you.
+
+A few practices that have worked for us:
+
+**Build paved roads.** A sandbox environment with safe data, a shared library of approved skills, a "promote my prototype" intake form. Make the official path easier than the unofficial one. Shadow AI happens when the sanctioned path is harder than the workaround.
+
+**Be present, not punitive.** R&D shows up to product reviews, content reviews, and ops standups. We answer questions. We don't audit. People bring us their experiments because we make it easy, not because we made it mandatory.
+
+**Separate the two failure modes.** Prototype mistakes — embarrassing demos, data that didn't validate, a workflow that didn't pan out — are free. We celebrate them, actually. Production mistakes — leaked data, broken customer flows, silent failures — get the same engineering rigor any incident gets, and the post-mortem is technical, not personal.
+
+**Teach, don't gate.** [IAPP found](https://iapp.org/resources/article/ai-governance-profession-report) only 28% of organizations have formally defined AI oversight roles (IAPP, 2025). When we defined those roles inside R&D, we wrote the responsibilities as *teach* and *unblock*, not *approve*. That single framing changed how the rest of the company sees us.
+
+{/* [UNIQUE INSIGHT] */}
+
+The shift in role is the hardest part for technical leaders. You go from being the gatekeeper — the person who decides what gets built — to being the ferryman, the person who helps things across the river safely. The river is still there. Production still has rules. But the work isn't blocking traffic; it's running the boat.
+
+<FAQ>
+<div>
+### Doesn't this just create a two-tier system where engineers have all the power?
+
+<p>It can if you're sloppy about it, but the design intent is the opposite. The two tiers aren't <em>engineer</em> versus <em>everyone else</em>. They're <em>prototype</em> versus <em>production</em>. Anyone can be in the prototype tier. Anyone willing to take on the engineering responsibilities can move into production ownership. The gating isn't about credentials, it's about the maintenance commitment that real systems require.</p>
+</div>
+<div>
+### What about non-engineers who actually want to own a production tool?
+
+<p>Welcome them in and treat the path seriously. Pair them with an engineer. Give them shadow time on incident reviews. Walk through observability and on-call expectations <em>before</em> they own anything. People who genuinely want to own production almost always rise to it, and the org gets a more capable contributor. The gate isn’t a wall — it’s a path with real prerequisites.</p>
+</div>
+<div>
+### How do you stop shadow AI from going around the framework?
+
+<p>You can’t fully, and chasing it is the wrong instinct. The IBM data shows the breach risk is real, but enforcement-first cultures push usage further underground, not into the open. The better move is making the sanctioned path obviously easier: approved tools available by default, a sandbox that doesn’t require asking permission, and a culture where someone showing you a prototype gets curiosity, not interrogation.</p>
+</div>
+</FAQ>
+
+## The Job R&D Actually Has Now
+
+R&D's expertise still matters. Maybe more than ever. The infra, the observability, the CI, the troubleshooting muscle, the on-call discipline — none of that goes away when product managers prototype apps and support leads write scripts. It just stops being the only place ideas can come from.
+
+The job isn't deciding who's allowed to make things. It's making sure the things that need to be production-grade actually are, and making sure the people closest to the customer can finally show what they mean. That's a different job than gatekeeping. It's a better one.
+
+If you're rethinking how non-technical voices land in your organization, [the post on listening before being heard](/blog/listening-before-being-heard) is a good companion. And if you want the original engineering-only version of this argument, [the Prototype Gate post](/blog/ai-code-learning-vs-skipping) is where this framework started.
