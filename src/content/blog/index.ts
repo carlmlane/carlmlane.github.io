@@ -5,6 +5,7 @@ const slugs = [
   'ai-code-learning-vs-skipping',
   'emergent-ai-overview-effect',
   'prototype-gate-whole-org',
+  'assertiveness-default-engineering-leaders',
 ] as const;
 
 export default slugs;
