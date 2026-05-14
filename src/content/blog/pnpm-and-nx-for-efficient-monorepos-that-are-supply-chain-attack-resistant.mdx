@@ -1,0 +1,446 @@
+import { FAQ } from '@/components/blog/faq';
+
+export const metadata = {
+  title: 'Can a JavaScript Monorepo Be Fast and Supply-Chain-Resistant?',
+  date: '2026-05-18',
+  description:
+    "Sonatype counted 454,600+ new malicious npm packages in 2025. pnpm and Nx are the defense that survives contact with engineers — because it's also faster.",
+  tags: ['engineering', 'security', 'monorepo', 'pnpm', 'nx', 'supply-chain'],
+  published: true,
+  image:
+    'https://carlmlane.com/blog/pnpm-and-nx-for-efficient-monorepos-that-are-supply-chain-attack-resistant/hero.jpg',
+};
+
+A week ago, a self-spreading worm pushed 84 malicious versions of 42 `@tanstack` packages to npm. StepSecurity researchers caught it in about twenty minutes. OpenAI later confirmed two compromised employee macOS devices — and that was the *good* outcome.
+
+The bad outcome is the team whose CI grabbed `@tanstack/router@1.142.7` ten minutes after publish, ran its `postinstall`, and is now reconstructing what an attacker did with their GitHub Actions OIDC token. The npm threat model changed last year. The package manager you install with — and the orchestrator you run CI through — have to change with it. This post is about doing that with pnpm and Nx without making CI so slow that engineers start routing around it.
+
+> **TLDR**
+>
+> - 454,600+ new malicious open source packages tracked in 2025; 99%+ on npm ([Sonatype 2026 State of the Software Supply Chain](https://www.sonatype.com/state-of-the-software-supply-chain/2026/open-source-malware), 2026)
+> - The Nx (Aug 2025), Shai-Hulud (Sept 2025), and TanStack (May 2026) attacks all weaponized the same primitive: a poisoned `postinstall` running attacker code the second `npm install` resolves the version
+> - pnpm 11's defaults — `postinstall` blocked, 24-hour minimum release age, frozen lockfile in CI — would have blunted every public 2025–2026 incident ([pnpm 11 release notes](https://pnpm.io/blog/releases/11.0), 2026)
+> - Nx caching and `affected` are what make those defaults sustainable: gates that run in seconds are gates engineers actually run
+
+## Why Is the `npm install` Command Itself Now the Attack Surface?
+
+Sonatype tracked 454,600+ new malicious open source packages in 2025, with 99%+ of them on npm ([Sonatype](https://www.sonatype.com/state-of-the-software-supply-chain/2026/open-source-malware), 2026). The point of leverage for almost every one of those packages is the same: they execute during dependency resolution, not at runtime. The install step *is* the perimeter.
+
+In August 2025, the Nx package itself was compromised through a workflow-injection bug in its release pipeline. Attackers extracted an npm publish token, pushed malicious versions, and used the package's own `postinstall` to scan developer machines for credentials. The Register reported roughly 1,000 GitHub tokens and 20,000 files leaked ([The Register](https://www.theregister.com/2025/08/27/nx_npm_supply_chain_attack/), 2025). What made it novel — and what should worry anyone building developer tools — is that the attackers' reconnaissance code prompted local AI CLIs to enumerate the filesystem for them.
+
+In September, the Shai-Hulud worm hit. A compromised maintainer token was used to publish a malicious `postinstall` into one of that maintainer's packages. The script harvested credentials with TruffleHog, used any freshly-stolen npm tokens to do the same to *those* maintainers' packages, and repeated. CISA's advisory put the package count over 500, including `@ctrl/tinycolor` at 2.2 million weekly downloads ([CISA](https://www.cisa.gov/news-events/alerts/2025/09/23/widespread-supply-chain-compromise-impacting-npm-ecosystem), 2025).
+
+A week ago, the same worm shape hit `@tanstack`. The release pipeline ran untrusted fork code in a privileged context, poisoned the runner's Actions cache, and stole an OIDC token from runner memory at publish time. 42 packages, 84 versions, each shipped with a fresh `postinstall` payload ([StepSecurity](https://www.stepsecurity.io/blog/mini-shai-hulud-is-back-a-self-spreading-supply-chain-attack-hits-the-npm-ecosystem), 2026). [OpenAI confirmed two compromised employee devices](https://openai.com/index/our-response-to-the-tanstack-npm-supply-chain-attack/) but no production impact (OpenAI, 2026).
+
+<figure style={{ margin: '2.5rem 0', textAlign: 'center', padding: '1.5rem', borderRadius: '12px' }}>
+  <svg
+    viewBox="0 0 580 360"
+    width="100%"
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-labelledby="npm-attacks-title"
+    style={{ background: 'transparent', fontFamily: 'system-ui, sans-serif' }}
+  >
+    <title id="npm-attacks-title">Recent high-profile npm supply chain attacks</title>
+    <text x="290" y="28" textAnchor="middle" style={{ fill: '#e5e5e5', fontSize: '15px', fontWeight: 'bold' }}>
+      {'Recent High-Profile npm Supply Chain Attacks'}
+    </text>
+    <text x="290" y="46" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '11px' }}>
+      {'Distinct packages compromised per public incident'}
+    </text>
+
+    {/* Vertical grid lines */}
+    <line x1="200" y1="70" x2="200" y2="290" stroke="#222" strokeWidth="0.5" />
+    <line x1="280" y1="70" x2="280" y2="290" stroke="#222" strokeWidth="0.5" />
+    <line x1="360" y1="70" x2="360" y2="290" stroke="#222" strokeWidth="0.5" />
+    <line x1="440" y1="70" x2="440" y2="290" stroke="#222" strokeWidth="0.5" />
+    <line x1="520" y1="70" x2="520" y2="290" stroke="#222" strokeWidth="0.5" />
+
+    {/* X-axis labels (0, 200, 400, 600, 800) */}
+    <text x="200" y="305" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'0'}</text>
+    <text x="280" y="305" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'200'}</text>
+    <text x="360" y="305" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'400'}</text>
+    <text x="440" y="305" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'600'}</text>
+    <text x="520" y="305" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'800'}</text>
+
+    {/* Row labels */}
+    <text x="190" y="113" textAnchor="end" style={{ fill: '#e5e5e5', fontSize: '11px' }}>{'Nx (Aug 2025)'}</text>
+    <text x="190" y="163" textAnchor="end" style={{ fill: '#e5e5e5', fontSize: '11px' }}>{'Shai-Hulud (Sept 2025)'}</text>
+    <text x="190" y="213" textAnchor="end" style={{ fill: '#e5e5e5', fontSize: '11px' }}>{'SHA1-Hulud (Nov 2025)'}</text>
+    <text x="190" y="263" textAnchor="end" style={{ fill: '#e5e5e5', fontSize: '11px' }}>{'TanStack (May 2026)'}</text>
+
+    {/* Nx: ~6 packages */}
+    <line x1="200" y1="110" x2="202" y2="110" stroke="#5b9ee1" strokeWidth="3" />
+    <circle cx="202" cy="110" r="6" style={{ fill: '#5b9ee1' }} />
+    <text x="215" y="114" style={{ fill: '#a3a3a3', fontSize: '11px' }}>{'~6 packages — 4.6M weekly downloads compromised'}</text>
+
+    {/* Shai-Hulud: 500 */}
+    <line x1="200" y1="160" x2="400" y2="160" stroke="#e5a853" strokeWidth="3" />
+    <circle cx="400" cy="160" r="6" style={{ fill: '#e5a853' }} />
+    <text x="414" y="164" style={{ fill: '#e5a853', fontSize: '11px', fontWeight: 'bold' }}>{'500+'}</text>
+
+    {/* SHA1-Hulud: 800 */}
+    <line x1="200" y1="210" x2="520" y2="210" stroke="#7c6fe0" strokeWidth="3" />
+    <circle cx="520" cy="210" r="6" style={{ fill: '#7c6fe0' }} />
+    <text x="200" y="231" style={{ fill: '#7c6fe0', fontSize: '11px', fontWeight: 'bold' }}>{'800+ packages tracked across the campaign'}</text>
+
+    {/* TanStack: 42 */}
+    <line x1="200" y1="260" x2="217" y2="260" stroke="#5b9ee1" strokeWidth="3" />
+    <circle cx="217" cy="260" r="6" style={{ fill: '#5b9ee1' }} />
+    <text x="230" y="264" style={{ fill: '#a3a3a3', fontSize: '11px' }}>{'42 packages / 84 versions — caught in ~20 min'}</text>
+
+    <text x="290" y="335" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'Distinct packages compromised'}</text>
+  </svg>
+  <figcaption style={{ color: '#a3a3a3', fontSize: '12px', marginTop: '0.5rem' }}>
+    {'Sources: The Register (Aug 2025), CISA (Sept 2025), Snyk (Nov 2025), StepSecurity (May 2026)'}
+  </figcaption>
+</figure>
+
+{/* [UNIQUE INSIGHT] */}
+
+The pattern under all four attacks is the same shift in threat model. The attacker no longer needs *your* credentials. They need the credentials of any upstream you trust. Once they have those, they don't need to fool a code reviewer — they just need to ship a tarball with a `postinstall`, wait for your CI to run, and exfiltrate whatever the runner can reach. That makes the install step the only place to put a control with real leverage: the package manager either resolves and executes the poisoned version, or it doesn't.
+
+Two structural facts about this category are worth holding onto. None of the 2025–2026 events required compromising a maintainer's password — Nx and TanStack both used the project's own CI pipeline as the publish channel. Hardening your own GitHub Actions doesn't help if an upstream you transitively depend on has a workflow-injection bug. And the median time-to-detection for high-profile packages is short (TanStack was caught in roughly twenty minutes) but irrelevant if your build ran during the window. By the time the npm team yanks the tarball, your runner already executed the payload.
+
+## What Does pnpm Actually Change About the Install Threat Model?
+
+pnpm 10+ disables `postinstall` execution by default for packages outside an explicit allowlist. pnpm 11 added a 24-hour minimum release age (`minimumReleaseAge: 1440`) that prevents the install step from resolving a version published within the last day ([pnpm 11 release notes](https://pnpm.io/blog/releases/11.0), 2026). Together, those two settings strip most of the leverage from the attacks above — without changing anything about how you write your own packages.
+
+The four settings that do the real work, in rough order of importance:
+
+**`onlyBuiltDependencies` (renamed to `allowBuilds` in pnpm 11):** the explicit allowlist for which packages may run lifecycle scripts. Native modules — Prisma, sharp, esbuild, swc, the canvas family, msw, Nx itself for telemetry — go here. Everything else gets installed without ever calling its `postinstall`, `preinstall`, `prepare`, or `install` hook. pnpm 10 made this the default ([Socket](https://socket.dev/blog/pnpm-11-adds-new-supply-chain-protection-defaults), 2026); on pnpm 9 or older you have to set it yourself.
+
+```yaml
+# pnpm-workspace.yaml — abstracted hardening profile
+onlyBuiltDependencies:
+  - '@prisma/client'
+  - '@prisma/engines'
+  - esbuild
+  - sharp
+  - '@swc/core'
+  - msw
+  - nx
+ignoredBuiltDependencies:
+  - '@datadog/pprof'
+
+linkWorkspacePackages: true
+preferWorkspacePackages: true
+resolutionMode: highest
+sharedWorkspaceLockfile: true
+
+networkConcurrency: 32
+fetchRetries: 3
+fetchRetryMintimeout: 10000
+fetchRetryMaxtimeout: 60000
+
+autoInstallPeers: true
+dedupePeerDependents: true
+```
+
+The list is short, deliberate, and reviewed in PR. A new package that wants to run a `postinstall` requires a code-owner sign-off. An attacker pushing a malicious version of an *unlisted* package can't run anything at install time. That single default — the one switch from "scripts run by default" to "scripts run by allowlist" — is most of the protection delta vs. npm.
+
+**`minimumReleaseAge`:** the cooling-off window. pnpm 11 defaults this to 1,440 minutes (24 hours). Any version published within that window simply isn't resolved by the next install — the lockfile falls back to the most recent eligible version. Set it to 10,080 (one week) if your team can tolerate the lag, then exclude security-critical packages via `minimumReleaseAgeExclude` and pair the setting with `pnpm audit --fix` so CVE patches can skip the cooling-off window when needed ([pnpm Supply Chain Security](https://pnpm.io/supply-chain-security), 2026).
+
+This setting alone would have blunted every public 2025–2026 incident on the chart above. TanStack's malicious versions were live for about twenty minutes before detection. The Shai-Hulud worm self-replicated within hours. With a 24-hour minimum release age, nothing your CI installs is younger than the *fastest* high-profile detection window in the industry.
+
+**`--frozen-lockfile`:** pnpm 11 makes this the default in CI environments. Any drift between `package.json` and `pnpm-lock.yaml` fails the install instead of silently resolving new versions. Combined with committing `pnpm-lock.yaml` and `package-manager-strict` (which enforces a matching `packageManager` field in `package.json`), this closes the loop on "an attacker can push a new minor version and my install picks it up by surprise." Pin the package manager itself too:
+
+```json
+{
+  "engines": { "node": ">=22", "pnpm": ">=11" },
+  "packageManager": "pnpm@11.0.0+sha512.<integrity-hash>"
+}
+```
+
+**Workspace-first resolution.** `linkWorkspacePackages: true` and `preferWorkspacePackages: true` make pnpm always try the local workspace before the registry when resolving a package. If your internal `@org/some-shared-lib` exists in `libs/`, no public typosquat with the same name beats it to resolution — even if an attacker successfully publishes to the public registry.
+
+{/* [PERSONAL EXPERIENCE] */}
+
+I run a monorepo with around a dozen internal libraries spread across a single pnpm workspace. Workspace-first resolution is the boring setting nobody talks about, but in practice it's the one that closes off the entire dependency-confusion attack class. An attacker who learns your internal package names — from a leaked `package.json`, an open-source CI config, even a screenshot of `pnpm ls` — cannot win a name race against a local workspace package. The other three settings raise the bar against generic attacks; this one specifically defeats targeted ones.
+
+<figure style={{ margin: '2.5rem 0', textAlign: 'center', padding: '1.5rem', borderRadius: '12px' }}>
+  <svg
+    viewBox="0 0 580 320"
+    width="100%"
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-labelledby="npm-vs-pnpm-defaults"
+    style={{ background: 'transparent', fontFamily: 'system-ui, sans-serif' }}
+  >
+    <title id="npm-vs-pnpm-defaults">Default install behavior: npm 11 vs pnpm 11</title>
+    <text x="290" y="28" textAnchor="middle" style={{ fill: '#e5e5e5', fontSize: '15px', fontWeight: 'bold' }}>
+      {'Default Install Behavior: npm 11 vs pnpm 11'}
+    </text>
+    <text x="290" y="46" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '11px' }}>
+      {'What runs when you type `install` without flags'}
+    </text>
+
+    {/* Column headers */}
+    <text x="370" y="78" textAnchor="middle" style={{ fill: '#e5e5e5', fontSize: '12px', fontWeight: 'bold' }}>{'npm 11'}</text>
+    <text x="480" y="78" textAnchor="middle" style={{ fill: '#e5e5e5', fontSize: '12px', fontWeight: 'bold' }}>{'pnpm 11'}</text>
+
+    {/* Row separators */}
+    <line x1="30" y1="92" x2="540" y2="92" stroke="#222" strokeWidth="0.5" />
+    <line x1="30" y1="142" x2="540" y2="142" stroke="#222" strokeWidth="0.5" />
+    <line x1="30" y1="192" x2="540" y2="192" stroke="#222" strokeWidth="0.5" />
+    <line x1="30" y1="242" x2="540" y2="242" stroke="#222" strokeWidth="0.5" />
+    <line x1="30" y1="292" x2="540" y2="292" stroke="#222" strokeWidth="0.5" />
+
+    {/* Row 1: postinstall scripts */}
+    <text x="40" y="118" style={{ fill: '#e5e5e5', fontSize: '12px' }}>{'Run postinstall scripts for any dep'}</text>
+    <rect x="335" y="105" width="70" height="22" rx="4" style={{ fill: '#e5a853', opacity: 0.85 }} />
+    <text x="370" y="120" textAnchor="middle" style={{ fill: '#0a0a0a', fontSize: '11px', fontWeight: 'bold' }}>{'YES'}</text>
+    <rect x="445" y="105" width="70" height="22" rx="4" style={{ fill: '#5b9ee1', opacity: 0.85 }} />
+    <text x="480" y="120" textAnchor="middle" style={{ fill: '#0a0a0a', fontSize: '11px', fontWeight: 'bold' }}>{'BLOCKED'}</text>
+
+    {/* Row 2: cooling-off */}
+    <text x="40" y="168" style={{ fill: '#e5e5e5', fontSize: '12px' }}>{'Cooling-off window before resolve'}</text>
+    <rect x="335" y="155" width="70" height="22" rx="4" style={{ fill: '#e5a853', opacity: 0.85 }} />
+    <text x="370" y="170" textAnchor="middle" style={{ fill: '#0a0a0a', fontSize: '11px', fontWeight: 'bold' }}>{'NONE'}</text>
+    <rect x="445" y="155" width="70" height="22" rx="4" style={{ fill: '#5b9ee1', opacity: 0.85 }} />
+    <text x="480" y="170" textAnchor="middle" style={{ fill: '#0a0a0a', fontSize: '11px', fontWeight: 'bold' }}>{'24 HOURS'}</text>
+
+    {/* Row 3: frozen-lockfile in CI */}
+    <text x="40" y="218" style={{ fill: '#e5e5e5', fontSize: '12px' }}>{'Frozen lockfile in CI by default'}</text>
+    <rect x="335" y="205" width="70" height="22" rx="4" style={{ fill: '#e5a853', opacity: 0.85 }} />
+    <text x="370" y="220" textAnchor="middle" style={{ fill: '#0a0a0a', fontSize: '11px', fontWeight: 'bold' }}>{'OPT-IN'}</text>
+    <rect x="445" y="205" width="70" height="22" rx="4" style={{ fill: '#5b9ee1', opacity: 0.85 }} />
+    <text x="480" y="220" textAnchor="middle" style={{ fill: '#0a0a0a', fontSize: '11px', fontWeight: 'bold' }}>{'DEFAULT'}</text>
+
+    {/* Row 4: workspace-first resolution */}
+    <text x="40" y="268" style={{ fill: '#e5e5e5', fontSize: '12px' }}>{'Workspace-first resolution'}</text>
+    <rect x="335" y="255" width="70" height="22" rx="4" style={{ fill: '#e5a853', opacity: 0.85 }} />
+    <text x="370" y="270" textAnchor="middle" style={{ fill: '#0a0a0a', fontSize: '11px', fontWeight: 'bold' }}>{'PARTIAL'}</text>
+    <rect x="445" y="255" width="70" height="22" rx="4" style={{ fill: '#5b9ee1', opacity: 0.85 }} />
+    <text x="480" y="270" textAnchor="middle" style={{ fill: '#0a0a0a', fontSize: '11px', fontWeight: 'bold' }}>{'DEFAULT'}</text>
+
+    {/* Legend */}
+    <rect x="180" y="305" width="10" height="10" rx="2" style={{ fill: '#e5a853' }} />
+    <text x="195" y="314" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'Exposed by default'}</text>
+    <rect x="320" y="305" width="10" height="10" rx="2" style={{ fill: '#5b9ee1' }} />
+    <text x="335" y="314" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'Hardened by default'}</text>
+  </svg>
+  <figcaption style={{ color: '#a3a3a3', fontSize: '12px', marginTop: '0.5rem' }}>
+    {'Source: pnpm 11 release notes & settings reference (pnpm.io, 2026); npm 11 CLI docs'}
+  </figcaption>
+</figure>
+
+## Why Does Nx Make Secure CI Fast Enough to Actually Run?
+
+Security gates only work if engineers don't route around them, and the only kind of gate engineers reliably route around is a slow one. Every additional minute in CI is an inducement to skip a local check, push and let the cluster catch it, or — worst case — disable the gate "temporarily" for a Friday-afternoon hotfix. Nx makes the security profile above sustainable by collapsing the work most of those gates do.
+
+**Caching with named inputs.** Nx's `nx.json` lets you declare what counts as a "production" change vs. a "default" change. Test files, snapshots, fixtures, mocks, README updates — all in `default`, not in `production`. The cache key for a build target is hashed over the `production` set, so docs PRs and test-only PRs hit cache for the build target while still re-running tests.
+
+```json
+{
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "production": [
+      "default",
+      "!{projectRoot}/**/*.spec.{ts,tsx}",
+      "!{projectRoot}/**/*.test.{ts,tsx}",
+      "!{projectRoot}/**/__mocks__/**/*",
+      "!{projectRoot}/**/test-utils/**/*",
+      "!{projectRoot}/**/*.md"
+    ],
+    "sharedGlobals": [
+      "{workspaceRoot}/.nvmrc",
+      "{workspaceRoot}/.npmrc",
+      "{workspaceRoot}/tsconfig.base.json"
+    ]
+  },
+  "targetDefaults": {
+    "build":     { "cache": true, "inputs": ["production", "^production"] },
+    "lint":      { "cache": true },
+    "test":      { "cache": true },
+    "typecheck": { "cache": true, "dependsOn": ["^build"] }
+  }
+}
+```
+
+That snippet caches lint, test, build, and typecheck for every project in the workspace and reuses cached results when the inputs don't change. The first time a developer runs `pnpm nx run-many -t lint typecheck test`, it's slow. Every run after — both local and in CI — is a cache restore.
+
+**`affected` plus accurate base SHAs.** `nx affected -t lint typecheck test build` only runs targets for projects in the dependency graph downstream of the changed files. For a monorepo with one app and a handful of shared libraries, a single library change typically affects three or four projects, not the whole graph. Combined with `nrwl/nx-set-shas` to compute the correct `NX_BASE` and `NX_HEAD` against the merge-base of `main`, CI runs only what changed since the branch diverged.
+
+**Remote cache.** The local Nx cache pays for itself within a single developer's session. A remote cache — typically backed by S3 or an Nx Cloud account — extends the same hit rate across the whole team and across CI. When a colleague's branch already built the same library at the same input hash, your CI restores the artifact instead of rebuilding. A `localMode: 'no-cache'` pattern keeps CI from trusting its own scratch disk and always reaching for the shared store, which sidesteps an entire class of "the runner had a stale cache" debugging.
+
+**Plugin-driven `cache: true`.** Nx plugins like `@nx/next/plugin`, `@nx/eslint/plugin`, `@nx/vite/plugin`, and `@nx/js/typescript` register their targets as cacheable on install. You don't hand-roll `cache: true` for every project; the plugin does it once. New apps and libraries inherit the cache profile when you generate them. This matters for security because consistency is what makes the defaults stick — there's no individual project quietly opting out.
+
+<figure style={{ margin: '2.5rem 0', textAlign: 'center', padding: '1.5rem', borderRadius: '12px' }}>
+  <svg
+    viewBox="0 0 580 360"
+    width="100%"
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-labelledby="ci-duration-illustrative"
+    style={{ background: 'transparent', fontFamily: 'system-ui, sans-serif' }}
+  >
+    <title id="ci-duration-illustrative">Illustrative CI duration: cold cache vs Nx affected with remote cache</title>
+    <text x="290" y="28" textAnchor="middle" style={{ fill: '#e5e5e5', fontSize: '15px', fontWeight: 'bold' }}>
+      {'Illustrative CI Duration per Stage'}
+    </text>
+    <text x="290" y="46" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '11px' }}>
+      {'Cold cache vs Nx `affected` + remote cache — directional comparison, not measured'}
+    </text>
+
+    {/* Y-axis */}
+    <line x1="70" y1="80" x2="70" y2="270" stroke="#404040" strokeWidth="0.8" />
+    <line x1="70" y1="270" x2="550" y2="270" stroke="#404040" strokeWidth="0.8" />
+
+    {/* Y gridlines at 0, 60, 120, 180, 240, 300 seconds */}
+    <line x1="70" y1="232" x2="550" y2="232" stroke="#222" strokeWidth="0.5" />
+    <line x1="70" y1="194" x2="550" y2="194" stroke="#222" strokeWidth="0.5" />
+    <line x1="70" y1="156" x2="550" y2="156" stroke="#222" strokeWidth="0.5" />
+    <line x1="70" y1="118" x2="550" y2="118" stroke="#222" strokeWidth="0.5" />
+    <line x1="70" y1="80" x2="550" y2="80" stroke="#222" strokeWidth="0.5" />
+
+    {/* Y-axis labels */}
+    <text x="60" y="273" textAnchor="end" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'0s'}</text>
+    <text x="60" y="235" textAnchor="end" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'60s'}</text>
+    <text x="60" y="197" textAnchor="end" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'120s'}</text>
+    <text x="60" y="159" textAnchor="end" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'180s'}</text>
+    <text x="60" y="121" textAnchor="end" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'240s'}</text>
+    <text x="60" y="83" textAnchor="end" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'300s'}</text>
+
+    {/* Bars: 5 stages × 2 scenarios. Stage centers x: 130, 220, 310, 400, 490. Bar width 28, gap 4. */}
+    {/* Stage 1: install — cold 60, warm 25 */}
+    <rect x="116" y={270 - (60 * 38 / 60)} width="28" height={60 * 38 / 60} style={{ fill: '#e5a853' }} />
+    <rect x="148" y={270 - (25 * 38 / 60)} width="28" height={25 * 38 / 60} style={{ fill: '#5b9ee1' }} />
+    <text x="146" y="285" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'install'}</text>
+
+    {/* Stage 2: lint — cold 75, warm 8 */}
+    <rect x="206" y={270 - (75 * 38 / 60)} width="28" height={75 * 38 / 60} style={{ fill: '#e5a853' }} />
+    <rect x="238" y={270 - (8 * 38 / 60)} width="28" height={8 * 38 / 60} style={{ fill: '#5b9ee1' }} />
+    <text x="236" y="285" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'lint'}</text>
+
+    {/* Stage 3: typecheck — cold 90, warm 12 */}
+    <rect x="296" y={270 - (90 * 38 / 60)} width="28" height={90 * 38 / 60} style={{ fill: '#e5a853' }} />
+    <rect x="328" y={270 - (12 * 38 / 60)} width="28" height={12 * 38 / 60} style={{ fill: '#5b9ee1' }} />
+    <text x="326" y="285" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'typecheck'}</text>
+
+    {/* Stage 4: test — cold 180, warm 22 */}
+    <rect x="386" y={270 - (180 * 38 / 60)} width="28" height={180 * 38 / 60} style={{ fill: '#e5a853' }} />
+    <rect x="418" y={270 - (22 * 38 / 60)} width="28" height={22 * 38 / 60} style={{ fill: '#5b9ee1' }} />
+    <text x="416" y="285" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'test'}</text>
+
+    {/* Stage 5: build — cold 240, warm 18 */}
+    <rect x="476" y={270 - (240 * 38 / 60)} width="28" height={240 * 38 / 60} style={{ fill: '#e5a853' }} />
+    <rect x="508" y={270 - (18 * 38 / 60)} width="28" height={18 * 38 / 60} style={{ fill: '#5b9ee1' }} />
+    <text x="506" y="285" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'build'}</text>
+
+    {/* Totals annotation */}
+    <text x="290" y="310" textAnchor="middle" style={{ fill: '#e5a853', fontSize: '11px', fontWeight: 'bold' }}>{'Cold cache total: ~645s (10m 45s)'}</text>
+    <text x="290" y="325" textAnchor="middle" style={{ fill: '#5b9ee1', fontSize: '11px', fontWeight: 'bold' }}>{'Warm cache + affected: ~85s (1m 25s)'}</text>
+
+    {/* Legend */}
+    <rect x="180" y="345" width="10" height="10" rx="2" style={{ fill: '#e5a853' }} />
+    <text x="195" y="354" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'Cold cache'}</text>
+    <rect x="320" y="345" width="10" height="10" rx="2" style={{ fill: '#5b9ee1' }} />
+    <text x="335" y="354" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'Nx affected + remote cache'}</text>
+  </svg>
+  <figcaption style={{ color: '#a3a3a3', fontSize: '12px', marginTop: '0.5rem' }}>
+    {'Illustrative numbers for a typical PR in a ~10-project workspace; not measured benchmarks.'}
+  </figcaption>
+</figure>
+
+{/* [UNIQUE INSIGHT] */}
+
+The most under-rated thing about Nx in a security context isn't the speed itself. It's that the speed makes you willing to *re-run the gates*. Pre-push hooks that run in 8 seconds get kept. Pre-push hooks that run in 90 seconds get bypassed within a week. A CI pipeline that completes in 2 minutes for a typical PR gets re-run after every review-comment fix. A 12-minute pipeline gets you a culture of "let's just merge and fix it forward." That cultural delta is where almost all of your supply-chain judgment lives.
+
+One operational note. Bound the parallelism. The temptation with Nx is to run everything at once. The pattern I've used keeps `networkConcurrency: 32` and `--parallel=5` as ceilings. More than that and the registry round-trips start looking — to anyone watching their stolen credentials' usage — like an interesting target.
+
+## What Does the Full Hardened Pipeline Look Like End-to-End?
+
+The hardened install path I run for a TypeScript monorepo today has four tripwires, all on by default: a frozen lockfile, an explicit `postinstall` allowlist, a release-age cooling-off window, and `nx affected` on every push. Each one is cheap individually, and the combination is hard to circumvent without committing something that fails review.
+
+```yaml
+# .github/workflows/ci.yml — abstracted shape
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          filter: tree:0
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+      - uses: pnpm/action-setup@v4
+      - uses: nrwl/nx-set-shas@v4
+
+      - run: pnpm install --frozen-lockfile --prefer-offline
+
+      - run: pnpm exec nx affected -t lint typecheck test build --nxBail --parallel=5
+        env:
+          NX_KEY: ${{ secrets.NX_KEY }}
+          NX_BATCH_MODE: true
+```
+
+That's it. Six steps, no custom logic, and every supply-chain protection above is enforced by the moment the runner finishes `pnpm install`. The `--frozen-lockfile` flag fails the build if the lockfile is out of date with `package.json`. The `--prefer-offline` flag pushes the runner toward its cached store before reaching the registry. The `nx-set-shas` action ensures `affected` compares against the correct merge-base. `NX_KEY` points at the remote cache, so a hash already seen by a colleague's branch restores instantly.
+
+```yaml
+# lefthook.yml — abstracted pre-push gates
+pre-commit:
+  commands:
+    affected-lint:
+      run: pnpm exec nx affected -t lint --fix
+
+pre-push:
+  parallel: false
+  commands:
+    affected-build-lint-test:
+      run: pnpm exec nx affected -t lint build test --parallel=5
+```
+
+Pre-push runs the same `affected` set CI will run, plus build. If a developer's change broke a library, they find out before the push, not after. That feedback loop is part of what [makes engineering teams learn](/blog/engineering-team-learning) instead of accumulating scar tissue from incident post-mortems.
+
+Every step of this pipeline is doing supply-chain work even though none of them have "security" in the name. The lockfile blocks unauthorized resolution. The `onlyBuiltDependencies` allowlist in `pnpm-workspace.yaml` blocks unauthorized lifecycle scripts. The release-age delay blocks freshly poisoned versions. The remote cache means the install step rarely needs to hit the registry at all once a hash has been seen by anyone on the team.
+
+Keep the security work invisible by making it indistinguishable from the work the build was already doing. Engineers don't have to think about it because the package manager and the orchestrator are doing the thinking.
+
+## What's the Migration Path if You're on npm or yarn Today?
+
+A migration to this stack takes a few days of focused work and another week of soak time. The order matters: do the package-manager swap first, harden the install defaults next, then layer Nx on top once you have a stable foundation.
+
+1. **Adopt pnpm and pin it via `packageManager` and `engines`.** Set `packageManager: "pnpm@11.x.x+sha512.<hash>"` in `package.json` and `pnpm: ">=11"` in `engines`. Corepack picks this up automatically. The integrity hash means a compromised pnpm binary can't silently swap in.
+
+2. **Audit `postinstall` scripts before turning on the default-block.** Run your install once with the default-block on and grep the output for "ignored build script" — those packages need a deliberate decision about whether they go in `onlyBuiltDependencies` or stay blocked. Build the allowlist from the packages your install actually needs, not from aspirational guesses about what's safe.
+
+3. **Set a `minimumReleaseAge` you can defend.** Start at 1,440 minutes (24 hours). When a colleague raises a concern about urgent CVE patches, point them at `minimumReleaseAgeExclude` and `pnpm audit --fix`. The cooling-off window is not negotiable for normal updates.
+
+4. **Add Nx incrementally.** Start with plugin-driven caching for the framework you already use — `@nx/next/plugin`, `@nx/vite/plugin`, `@nx/eslint/plugin`, `@nx/js/typescript`. Don't introduce `nx affected` in CI until the cache key for your common targets is stable. Affected detection is only useful once the cache is hot.
+
+5. **Wire remote cache last.** Local caching alone gets you about 80% of the developer-experience win. Remote caching closes the loop for CI and for fresh clones. Use Nx Cloud if you don't want to operate the storage; use the S3-backed plugin if you want the cache in your own bucket.
+
+None of this stops a determined long-game attacker. The xz utils backdoor took about two and a half years of social engineering to plant a single CVSS-10 vulnerability ([NVD CVE-2024-3094](https://nvd.nist.gov/vuln/detail/cve-2024-3094), 2024). What this stack does is raise the floor against the 99% of incidents that look like Shai-Hulud or TanStack: opportunistic, fast-moving, and fundamentally a `postinstall` problem.
+
+<FAQ>
+  <div>
+    ### Should I set `minimumReleaseAge` to 24 hours or one week?
+
+    <p>Start at 24 hours. StepSecurity caught the TanStack worm in roughly twenty minutes; 24 hours sits well past the public-detection window for any high-profile package. Move to 168 hours (one week) only if your team can absorb the lag, and pair it with <a href="https://pnpm.io/supply-chain-security">`minimumReleaseAgeExclude`</a> for security-critical dependencies (pnpm.io, 2026).</p>
+  </div>
+  <div>
+    ### Does Nx caching help if our pipeline already runs in six minutes?
+
+    <p>The math isn't really about CI minutes. It's about whether engineers re-run gates locally before pushing. Six-minute pipelines train teams to push first and watch CI later; sub-minute pre-push hooks train teams to fix locally. The supply-chain payoff is indirect: a culture that re-runs gates is a culture that notices a strange `postinstall` warning the moment it appears.</p>
+  </div>
+  <div>
+    ### Can I get pnpm's supply-chain protection on npm via overrides?
+
+    <p>Partially. npm has `overrides` for version pinning and a `--ignore-scripts` flag, but neither is the default. pnpm 10+ blocks lifecycle scripts by default and requires an explicit allowlist to opt back in. That single default — not the cooling-off window, not the lockfile enforcement — is the largest delta between the two package managers' threat models (<a href="https://socket.dev/blog/pnpm-11-adds-new-supply-chain-protection-defaults">Socket</a>, 2026).</p>
+  </div>
+  <div>
+    ### Is Yarn Berry a viable alternative to pnpm here?
+
+    <p>For caching and workspaces, yes. For the supply-chain defaults specifically, less so. Yarn Berry's Plug'n'Play resolution model also changes how packages get loaded at runtime, which introduces its own tradeoffs around tooling compatibility. If you're picking between Yarn Berry and pnpm in 2026 with supply chain as a primary concern, pnpm's defaults are the cleaner answer.</p>
+  </div>
+</FAQ>
+
+## What's the Real Choice Here?
+
+The choice in 2026 is not between secure-and-slow and fast-and-exposed. It's between teams whose package manager makes the secure path the default path, and teams whose package manager makes them choose. pnpm 11 ships the secure defaults. Nx makes those defaults survive contact with engineers, because the gates that enforce them run in seconds.
+
+The deepest version of this argument is that defaults matter more than reviews. Code review catches what the reviewer happens to notice; a default catches everything that fits its shape. The defaults you ship with are the policy you actually have. [Defaulting to defense](/blog/assertiveness-default-engineering-leaders) — the engineering version of saying no early rather than negotiating later — is the disposition that scales. The pipeline above is what defaulting to defense looks like when you write it down in YAML.
