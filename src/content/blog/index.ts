@@ -6,6 +6,7 @@ const slugs = [
   'emergent-ai-overview-effect',
   'prototype-gate-whole-org',
   'assertiveness-default-engineering-leaders',
+  'pnpm-and-nx-for-efficient-monorepos-that-are-supply-chain-attack-resistant',
 ] as const;
 
 export default slugs;
