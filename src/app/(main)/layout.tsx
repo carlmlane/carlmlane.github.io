@@ -1,7 +1,6 @@
-import { GoogleTagManager } from '@next/third-parties/google';
-import { MotionConfig } from 'framer-motion';
 import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
+import DeferredGoogleTagManager from '@/components/deferred-google-tag-manager';
 import Header from '@/components/header';
 import './globals.css';
 
@@ -91,12 +90,10 @@ export default function RootLayout({
         <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
         <meta httpEquiv="Content-Security-Policy" content={contentSecurityPolicy} />
       </head>
-      <GoogleTagManager gtmId="GTM-M55D9MGW" />
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <MotionConfig reducedMotion="user">
-          <Header />
-          {children}
-        </MotionConfig>
+        <DeferredGoogleTagManager gtmId="GTM-M55D9MGW" />
+        <Header />
+        {children}
       </body>
     </html>
   );

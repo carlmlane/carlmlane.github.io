@@ -1,6 +1,3 @@
-'use client';
-
-import { motion } from 'framer-motion';
 import FormattedDate from '@/components/formatted-date';
 import type { BlogPost } from '@/lib/schemas';
 
@@ -9,13 +6,8 @@ type BlogCardProps = {
   readonly index: number;
 };
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' as const } },
-};
-
 const BlogCard = ({ post, index }: BlogCardProps) => (
-  <motion.article variants={itemVariants} custom={index} className="group">
+  <article className="group animate-fade-in-up" style={{ animationDelay: `${index * 80}ms` }}>
     <a
       href={`/blog/${post.slug}`}
       className="block rounded-xl border border-border bg-surface p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/30 hover:shadow-[0_0_20px_var(--accent-glow)]"
@@ -35,7 +27,7 @@ const BlogCard = ({ post, index }: BlogCardProps) => (
         </div>
       </div>
     </a>
-  </motion.article>
+  </article>
 );
 
 export default BlogCard;

@@ -2,97 +2,97 @@
   "/blog/about-me/backcountry-skiing.jpg": {
     "width": 1200,
     "height": 960,
-    "webp": "/blog/about-me/backcountry-skiing.webp",
-    "avif": "/blog/about-me/backcountry-skiing.avif"
+    "webp": "/blog/about-me/backcountry-skiing-640.webp 640w, /blog/about-me/backcountry-skiing-960.webp 960w, /blog/about-me/backcountry-skiing-1200.webp 1200w",
+    "avif": "/blog/about-me/backcountry-skiing-640.avif 640w, /blog/about-me/backcountry-skiing-960.avif 960w, /blog/about-me/backcountry-skiing-1200.avif 1200w"
   },
   "/blog/about-me/hero.jpg": {
     "width": 1200,
     "height": 800,
-    "webp": "/blog/about-me/hero.webp",
-    "avif": "/blog/about-me/hero.avif"
+    "webp": "/blog/about-me/hero-640.webp 640w, /blog/about-me/hero-960.webp 960w, /blog/about-me/hero-1200.webp 1200w",
+    "avif": "/blog/about-me/hero-640.avif 640w, /blog/about-me/hero-960.avif 960w, /blog/about-me/hero-1200.avif 1200w"
   },
   "/blog/about-me/mountain-trail.jpg": {
     "width": 1200,
     "height": 801,
-    "webp": "/blog/about-me/mountain-trail.webp",
-    "avif": "/blog/about-me/mountain-trail.avif"
+    "webp": "/blog/about-me/mountain-trail-640.webp 640w, /blog/about-me/mountain-trail-960.webp 960w, /blog/about-me/mountain-trail-1200.webp 1200w",
+    "avif": "/blog/about-me/mountain-trail-640.avif 640w, /blog/about-me/mountain-trail-960.avif 960w, /blog/about-me/mountain-trail-1200.avif 1200w"
   },
   "/blog/about-me/team-collaboration.jpg": {
     "width": 1200,
     "height": 800,
-    "webp": "/blog/about-me/team-collaboration.webp",
-    "avif": "/blog/about-me/team-collaboration.avif"
+    "webp": "/blog/about-me/team-collaboration-640.webp 640w, /blog/about-me/team-collaboration-960.webp 960w, /blog/about-me/team-collaboration-1200.webp 1200w",
+    "avif": "/blog/about-me/team-collaboration-640.avif 640w, /blog/about-me/team-collaboration-960.avif 960w, /blog/about-me/team-collaboration-1200.avif 1200w"
   },
   "/blog/ai-code-learning-vs-skipping/code-review-session.jpg": {
     "width": 1200,
     "height": 630,
-    "webp": "/blog/ai-code-learning-vs-skipping/code-review-session.webp",
-    "avif": "/blog/ai-code-learning-vs-skipping/code-review-session.avif"
+    "webp": "/blog/ai-code-learning-vs-skipping/code-review-session-640.webp 640w, /blog/ai-code-learning-vs-skipping/code-review-session-960.webp 960w, /blog/ai-code-learning-vs-skipping/code-review-session-1200.webp 1200w",
+    "avif": "/blog/ai-code-learning-vs-skipping/code-review-session-640.avif 640w, /blog/ai-code-learning-vs-skipping/code-review-session-960.avif 960w, /blog/ai-code-learning-vs-skipping/code-review-session-1200.avif 1200w"
   },
   "/blog/ai-code-learning-vs-skipping/hero.jpg": {
     "width": 1200,
     "height": 630,
-    "webp": "/blog/ai-code-learning-vs-skipping/hero.webp",
-    "avif": "/blog/ai-code-learning-vs-skipping/hero.avif"
+    "webp": "/blog/ai-code-learning-vs-skipping/hero-640.webp 640w, /blog/ai-code-learning-vs-skipping/hero-960.webp 960w, /blog/ai-code-learning-vs-skipping/hero-1200.webp 1200w",
+    "avif": "/blog/ai-code-learning-vs-skipping/hero-640.avif 640w, /blog/ai-code-learning-vs-skipping/hero-960.avif 960w, /blog/ai-code-learning-vs-skipping/hero-1200.avif 1200w"
   },
   "/blog/ai-code-learning-vs-skipping/prototyping-session.jpg": {
     "width": 1200,
     "height": 630,
-    "webp": "/blog/ai-code-learning-vs-skipping/prototyping-session.webp",
-    "avif": "/blog/ai-code-learning-vs-skipping/prototyping-session.avif"
+    "webp": "/blog/ai-code-learning-vs-skipping/prototyping-session-640.webp 640w, /blog/ai-code-learning-vs-skipping/prototyping-session-960.webp 960w, /blog/ai-code-learning-vs-skipping/prototyping-session-1200.webp 1200w",
+    "avif": "/blog/ai-code-learning-vs-skipping/prototyping-session-640.avif 640w, /blog/ai-code-learning-vs-skipping/prototyping-session-960.avif 960w, /blog/ai-code-learning-vs-skipping/prototyping-session-1200.avif 1200w"
   },
   "/blog/assertiveness-default-engineering-leaders/hero.jpg": {
     "width": 1600,
     "height": 840,
-    "webp": "/blog/assertiveness-default-engineering-leaders/hero.webp",
-    "avif": "/blog/assertiveness-default-engineering-leaders/hero.avif"
+    "webp": "/blog/assertiveness-default-engineering-leaders/hero-640.webp 640w, /blog/assertiveness-default-engineering-leaders/hero-960.webp 960w, /blog/assertiveness-default-engineering-leaders/hero-1280.webp 1280w, /blog/assertiveness-default-engineering-leaders/hero-1600.webp 1600w",
+    "avif": "/blog/assertiveness-default-engineering-leaders/hero-640.avif 640w, /blog/assertiveness-default-engineering-leaders/hero-960.avif 960w, /blog/assertiveness-default-engineering-leaders/hero-1280.avif 1280w, /blog/assertiveness-default-engineering-leaders/hero-1600.avif 1600w"
   },
   "/blog/emergent-ai-overview-effect/artemis-earthrise.jpg": {
     "width": 1920,
     "height": 1280,
-    "webp": "/blog/emergent-ai-overview-effect/artemis-earthrise.webp",
-    "avif": "/blog/emergent-ai-overview-effect/artemis-earthrise.avif"
+    "webp": "/blog/emergent-ai-overview-effect/artemis-earthrise-640.webp 640w, /blog/emergent-ai-overview-effect/artemis-earthrise-960.webp 960w, /blog/emergent-ai-overview-effect/artemis-earthrise-1280.webp 1280w, /blog/emergent-ai-overview-effect/artemis-earthrise-1920.webp 1920w",
+    "avif": "/blog/emergent-ai-overview-effect/artemis-earthrise-640.avif 640w, /blog/emergent-ai-overview-effect/artemis-earthrise-960.avif 960w, /blog/emergent-ai-overview-effect/artemis-earthrise-1280.avif 1280w, /blog/emergent-ai-overview-effect/artemis-earthrise-1920.avif 1920w"
   },
   "/blog/emergent-ai-overview-effect/hero.jpg": {
     "width": 2048,
     "height": 1365,
-    "webp": "/blog/emergent-ai-overview-effect/hero.webp",
-    "avif": "/blog/emergent-ai-overview-effect/hero.avif"
+    "webp": "/blog/emergent-ai-overview-effect/hero-640.webp 640w, /blog/emergent-ai-overview-effect/hero-960.webp 960w, /blog/emergent-ai-overview-effect/hero-1280.webp 1280w, /blog/emergent-ai-overview-effect/hero-2048.webp 2048w",
+    "avif": "/blog/emergent-ai-overview-effect/hero-640.avif 640w, /blog/emergent-ai-overview-effect/hero-960.avif 960w, /blog/emergent-ai-overview-effect/hero-1280.avif 1280w, /blog/emergent-ai-overview-effect/hero-2048.avif 2048w"
   },
   "/blog/engineering-team-learning/feedback-loops.jpg": {
     "width": 1280,
     "height": 853,
-    "webp": "/blog/engineering-team-learning/feedback-loops.webp",
-    "avif": "/blog/engineering-team-learning/feedback-loops.avif"
+    "webp": "/blog/engineering-team-learning/feedback-loops-640.webp 640w, /blog/engineering-team-learning/feedback-loops-960.webp 960w, /blog/engineering-team-learning/feedback-loops-1280.webp 1280w",
+    "avif": "/blog/engineering-team-learning/feedback-loops-640.avif 640w, /blog/engineering-team-learning/feedback-loops-960.avif 960w, /blog/engineering-team-learning/feedback-loops-1280.avif 1280w"
   },
   "/blog/engineering-team-learning/hero.jpg": {
     "width": 1280,
     "height": 853,
-    "webp": "/blog/engineering-team-learning/hero.webp",
-    "avif": "/blog/engineering-team-learning/hero.avif"
+    "webp": "/blog/engineering-team-learning/hero-640.webp 640w, /blog/engineering-team-learning/hero-960.webp 960w, /blog/engineering-team-learning/hero-1280.webp 1280w",
+    "avif": "/blog/engineering-team-learning/hero-640.avif 640w, /blog/engineering-team-learning/hero-960.avif 960w, /blog/engineering-team-learning/hero-1280.avif 1280w"
   },
   "/blog/engineering-team-learning/team-learning.jpg": {
     "width": 1280,
     "height": 854,
-    "webp": "/blog/engineering-team-learning/team-learning.webp",
-    "avif": "/blog/engineering-team-learning/team-learning.avif"
+    "webp": "/blog/engineering-team-learning/team-learning-640.webp 640w, /blog/engineering-team-learning/team-learning-960.webp 960w, /blog/engineering-team-learning/team-learning-1280.webp 1280w",
+    "avif": "/blog/engineering-team-learning/team-learning-640.avif 640w, /blog/engineering-team-learning/team-learning-960.avif 960w, /blog/engineering-team-learning/team-learning-1280.avif 1280w"
   },
   "/blog/pnpm-and-nx-for-efficient-monorepos-that-are-supply-chain-attack-resistant/hero.jpg": {
     "width": 1920,
     "height": 1080,
-    "webp": "/blog/pnpm-and-nx-for-efficient-monorepos-that-are-supply-chain-attack-resistant/hero.webp",
-    "avif": "/blog/pnpm-and-nx-for-efficient-monorepos-that-are-supply-chain-attack-resistant/hero.avif"
+    "webp": "/blog/pnpm-and-nx-for-efficient-monorepos-that-are-supply-chain-attack-resistant/hero-640.webp 640w, /blog/pnpm-and-nx-for-efficient-monorepos-that-are-supply-chain-attack-resistant/hero-960.webp 960w, /blog/pnpm-and-nx-for-efficient-monorepos-that-are-supply-chain-attack-resistant/hero-1280.webp 1280w, /blog/pnpm-and-nx-for-efficient-monorepos-that-are-supply-chain-attack-resistant/hero-1920.webp 1920w",
+    "avif": "/blog/pnpm-and-nx-for-efficient-monorepos-that-are-supply-chain-attack-resistant/hero-640.avif 640w, /blog/pnpm-and-nx-for-efficient-monorepos-that-are-supply-chain-attack-resistant/hero-960.avif 960w, /blog/pnpm-and-nx-for-efficient-monorepos-that-are-supply-chain-attack-resistant/hero-1280.avif 1280w, /blog/pnpm-and-nx-for-efficient-monorepos-that-are-supply-chain-attack-resistant/hero-1920.avif 1920w"
   },
   "/blog/prototype-gate-whole-org/hero.jpg": {
     "width": 1600,
     "height": 900,
-    "webp": "/blog/prototype-gate-whole-org/hero.webp",
-    "avif": "/blog/prototype-gate-whole-org/hero.avif"
+    "webp": "/blog/prototype-gate-whole-org/hero-640.webp 640w, /blog/prototype-gate-whole-org/hero-960.webp 960w, /blog/prototype-gate-whole-org/hero-1280.webp 1280w, /blog/prototype-gate-whole-org/hero-1600.webp 1600w",
+    "avif": "/blog/prototype-gate-whole-org/hero-640.avif 640w, /blog/prototype-gate-whole-org/hero-960.avif 960w, /blog/prototype-gate-whole-org/hero-1280.avif 1280w, /blog/prototype-gate-whole-org/hero-1600.avif 1600w"
   },
   "/blog/prototype-gate-whole-org/team-learning.jpg": {
     "width": 1600,
     "height": 900,
-    "webp": "/blog/prototype-gate-whole-org/team-learning.webp",
-    "avif": "/blog/prototype-gate-whole-org/team-learning.avif"
+    "webp": "/blog/prototype-gate-whole-org/team-learning-640.webp 640w, /blog/prototype-gate-whole-org/team-learning-960.webp 960w, /blog/prototype-gate-whole-org/team-learning-1280.webp 1280w, /blog/prototype-gate-whole-org/team-learning-1600.webp 1600w",
+    "avif": "/blog/prototype-gate-whole-org/team-learning-640.avif 640w, /blog/prototype-gate-whole-org/team-learning-960.avif 960w, /blog/prototype-gate-whole-org/team-learning-1280.avif 1280w, /blog/prototype-gate-whole-org/team-learning-1600.avif 1600w"
   }
 }

@@ -10,8 +10,8 @@ vi.mock('@/lib/image-manifest.json', () => ({
     '/blog/sample/photo.jpg': {
       width: 1200,
       height: 800,
-      webp: '/blog/sample/photo.webp',
-      avif: '/blog/sample/photo.avif',
+      webp: '/blog/sample/photo-640.webp 640w, /blog/sample/photo-1200.webp 1200w',
+      avif: '/blog/sample/photo-640.avif 640w, /blog/sample/photo-1200.avif 1200w',
     },
   },
 }));
@@ -144,14 +144,16 @@ describe('Img', () => {
 
     const avif = container.querySelector('source[type="image/avif"]');
     const webp = container.querySelector('source[type="image/webp"]');
-    expect(avif).toHaveAttribute('srcset', '/blog/sample/photo.avif');
-    expect(webp).toHaveAttribute('srcset', '/blog/sample/photo.webp');
+    expect(avif).toHaveAttribute('srcset', '/blog/sample/photo-640.avif 640w, /blog/sample/photo-1200.avif 1200w');
+    expect(webp).toHaveAttribute('srcset', '/blog/sample/photo-640.webp 640w, /blog/sample/photo-1200.webp 1200w');
+    expect(avif).toHaveAttribute('sizes', '(max-width: 768px) 100vw, 720px');
 
     const img = container.querySelector('img');
     expect(img).toHaveAttribute('src', '/blog/sample/photo.jpg');
     expect(img).toHaveAttribute('alt', 'Sample');
     expect(img).toHaveAttribute('width', '1200');
     expect(img).toHaveAttribute('height', '800');
+    expect(img).toHaveAttribute('sizes', '(max-width: 768px) 100vw, 720px');
     expect(img).toHaveAttribute('loading', 'lazy');
     expect(img).toHaveAttribute('decoding', 'async');
   });

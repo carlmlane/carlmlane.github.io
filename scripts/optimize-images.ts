@@ -4,8 +4,9 @@ import { extname, join, relative, resolve, sep } from 'node:path';
 import sharp from 'sharp';
 
 // AUTO-RUN via `pnpm generate:image-manifest` (chained into `prebuild`).
-// Walks public/blog, re-compresses oversized JPEGs in place, emits sibling
-// .webp/.avif variants, and writes intrinsic dimensions to src/lib/image-manifest.json.
+// Walks public/blog, re-compresses oversized JPEGs in place, emits resized
+// .webp/.avif variants at several widths, and writes intrinsic dimensions plus
+// width-descriptor srcsets to src/lib/image-manifest.json.
 // The manifest is committed (CI typecheck/test/lint run without prebuild); the
 // generated .webp/.avif variants are gitignored and regenerated at build time.
 
@@ -16,6 +17,10 @@ const blogDir = join(publicDir, 'blog');
 const manifestPath = join(projectRoot, 'src', 'lib', 'image-manifest.json');
 
 const sourceExtensions = new Set(['.jpg', '.jpeg', '.png']);
+
+// Render widths covering 1x/1.5x/2x of the ~720px content column. Widths wider
+// than a given image are dropped, and the image's own width is always included.
+const targetWidths = [640, 960, 1280];
 
 type ImageEntry = {
   readonly width: number;
@@ -28,7 +33,8 @@ const kb = (bytes: number) => `${Math.round(bytes / 1024)}KB`;
 
 const toPublicPath = (file: string) => `/${relative(publicDir, file).split(sep).join('/')}`;
 
-const variantPath = (file: string, ext: '.webp' | '.avif') => file.replace(/\.(jpe?g|png)$/i, ext);
+const variantPath = (file: string, width: number, ext: '.webp' | '.avif') =>
+  file.replace(/\.(jpe?g|png)$/i, `-${width}${ext}`);
 
 const collectImages = async (dir: string): Promise<readonly string[]> => {
   const entries = await readdir(dir, { withFileTypes: true });
@@ -70,13 +76,24 @@ const ensureVariant = async (
   console.log(`Wrote ${relative(projectRoot, target)}`);
 };
 
+const buildSrcset = async (
+  file: string,
+  widths: readonly number[],
+  ext: '.webp' | '.avif',
+  encode: (img: sharp.Sharp) => sharp.Sharp,
+): Promise<string> => {
+  const parts = await Promise.all(
+    widths.map(async (width) => {
+      const target = variantPath(file, width, ext);
+      await ensureVariant(file, target, (img) => encode(img.rotate().resize({ width, withoutEnlargement: true })));
+      return `${toPublicPath(target)} ${width}w`;
+    }),
+  );
+  return parts.join(', ');
+};
+
 const buildEntry = async (file: string): Promise<readonly [string, ImageEntry]> => {
   await maybeRecompressJpeg(file);
-
-  const webpFile = variantPath(file, '.webp');
-  const avifFile = variantPath(file, '.avif');
-  await ensureVariant(file, webpFile, (img) => img.webp({ quality: 80 }));
-  await ensureVariant(file, avifFile, (img) => img.avif({ quality: 50 }));
 
   const meta = await sharp(file).metadata();
   if (meta.width === undefined || meta.height === undefined) {
@@ -84,16 +101,14 @@ const buildEntry = async (file: string): Promise<readonly [string, ImageEntry]> 
   }
   // EXIF orientation values >= 5 swap width/height.
   const swap = (meta.orientation ?? 1) >= 5;
+  const width = swap ? meta.height : meta.width;
+  const height = swap ? meta.width : meta.height;
 
-  return [
-    toPublicPath(file),
-    {
-      width: swap ? meta.height : meta.width,
-      height: swap ? meta.width : meta.height,
-      webp: toPublicPath(webpFile),
-      avif: toPublicPath(avifFile),
-    },
-  ];
+  const widths = [...new Set([...targetWidths.filter((w) => w < width), width])].toSorted((a, b) => a - b);
+  const webp = await buildSrcset(file, widths, '.webp', (img) => img.webp({ quality: 80 }));
+  const avif = await buildSrcset(file, widths, '.avif', (img) => img.avif({ quality: 50 }));
+
+  return [toPublicPath(file), { width, height, webp, avif }];
 };
 
 const images = await collectImages(blogDir);

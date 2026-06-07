@@ -7,6 +7,9 @@ import { FAQ } from './faq';
 type ImageEntry = { readonly width: number; readonly height: number; readonly webp: string; readonly avif: string };
 const manifest: Record<string, ImageEntry> = imageManifest;
 
+// Content images render full-width on mobile and within the ~720px column on larger screens.
+const IMAGE_SIZES = '(max-width: 768px) 100vw, 720px';
+
 const createHeading = (Tag: 'h1' | 'h2' | 'h3' | 'h4') => {
   const Heading = (props: ComponentPropsWithoutRef<typeof Tag>) => (
     <Tag {...props} className="text-foreground font-semibold tracking-tight" />
@@ -60,14 +63,15 @@ const Img = ({ src, ...props }: ComponentPropsWithoutRef<'img'>) => {
 
   return (
     <picture>
-      <source srcSet={entry.avif} type="image/avif" />
-      <source srcSet={entry.webp} type="image/webp" />
+      <source srcSet={entry.avif} sizes={IMAGE_SIZES} type="image/avif" />
+      <source srcSet={entry.webp} sizes={IMAGE_SIZES} type="image/webp" />
       {/* biome-ignore lint/a11y/useAltText: alt is passed through props from MDX */}
       <img
         className="rounded-lg h-auto max-w-full"
         src={src}
         width={entry.width}
         height={entry.height}
+        sizes={IMAGE_SIZES}
         loading="lazy"
         decoding="async"
         {...props}
