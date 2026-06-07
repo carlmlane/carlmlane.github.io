@@ -6,7 +6,8 @@
   "homepage": "https://carlmlane.com",
   "scripts": {
     "generate:service-worker": "tsx scripts/generate-service-worker.ts",
-    "prebuild": "pnpm generate:service-worker",
+    "generate:image-manifest": "tsx scripts/optimize-images.ts",
+    "prebuild": "pnpm generate:service-worker && pnpm generate:image-manifest",
     "dev": "next dev --experimental-https",
     "build": "next build",
     "start": "next start",
@@ -34,6 +35,7 @@
     "posthog-js": "^1.369.3",
     "react": "19.2.5",
     "react-dom": "19.2.5",
+    "rehype-slug": "^6.0.0",
     "schema-dts": "^2.0.0",
     "sugar-high": "^1.1.0",
     "zod": "^4.3.6"
@@ -54,6 +56,7 @@
     "babel-plugin-react-compiler": "1.0.0",
     "happy-dom": "^20.9.0",
     "lefthook": "^2.1.6",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4.2.3",
     "tsx": "^4.21.0",
     "typescript": "^5",

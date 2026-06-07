@@ -1,5 +1,6 @@
 import { GoogleTagManager } from '@next/third-parties/google';
-import type { Metadata } from 'next';
+import { MotionConfig } from 'framer-motion';
+import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import Header from '@/components/header';
 import './globals.css';
@@ -57,9 +58,10 @@ export const metadata: Metadata = {
     follow: true,
   },
   referrer: 'strict-origin-when-cross-origin',
-  other: {
-    'theme-color': '#0a0a0a',
-  },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#0a0a0a',
 };
 
 const cspDirectives = [
@@ -91,8 +93,10 @@ export default function RootLayout({
       </head>
       <GoogleTagManager gtmId="GTM-M55D9MGW" />
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Header />
-        {children}
+        <MotionConfig reducedMotion="user">
+          <Header />
+          {children}
+        </MotionConfig>
       </body>
     </html>
   );

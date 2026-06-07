@@ -1,0 +1,98 @@
+{
+  "/blog/about-me/backcountry-skiing.jpg": {
+    "width": 1200,
+    "height": 960,
+    "webp": "/blog/about-me/backcountry-skiing.webp",
+    "avif": "/blog/about-me/backcountry-skiing.avif"
+  },
+  "/blog/about-me/hero.jpg": {
+    "width": 1200,
+    "height": 800,
+    "webp": "/blog/about-me/hero.webp",
+    "avif": "/blog/about-me/hero.avif"
+  },
+  "/blog/about-me/mountain-trail.jpg": {
+    "width": 1200,
+    "height": 801,
+    "webp": "/blog/about-me/mountain-trail.webp",
+    "avif": "/blog/about-me/mountain-trail.avif"
+  },
+  "/blog/about-me/team-collaboration.jpg": {
+    "width": 1200,
+    "height": 800,
+    "webp": "/blog/about-me/team-collaboration.webp",
+    "avif": "/blog/about-me/team-collaboration.avif"
+  },
+  "/blog/ai-code-learning-vs-skipping/code-review-session.jpg": {
+    "width": 1200,
+    "height": 630,
+    "webp": "/blog/ai-code-learning-vs-skipping/code-review-session.webp",
+    "avif": "/blog/ai-code-learning-vs-skipping/code-review-session.avif"
+  },
+  "/blog/ai-code-learning-vs-skipping/hero.jpg": {
+    "width": 1200,
+    "height": 630,
+    "webp": "/blog/ai-code-learning-vs-skipping/hero.webp",
+    "avif": "/blog/ai-code-learning-vs-skipping/hero.avif"
+  },
+  "/blog/ai-code-learning-vs-skipping/prototyping-session.jpg": {
+    "width": 1200,
+    "height": 630,
+    "webp": "/blog/ai-code-learning-vs-skipping/prototyping-session.webp",
+    "avif": "/blog/ai-code-learning-vs-skipping/prototyping-session.avif"
+  },
+  "/blog/assertiveness-default-engineering-leaders/hero.jpg": {
+    "width": 1600,
+    "height": 840,
+    "webp": "/blog/assertiveness-default-engineering-leaders/hero.webp",
+    "avif": "/blog/assertiveness-default-engineering-leaders/hero.avif"
+  },
+  "/blog/emergent-ai-overview-effect/artemis-earthrise.jpg": {
+    "width": 1920,
+    "height": 1280,
+    "webp": "/blog/emergent-ai-overview-effect/artemis-earthrise.webp",
+    "avif": "/blog/emergent-ai-overview-effect/artemis-earthrise.avif"
+  },
+  "/blog/emergent-ai-overview-effect/hero.jpg": {
+    "width": 2048,
+    "height": 1365,
+    "webp": "/blog/emergent-ai-overview-effect/hero.webp",
+    "avif": "/blog/emergent-ai-overview-effect/hero.avif"
+  },
+  "/blog/engineering-team-learning/feedback-loops.jpg": {
+    "width": 1280,
+    "height": 853,
+    "webp": "/blog/engineering-team-learning/feedback-loops.webp",
+    "avif": "/blog/engineering-team-learning/feedback-loops.avif"
+  },
+  "/blog/engineering-team-learning/hero.jpg": {
+    "width": 1280,
+    "height": 853,
+    "webp": "/blog/engineering-team-learning/hero.webp",
+    "avif": "/blog/engineering-team-learning/hero.avif"
+  },
+  "/blog/engineering-team-learning/team-learning.jpg": {
+    "width": 1280,
+    "height": 854,
+    "webp": "/blog/engineering-team-learning/team-learning.webp",
+    "avif": "/blog/engineering-team-learning/team-learning.avif"
+  },
+  "/blog/pnpm-and-nx-for-efficient-monorepos-that-are-supply-chain-attack-resistant/hero.jpg": {
+    "width": 1920,
+    "height": 1080,
+    "webp": "/blog/pnpm-and-nx-for-efficient-monorepos-that-are-supply-chain-attack-resistant/hero.webp",
+    "avif": "/blog/pnpm-and-nx-for-efficient-monorepos-that-are-supply-chain-attack-resistant/hero.avif"
+  },
+  "/blog/prototype-gate-whole-org/hero.jpg": {
+    "width": 1600,
+    "height": 900,
+    "webp": "/blog/prototype-gate-whole-org/hero.webp",
+    "avif": "/blog/prototype-gate-whole-org/hero.avif"
+  },
+  "/blog/prototype-gate-whole-org/team-learning.jpg": {
+    "width": 1600,
+    "height": 900,
+    "webp": "/blog/prototype-gate-whole-org/team-learning.webp",
+    "avif": "/blog/prototype-gate-whole-org/team-learning.avif"
+  }
+}

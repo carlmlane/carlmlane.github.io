@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
 };
 
-const withMDX = createMDX({});
+// Turbopack requires MDX plugins to be referenced by name (string) so options stay serializable.
+const withMDX = createMDX({
+  options: {
+    rehypePlugins: [['rehype-slug']],
+  },
+});
 
 export default withMDX(nextConfig);

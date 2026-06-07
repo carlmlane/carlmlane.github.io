@@ -154,3 +154,7 @@ playwright-report/
 
 # Lighthouse CI
 .lighthouseci/
+
+# Generated image variants (regenerated at build via prebuild; manifest is committed)
+public/blog/**/*.webp
+public/blog/**/*.avif

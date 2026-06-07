@@ -1,7 +1,11 @@
 import type { MDXComponents } from 'mdx/types';
 import type { ComponentPropsWithoutRef } from 'react';
 import { highlight } from 'sugar-high';
+import imageManifest from '@/lib/image-manifest.json';
 import { FAQ } from './faq';
+
+type ImageEntry = { readonly width: number; readonly height: number; readonly webp: string; readonly avif: string };
+const manifest: Record<string, ImageEntry> = imageManifest;
 
 const createHeading = (Tag: 'h1' | 'h2' | 'h3' | 'h4') => {
   const Heading = (props: ComponentPropsWithoutRef<typeof Tag>) => (
@@ -45,11 +49,32 @@ const Blockquote = (props: ComponentPropsWithoutRef<'blockquote'>) => (
   <blockquote className="border-l-2 border-accent-warm pl-4 text-muted italic" {...props} />
 );
 
-const Img = (props: ComponentPropsWithoutRef<'img'>) => (
-  // biome-ignore lint/a11y/useAltText: alt is passed through props from MDX
-  // biome-ignore lint/performance/noImgElement: MDX content images don't have static dimensions for next/image
-  <img className="rounded-lg" {...props} />
-);
+const Img = ({ src, ...props }: ComponentPropsWithoutRef<'img'>) => {
+  const entry = typeof src === 'string' ? manifest[src] : undefined;
+
+  if (!entry) {
+    // biome-ignore lint/a11y/useAltText: alt is passed through props from MDX
+    // biome-ignore lint/performance/noImgElement: static export — MDX content images aren't routed through next/image
+    return <img className="rounded-lg" src={src} {...props} />;
+  }
+
+  return (
+    <picture>
+      <source srcSet={entry.avif} type="image/avif" />
+      <source srcSet={entry.webp} type="image/webp" />
+      {/* biome-ignore lint/a11y/useAltText: alt is passed through props from MDX */}
+      <img
+        className="rounded-lg h-auto max-w-full"
+        src={src}
+        width={entry.width}
+        height={entry.height}
+        loading="lazy"
+        decoding="async"
+        {...props}
+      />
+    </picture>
+  );
+};
 
 const blogMdxComponents: MDXComponents = {
   h1: createHeading('h1'),
