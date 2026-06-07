@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 - **Dev server:** `pnpm dev` (Next.js with experimental HTTPS)
-- **Build:** `pnpm build` (static export to `out/`; `prebuild` hook runs `pnpm generate:service-worker` first)
+- **Build:** `pnpm build` (static export to `out/`; `prebuild` runs `generate:service-worker` then `generate:image-manifest`)
 - **Start:** `pnpm start`
 - **Lint:** `pnpm lint` (runs `biome check`)
 - **Format:** `pnpm format` (runs `biome format --write`)
@@ -25,17 +25,19 @@ This is a personal GitHub Pages site built with **Next.js 16** (App Router) conf
 - **Styling:** Tailwind CSS v4 via PostCSS
 - **Linting/Formatting:** Biome (single quotes, 2-space indent, 120 char line width)
 - **React Compiler** enabled for automatic optimizations
+- **Analytics:** PostHog (`src/instrumentation-client.ts`) and deferred Google Tag Manager (`src/components/deferred-google-tag-manager.tsx`)
 - **Custom domain:** carlmlane.com (see `CNAME`)
 
 ### Source structure
 
-- `src/app/` — Next.js App Router pages and layouts
+- `src/app/` — App Router, split into route groups: `(main)/` (home, blog, python-interview-question, RSS via `feed.xml/route.ts`) and `(new-tab)/` (new-tab page + service-worker registration)
 - `src/app/globals.css` — Tailwind imports and CSS custom properties (light/dark themes)
 - `src/components/blog/` — Blog-specific components (`FAQ`, `BlogCard`, `BlogGrid`, `PostLayout`, `mdx-components`, etc.)
 - `src/content/blog/` — Blog posts (MDX) plus `index.ts` that registers published slugs
-- `src/lib/schemas.ts` — Zod schemas; `postMetadataSchema` validates blog frontmatter at build time
+- `src/lib/` — `schemas.ts` (`postMetadataSchema` validates frontmatter at build time), `blog.ts` (post loading), `feed.ts` (RSS), and generated `image-manifest.json`
 - `public/blog/{slug}/` — Per-post images (hero + inline). Other static assets and the generated `service-worker.js` also live in `public/`
 - `scripts/generate-service-worker.ts` — Runs via `prebuild`; output committed to `public/service-worker.js`
+- `scripts/optimize-images.ts` (`pnpm generate:image-manifest`) — Walks `public/blog`, re-compresses oversized JPEGs in place, emits resized `.webp`/`.avif` variants, and writes `src/lib/image-manifest.json` (dimensions + srcsets). The manifest is **committed**; the generated `.webp`/`.avif` variants are **gitignored** and regenerated at build time.
 - `archive/` — Legacy static HTML files (excluded from linting)
 
 ### Key config
@@ -58,6 +60,6 @@ This is a personal GitHub Pages site built with **Next.js 16** (App Router) conf
    };
    ```
 2. Append `'<slug>'` to the tuple in `src/content/blog/index.ts`. Posts not in the tuple don't render.
-3. Put images at `public/blog/<slug>/` and reference them inline as `/blog/<slug>/foo.jpg`. The frontmatter `image` field requires the absolute `https://carlmlane.com/...` URL (Zod enforces `.url()`).
+3. Put images at `public/blog/<slug>/` and reference them inline as `/blog/<slug>/foo.jpg`. Run `pnpm generate:image-manifest` so `mdx-components` can serve responsive `<picture>` (avif/webp) — images missing from `image-manifest.json` fall back to a plain `<img>`. The frontmatter `image` field requires the absolute `https://carlmlane.com/...` URL (Zod enforces `.url()`).
 4. MDX components are auto-styled via `src/components/blog/mdx-components.tsx`. For FAQ blocks: `import { FAQ } from '@/components/blog/faq';` and wrap each Q&A in a `<div>` with an `<h3>` plus `<p>`.
 5. Charts use inline `<svg>` inside `<figure>` with the dark-mode palette (`#5b9ee1`, `#e5a853`, `#7c6fe0`, `#404040`) — see existing posts for the pattern; transparent background, never raster.
