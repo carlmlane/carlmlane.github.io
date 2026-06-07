@@ -1,6 +1,6 @@
 import { cleanup, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, type MockInstance, vi } from 'vitest';
-import RootLayout, { metadata } from './layout';
+import RootLayout, { metadata, viewport } from './layout';
 
 vi.mock('next/navigation', () => ({
   usePathname: () => '/',
@@ -70,6 +70,12 @@ describe('metadata', () => {
 
   it('has publisher', () => {
     expect(metadata.publisher).toBe('Carl M. Lane');
+  });
+});
+
+describe('viewport', () => {
+  it('sets the dark theme color via the viewport export', () => {
+    expect(viewport.themeColor).toBe('#0a0a0a');
   });
 });
 

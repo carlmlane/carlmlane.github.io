@@ -1,14 +1,6 @@
 import { cleanup, render } from '@testing-library/react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import BlogCard from './blog-card';
-
-vi.mock('framer-motion', () => ({
-  motion: {
-    article: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) => (
-      <article {...props}>{children}</article>
-    ),
-  },
-}));
 
 afterEach(cleanup);
 
@@ -48,5 +40,12 @@ describe('BlogCard', () => {
   it('links to the correct blog post', () => {
     const { getByRole } = render(<BlogCard post={mockPost} index={0} />);
     expect(getByRole('link')).toHaveAttribute('href', '/blog/test-post');
+  });
+
+  it('staggers the entrance animation by index', () => {
+    const { getByRole } = render(<BlogCard post={mockPost} index={3} />);
+    const article = getByRole('article');
+    expect(article).toHaveClass('animate-fade-in-up');
+    expect(article).toHaveStyle({ animationDelay: '240ms' });
   });
 });

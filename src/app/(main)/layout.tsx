@@ -1,6 +1,6 @@
-import { GoogleTagManager } from '@next/third-parties/google';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
+import DeferredGoogleTagManager from '@/components/deferred-google-tag-manager';
 import Header from '@/components/header';
 import './globals.css';
 
@@ -57,9 +57,10 @@ export const metadata: Metadata = {
     follow: true,
   },
   referrer: 'strict-origin-when-cross-origin',
-  other: {
-    'theme-color': '#0a0a0a',
-  },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#0a0a0a',
 };
 
 const cspDirectives = [
@@ -89,8 +90,8 @@ export default function RootLayout({
         <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
         <meta httpEquiv="Content-Security-Policy" content={contentSecurityPolicy} />
       </head>
-      <GoogleTagManager gtmId="GTM-M55D9MGW" />
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <DeferredGoogleTagManager gtmId="GTM-M55D9MGW" />
         <Header />
         {children}
       </body>

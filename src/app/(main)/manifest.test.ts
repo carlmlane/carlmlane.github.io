@@ -20,4 +20,9 @@ describe('manifest', () => {
   it('uses standalone display', () => {
     expect(result.display).toBe('standalone');
   });
+
+  it('uses the dark theme and background colors to match the site UI', () => {
+    expect(result.theme_color).toBe('#0a0a0a');
+    expect(result.background_color).toBe('#0a0a0a');
+  });
 });

@@ -1,6 +1,3 @@
-'use client';
-
-import { motion } from 'framer-motion';
 import type { ReactNode } from 'react';
 import FormattedDate from '@/components/formatted-date';
 import type { PostMetadata } from '@/lib/schemas';
@@ -13,7 +10,7 @@ type PostLayoutProps = {
 };
 
 const PostLayout = ({ metadata, children }: PostLayoutProps) => (
-  <motion.article initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+  <article className="animate-rise">
     <BackLink />
     <header className="mb-10 space-y-4">
       <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">{metadata.title}</h1>
@@ -27,7 +24,7 @@ const PostLayout = ({ metadata, children }: PostLayoutProps) => (
       </div>
     </header>
     <div className="prose prose-lg max-w-none">{children}</div>
-  </motion.article>
+  </article>
 );
 
 export default PostLayout;

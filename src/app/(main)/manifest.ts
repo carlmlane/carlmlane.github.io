@@ -19,8 +19,8 @@ const manifest = (): MetadataRoute.Manifest => ({
       purpose: 'maskable',
     },
   ],
-  theme_color: '#ffffff',
-  background_color: '#ffffff',
+  theme_color: '#0a0a0a',
+  background_color: '#0a0a0a',
   display: 'standalone',
 });
 

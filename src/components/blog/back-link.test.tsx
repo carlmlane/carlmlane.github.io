@@ -1,14 +1,6 @@
 import { cleanup, render } from '@testing-library/react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import BackLink from './back-link';
-
-type MockProps = { children?: React.ReactNode; [key: string]: unknown };
-
-vi.mock('framer-motion', () => ({
-  motion: {
-    a: ({ children, ...props }: MockProps) => <a {...props}>{children}</a>,
-  },
-}));
 
 afterEach(cleanup);
 
