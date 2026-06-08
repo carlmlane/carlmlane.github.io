@@ -78,9 +78,17 @@ describe('sitemap', () => {
     expect(about?.priority).toBe(0.8);
   });
 
+  it('includes the now and uses pages', async () => {
+    const result = await sitemap();
+    const now = result.find((e) => e.url === 'https://carlmlane.com/now');
+    const uses = result.find((e) => e.url === 'https://carlmlane.com/uses');
+    expect(now).toBeDefined();
+    expect(uses).toBeDefined();
+  });
+
   it('contains the expected total number of entries', async () => {
     const result = await sitemap();
-    // 4 static (home + about + blog index + feed.xml) + 2 posts + 2 tags = 8
-    expect(result).toHaveLength(8);
+    // 6 static (home + about + now + uses + blog index + feed.xml) + 2 posts + 2 tags = 10
+    expect(result).toHaveLength(10);
   });
 });

@@ -19,7 +19,7 @@ test.describe('Hydration', () => {
   test('blog post page hydrates without errors', async ({ page }) => {
     const errors = collectErrors(page);
 
-    await page.goto('/blog/about-me');
+    await page.goto('/blog/engineering-team-learning');
     await page.waitForLoadState('networkidle');
 
     const hydrationErrors = errors.filter((e) => hydrationPattern.test(e));
@@ -47,7 +47,7 @@ test.describe('Hydration', () => {
   });
 
   test('blog post date is in long format', async ({ page }) => {
-    await page.goto('/blog/about-me');
+    await page.goto('/blog/engineering-team-learning');
     const timeEl = page.locator('header time');
     await expect(timeEl).toBeVisible();
     const text = await timeEl.textContent();

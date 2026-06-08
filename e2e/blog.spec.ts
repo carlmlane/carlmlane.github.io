@@ -61,15 +61,15 @@ test.describe('Blog Index', () => {
 
 test.describe('Blog Post Page', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/blog/about-me');
+    await page.goto('/blog/engineering-team-learning');
   });
 
   test('has correct title', async ({ page }) => {
-    await expect(page).toHaveTitle(/Support Rep to VP.*Carl M\. Lane/);
+    await expect(page).toHaveTitle(/Why Learning Velocity Beats Headcount.*Carl M\. Lane/);
   });
 
   test('renders post title as h1', async ({ page }) => {
-    await expect(page.locator('header h1')).toContainText('Support Rep to VP');
+    await expect(page.locator('header h1')).toContainText('Learning Velocity');
   });
 
   test('renders publication date', async ({ page }) => {
@@ -78,8 +78,8 @@ test.describe('Blog Post Page', () => {
 
   test('renders tag chips', async ({ page }) => {
     const header = page.locator('header');
-    await expect(header.getByRole('link', { name: 'personal' })).toBeVisible();
-    await expect(header.getByRole('link', { name: 'career' })).toBeVisible();
+    await expect(header.getByRole('link', { name: 'engineering', exact: true })).toBeVisible();
+    await expect(header.getByRole('link', { name: 'leadership', exact: true })).toBeVisible();
   });
 
   test('renders back to blog link', async ({ page }) => {
@@ -103,7 +103,7 @@ test.describe('Blog Post Page', () => {
     expect(content).not.toBeNull();
     const schema = JSON.parse(content ?? '');
     expect(schema['@type']).toBe('BlogPosting');
-    expect(schema.headline).toContain('Support Rep to VP');
+    expect(schema.headline).toContain('Learning Velocity');
     expect(schema.author).toBeDefined();
   });
 
@@ -115,15 +115,15 @@ test.describe('Blog Post Page', () => {
 
 test.describe('Blog Tag Page', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/blog/tag/personal');
+    await page.goto('/blog/tag/leadership');
   });
 
   test('has correct title', async ({ page }) => {
-    await expect(page).toHaveTitle(/Posts tagged "personal"/);
+    await expect(page).toHaveTitle(/Posts tagged "leadership"/);
   });
 
   test('renders tag heading', async ({ page }) => {
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('personal');
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('leadership');
   });
 
   test('renders tag filter with active tag', async ({ page }) => {

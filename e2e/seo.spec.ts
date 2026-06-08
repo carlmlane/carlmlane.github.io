@@ -17,22 +17,28 @@ test.describe('SEO & Accessibility', () => {
   });
 
   test('blog post has article meta tags', async ({ page }) => {
-    await page.goto('/blog/about-me');
+    await page.goto('/blog/engineering-team-learning');
     await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /.+/);
     await expect(page.locator('meta[property="og:type"]')).toHaveAttribute('content', 'article');
-    await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', /Support Rep to VP/);
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /carlmlane\.com\/blog\/about-me/);
+    await expect(page.locator('meta[property="og:title"]')).toHaveAttribute(
+      'content',
+      /Why Learning Velocity Beats Headcount/,
+    );
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+      'href',
+      /carlmlane\.com\/blog\/engineering-team-learning/,
+    );
   });
 
   test('all pages have lang attribute', async ({ page }) => {
-    for (const path of ['/', '/blog', '/blog/about-me']) {
+    for (const path of ['/', '/blog', '/blog/engineering-team-learning']) {
       await page.goto(path);
       await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     }
   });
 
   test('blog post has semantic article structure', async ({ page }) => {
-    await page.goto('/blog/about-me');
+    await page.goto('/blog/engineering-team-learning');
     await expect(page.locator('article')).toBeVisible();
     await expect(page.locator('article header h1')).toBeVisible();
     await expect(page.locator('article time')).toBeVisible();
