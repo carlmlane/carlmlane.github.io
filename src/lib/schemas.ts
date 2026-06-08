@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { Faq } from './faq';
 
 const postMetadataSchema = z.object({
   title: z.string().min(1),
@@ -17,6 +18,8 @@ type BlogPost = PostMetadata & {
   readonly slug: string;
   // Computed at build time from the post body (see lib/reading-time.ts).
   readonly readingTimeMinutes?: number;
+  // Extracted from the post's <FAQ> block at build time (see lib/faq.ts).
+  readonly faqs?: readonly Faq[];
 };
 
 export type { BlogPost, PostMetadata };

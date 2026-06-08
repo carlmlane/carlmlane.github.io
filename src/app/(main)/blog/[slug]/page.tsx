@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { BlogPostingSchema, BreadcrumbSchema } from '@/components/blog/blog-schema';
+import { BlogPostingSchema, BreadcrumbSchema, FaqSchema } from '@/components/blog/blog-schema';
 import PostLayout from '@/components/blog/post-layout';
 import slugs from '@/content/blog';
 import { getPostBySlug } from '@/lib/blog';
@@ -55,6 +55,7 @@ const BlogPostPage = async ({ params }: { params: Promise<{ slug: string }> }) =
               { name: post.title, url: `https://carlmlane.com/blog/${post.slug}` },
             ]}
           />
+          <FaqSchema faqs={post.faqs ?? []} />
         </>
       )}
       <PostLayout metadata={metadata} readingTimeMinutes={post?.readingTimeMinutes}>

@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import slugs from '@/content/blog';
+import { extractFaqs } from './faq';
 import { countWords, minutesToRead } from './reading-time';
 import { type BlogPost, postMetadataSchema } from './schemas';
 
@@ -11,7 +12,13 @@ const getBlogPosts = async (): Promise<readonly BlogPost[]> => {
       const parsed = postMetadataSchema.parse(metadata);
       const raw = await readFile(join(process.cwd(), 'src/content/blog', `${slug}.mdx`), 'utf8');
       const wordCount = parsed.wordCount ?? countWords(raw);
-      return { ...parsed, slug, wordCount, readingTimeMinutes: minutesToRead(wordCount) } as const;
+      return {
+        ...parsed,
+        slug,
+        wordCount,
+        readingTimeMinutes: minutesToRead(wordCount),
+        faqs: extractFaqs(raw),
+      } as const;
     }),
   );
 

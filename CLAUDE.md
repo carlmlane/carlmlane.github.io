@@ -12,7 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Typecheck:** `pnpm typecheck` (runs `tsc --noEmit`)
 - **Unit tests:** `pnpm test` (vitest run) / `pnpm test:watch` / `pnpm test:coverage`
 - **E2E tests:** `pnpm test:e2e` (playwright) / `pnpm test:e2e:ui`
-- **Run everything:** `pnpm check-all` (build + lint + test + typecheck + e2e in parallel)
+- **Run everything:** `pnpm check-all` (runs build + lint + test + typecheck + test:e2e via a pnpm regex script pattern)
 
 A **lefthook pre-commit hook** runs `biome format --write` and `biome check` on every commit. Commits abort if either fails — fix and re-stage rather than bypassing.
 
@@ -30,11 +30,11 @@ This is a personal GitHub Pages site built with **Next.js 16** (App Router) conf
 
 ### Source structure
 
-- `src/app/` — App Router, split into route groups: `(main)/` (home, blog, python-interview-question, RSS via `feed.xml/route.ts`) and `(new-tab)/` (new-tab page + service-worker registration)
-- `src/app/globals.css` — Tailwind imports and CSS custom properties (light/dark themes)
+- `src/app/` — App Router, split into route groups: `(main)/` (home, blog, about, python-interview-question) and `(new-tab)/` (new-tab page + service-worker registration). At the app root sit `feed.xml/` (RSS), `robots.ts`, and `sitemap.ts`.
+- `src/app/(main)/globals.css` — Tailwind imports and CSS custom properties (light/dark themes)
 - `src/components/blog/` — Blog-specific components (`FAQ`, `BlogCard`, `BlogGrid`, `PostLayout`, `mdx-components`, etc.)
 - `src/content/blog/` — Blog posts (MDX) plus `index.ts` that registers published slugs
-- `src/lib/` — `schemas.ts` (`postMetadataSchema` validates frontmatter at build time), `blog.ts` (post loading), `feed.ts` (RSS), and generated `image-manifest.json`
+- `src/lib/` — `schemas.ts` (`postMetadataSchema` validates frontmatter at build time), `blog.ts` (post loading), `feed.ts` (RSS), `faq.ts`/`reading-time.ts` (post-content helpers), `person.ts` (author schema entity), and generated `image-manifest.json`
 - `public/blog/{slug}/` — Per-post images (hero + inline). Other static assets and the generated `service-worker.js` also live in `public/`
 - `scripts/generate-service-worker.ts` — Runs via `prebuild`; output committed to `public/service-worker.js`
 - `scripts/optimize-images.ts` (`pnpm generate:image-manifest`) — Walks `public/blog`, re-compresses oversized JPEGs in place, emits resized `.webp`/`.avif` variants, and writes `src/lib/image-manifest.json` (dimensions + srcsets). The manifest is **committed**; the generated `.webp`/`.avif` variants are **gitignored** and regenerated at build time.
