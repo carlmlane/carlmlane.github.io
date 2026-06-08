@@ -35,6 +35,12 @@ const mockPostWithWordCount = {
   slug: 'with-word-count',
 };
 
+const mockPostWithReadingTime = {
+  ...mockPost,
+  readingTimeMinutes: 7,
+  slug: 'with-reading-time',
+};
+
 describe('createBlogSchema', () => {
   it('has correct @type and @context', () => {
     const schema = createBlogSchema([mockPost]);
@@ -115,6 +121,16 @@ describe('createBlogPostingSchema', () => {
   it('omits wordCount when not provided', () => {
     const schema = createBlogPostingSchema(mockPost);
     expect(schema).not.toHaveProperty('wordCount');
+  });
+
+  it('includes timeRequired as an ISO 8601 duration when reading time is known', () => {
+    const schema = createBlogPostingSchema(mockPostWithReadingTime);
+    expect(schema.timeRequired).toBe('PT7M');
+  });
+
+  it('omits timeRequired when reading time is unknown', () => {
+    const schema = createBlogPostingSchema(mockPost);
+    expect(schema).not.toHaveProperty('timeRequired');
   });
 });
 

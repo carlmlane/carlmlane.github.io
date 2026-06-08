@@ -6,16 +6,20 @@ import TagChip from './tag-chip';
 
 type PostLayoutProps = {
   readonly metadata: PostMetadata;
+  readonly readingTimeMinutes?: number;
   readonly children: ReactNode;
 };
 
-const PostLayout = ({ metadata, children }: PostLayoutProps) => (
+const PostLayout = ({ metadata, readingTimeMinutes, children }: PostLayoutProps) => (
   <article className="animate-rise">
     <BackLink />
     <header className="mb-10 space-y-4">
       <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">{metadata.title}</h1>
       <div className="flex flex-wrap items-center gap-4">
         <FormattedDate dateStr={metadata.date} className="font-mono text-sm text-muted" />
+        {readingTimeMinutes ? (
+          <span className="font-mono text-sm text-muted">{readingTimeMinutes} min read</span>
+        ) : null}
         <div className="flex flex-wrap gap-2">
           {metadata.tags.map((tag) => (
             <TagChip key={tag} tag={tag} />
