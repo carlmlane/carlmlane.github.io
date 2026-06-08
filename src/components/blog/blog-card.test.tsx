@@ -42,6 +42,16 @@ describe('BlogCard', () => {
     expect(getByRole('link')).toHaveAttribute('href', '/blog/test-post');
   });
 
+  it('renders reading time when provided', () => {
+    const { getByText } = render(<BlogCard post={{ ...mockPost, readingTimeMinutes: 4 }} index={0} />);
+    expect(getByText('· 4 min')).toBeInTheDocument();
+  });
+
+  it('omits reading time when not provided', () => {
+    const { queryByText } = render(<BlogCard post={mockPost} index={0} />);
+    expect(queryByText(/min$/)).not.toBeInTheDocument();
+  });
+
   it('staggers the entrance animation by index', () => {
     const { getByRole } = render(<BlogCard post={mockPost} index={3} />);
     const article = getByRole('article');

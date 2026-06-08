@@ -37,6 +37,7 @@ const createBlogPostingSchema = (post: BlogPost): WithContext<BlogPosting> => ({
   },
   ...(post.image ? { image: post.image } : {}),
   ...(post.wordCount ? { wordCount: post.wordCount } : {}),
+  ...(post.readingTimeMinutes ? { timeRequired: `PT${post.readingTimeMinutes}M` } : {}),
 });
 
 type BreadcrumbItem = {

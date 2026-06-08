@@ -15,7 +15,10 @@ const BlogCard = ({ post, index }: BlogCardProps) => (
       <div className="space-y-3">
         <div className="flex items-baseline justify-between gap-4">
           <h3 className="font-semibold text-foreground transition-colors group-hover:text-accent">{post.title}</h3>
-          <FormattedDate dateStr={post.date} style="short" className="shrink-0 font-mono text-xs text-muted" />
+          <div className="flex shrink-0 items-baseline gap-2 font-mono text-xs text-muted">
+            <FormattedDate dateStr={post.date} style="short" />
+            {post.readingTimeMinutes ? <span>· {post.readingTimeMinutes} min</span> : null}
+          </div>
         </div>
         <p className="text-sm leading-relaxed text-muted">{post.description}</p>
         <div className="flex flex-wrap gap-2">

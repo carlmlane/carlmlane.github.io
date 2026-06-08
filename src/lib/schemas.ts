@@ -15,6 +15,8 @@ type PostMetadata = z.infer<typeof postMetadataSchema>;
 
 type BlogPost = PostMetadata & {
   readonly slug: string;
+  // Computed at build time from the post body (see lib/reading-time.ts).
+  readonly readingTimeMinutes?: number;
 };
 
 export type { BlogPost, PostMetadata };

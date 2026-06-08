@@ -51,4 +51,18 @@ describe('PostLayout', () => {
     const { container } = render(<PostLayout metadata={mockMetadata}>Content</PostLayout>);
     expect(container.querySelector('header')).toBeInTheDocument();
   });
+
+  it('renders reading time when provided', () => {
+    const { getByText } = render(
+      <PostLayout metadata={mockMetadata} readingTimeMinutes={6}>
+        Content
+      </PostLayout>,
+    );
+    expect(getByText('6 min read')).toBeInTheDocument();
+  });
+
+  it('omits reading time when not provided', () => {
+    const { queryByText } = render(<PostLayout metadata={mockMetadata}>Content</PostLayout>);
+    expect(queryByText(/min read/)).not.toBeInTheDocument();
+  });
 });

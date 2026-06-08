@@ -57,7 +57,7 @@ const BlogPostPage = async ({ params }: { params: Promise<{ slug: string }> }) =
           />
         </>
       )}
-      <PostLayout metadata={metadata}>
+      <PostLayout metadata={metadata} readingTimeMinutes={post?.readingTimeMinutes}>
         <Content />
       </PostLayout>
     </>
