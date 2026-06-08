@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.16",
-    "@playwright/test": "^1.58.2",
+    "@playwright/test": "^1.60.0",
     "@tailwindcss/postcss": "^4.3.0",
     "@tailwindcss/typography": "^0.5.19",
     "@testing-library/jest-dom": "^6.9.1",
