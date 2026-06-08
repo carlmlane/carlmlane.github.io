@@ -43,10 +43,11 @@ describe('Header', () => {
     expect(nameLink).toHaveAttribute('href', '/');
   });
 
-  it('contains Home and Blog navigation links', () => {
+  it('contains Home, About and Blog navigation links', () => {
     const { getByRole } = render(<Header />);
     const nav = getByRole('navigation');
     expect(nav.querySelector('a[href="/"]')).toBeInTheDocument();
+    expect(nav.querySelector('a[href="/about"]')).toBeInTheDocument();
     expect(nav.querySelector('a[href="/blog"]')).toBeInTheDocument();
   });
 });
