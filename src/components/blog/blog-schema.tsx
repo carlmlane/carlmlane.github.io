@@ -1,4 +1,5 @@
 import type { Blog, BlogPosting, BreadcrumbList, WithContext } from 'schema-dts';
+import { personNode } from '@/lib/person';
 import type { BlogPost } from '@/lib/schemas';
 
 const createBlogSchema = (posts: readonly BlogPost[]): WithContext<Blog> => ({
@@ -8,11 +9,7 @@ const createBlogSchema = (posts: readonly BlogPost[]): WithContext<Blog> => ({
   url: 'https://carlmlane.com/blog',
   description: 'Thoughts on engineering leadership, software development, and team building.',
   inLanguage: 'en-US',
-  author: {
-    '@type': 'Person',
-    name: 'Carl M. Lane',
-    url: 'https://carlmlane.com',
-  },
+  author: personNode,
   blogPost: posts.map((post) => ({
     '@type': 'BlogPosting' as const,
     headline: post.title,
@@ -31,16 +28,8 @@ const createBlogPostingSchema = (post: BlogPost): WithContext<BlogPosting> => ({
   ...(post.lastUpdated ? { dateModified: post.lastUpdated } : {}),
   description: post.description,
   inLanguage: 'en-US',
-  author: {
-    '@type': 'Person',
-    name: 'Carl M. Lane',
-    url: 'https://carlmlane.com',
-  },
-  publisher: {
-    '@type': 'Person',
-    name: 'Carl M. Lane',
-    url: 'https://carlmlane.com',
-  },
+  author: personNode,
+  publisher: personNode,
   keywords: post.tags,
   mainEntityOfPage: {
     '@type': 'WebPage',

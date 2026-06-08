@@ -65,4 +65,17 @@ describe('TagPage', () => {
     const { getByTestId } = render(await TagPage({ params: Promise.resolve({ tag: 'react' }) }));
     expect(getByTestId('blog-grid')).toHaveTextContent('1 posts');
   });
+
+  it('renders a BreadcrumbList JSON-LD with Home, Blog and the tag', async () => {
+    const { container } = render(await TagPage({ params: Promise.resolve({ tag: 'react' }) }));
+    const script = container.querySelector('script[type="application/ld+json"]');
+    const json = JSON.parse(script?.textContent ?? '{}');
+    expect(json['@type']).toBe('BreadcrumbList');
+    expect(json.itemListElement).toHaveLength(3);
+    expect(json.itemListElement[2]).toMatchObject({
+      position: 3,
+      name: 'Posts tagged "react"',
+      item: 'https://carlmlane.com/blog/tag/react',
+    });
+  });
 });

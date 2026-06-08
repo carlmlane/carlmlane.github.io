@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import BlogGrid from '@/components/blog/blog-grid';
+import { BreadcrumbSchema } from '@/components/blog/blog-schema';
 import TagFilter from '@/components/blog/tag-filter';
 import { getAllTags, getPostsByTag } from '@/lib/blog';
 
@@ -47,6 +48,13 @@ const TagPage = async ({ params }: { params: Promise<{ tag: string }> }) => {
 
   return (
     <>
+      <BreadcrumbSchema
+        items={[
+          { name: 'Home', url: 'https://carlmlane.com' },
+          { name: 'Blog', url: 'https://carlmlane.com/blog' },
+          { name: `Posts tagged "${tag}"`, url: `https://carlmlane.com/blog/tag/${tag}` },
+        ]}
+      />
       <header className="mb-10 space-y-4">
         <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
           Posts tagged &ldquo;{tag}&rdquo;

@@ -1,5 +1,6 @@
 import { cleanup, render } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
+import { PERSON_ID } from '@/lib/person';
 import {
   BlogPostingSchema,
   BlogSchema,
@@ -8,6 +9,8 @@ import {
   createBlogSchema,
   createBreadcrumbSchema,
 } from './blog-schema';
+
+const personNode = { '@type': 'Person', '@id': PERSON_ID, name: 'Carl M. Lane', url: 'https://carlmlane.com' };
 
 afterEach(cleanup);
 
@@ -46,9 +49,9 @@ describe('createBlogSchema', () => {
     expect(posts).toHaveLength(1);
   });
 
-  it('has author info', () => {
+  it('has author info referencing the canonical person', () => {
     const schema = createBlogSchema([mockPost]);
-    expect(schema.author).toMatchObject({ '@type': 'Person', name: 'Carl M. Lane' });
+    expect(schema.author).toEqual(personNode);
   });
 
   it('has inLanguage', () => {
@@ -69,14 +72,14 @@ describe('createBlogPostingSchema', () => {
     expect(schema.url).toBe('https://carlmlane.com/blog/test-post');
   });
 
-  it('has author info', () => {
+  it('has author referencing the canonical person', () => {
     const schema = createBlogPostingSchema(mockPost);
-    expect(schema.author).toEqual({ '@type': 'Person', name: 'Carl M. Lane', url: 'https://carlmlane.com' });
+    expect(schema.author).toEqual(personNode);
   });
 
-  it('has publisher info', () => {
+  it('has publisher referencing the canonical person', () => {
     const schema = createBlogPostingSchema(mockPost);
-    expect(schema.publisher).toEqual({ '@type': 'Person', name: 'Carl M. Lane', url: 'https://carlmlane.com' });
+    expect(schema.publisher).toEqual(personNode);
   });
 
   it('includes keywords', () => {
