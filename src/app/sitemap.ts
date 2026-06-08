@@ -34,6 +34,18 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
       priority: 0.8,
     },
     {
+      url: 'https://carlmlane.com/now',
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.5,
+    },
+    {
+      url: 'https://carlmlane.com/uses',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
+    {
       url: 'https://carlmlane.com/blog',
       lastModified: new Date(),
       changeFrequency: 'weekly',
