@@ -1,4 +1,5 @@
-import type { Blog, BlogPosting, BreadcrumbList, WithContext } from 'schema-dts';
+import type { Blog, BlogPosting, BreadcrumbList, FAQPage, WithContext } from 'schema-dts';
+import type { Faq } from '@/lib/faq';
 import { personNode } from '@/lib/person';
 import type { BlogPost } from '@/lib/schemas';
 
@@ -80,6 +81,26 @@ const BreadcrumbSchema = ({ items }: BreadcrumbSchemaProps) => (
   <script type="application/ld+json">{JSON.stringify(createBreadcrumbSchema(items))}</script>
 );
 
+const createFaqSchema = (faqs: readonly Faq[]): WithContext<FAQPage> => ({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question' as const,
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer' as const,
+      text: faq.answer,
+    },
+  })),
+});
+
+type FaqSchemaProps = {
+  readonly faqs: readonly Faq[];
+};
+
+const FaqSchema = ({ faqs }: FaqSchemaProps) =>
+  faqs.length > 0 ? <script type="application/ld+json">{JSON.stringify(createFaqSchema(faqs))}</script> : null;
+
 export {
   BlogPostingSchema,
   BlogSchema,
@@ -87,4 +108,6 @@ export {
   createBlogPostingSchema,
   createBlogSchema,
   createBreadcrumbSchema,
+  createFaqSchema,
+  FaqSchema,
 };

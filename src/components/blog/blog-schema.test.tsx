@@ -8,6 +8,8 @@ import {
   createBlogPostingSchema,
   createBlogSchema,
   createBreadcrumbSchema,
+  createFaqSchema,
+  FaqSchema,
 } from './blog-schema';
 
 const personNode = { '@type': 'Person', '@id': PERSON_ID, name: 'Carl M. Lane', url: 'https://carlmlane.com' };
@@ -192,6 +194,45 @@ describe('BlogPostingSchema component', () => {
     const json = JSON.parse(script?.textContent ?? '{}');
     expect(json['@type']).toBe('BlogPosting');
     expect(json.headline).toBe('Test Post');
+  });
+});
+
+describe('createFaqSchema', () => {
+  const faqs = [
+    { question: 'What is X?', answer: 'X is a thing.' },
+    { question: 'What is Y?', answer: 'Y is another thing.' },
+  ];
+
+  it('has correct @type and @context', () => {
+    const schema = createFaqSchema(faqs);
+    expect(schema['@context']).toBe('https://schema.org');
+    expect(schema['@type']).toBe('FAQPage');
+  });
+
+  it('maps each FAQ to a Question with an acceptedAnswer', () => {
+    const json = JSON.parse(JSON.stringify(createFaqSchema(faqs)));
+    expect(json.mainEntity).toHaveLength(2);
+    expect(json.mainEntity[0]).toEqual({
+      '@type': 'Question',
+      name: 'What is X?',
+      acceptedAnswer: { '@type': 'Answer', text: 'X is a thing.' },
+    });
+  });
+});
+
+describe('FaqSchema component', () => {
+  it('renders FAQPage JSON-LD when FAQs are present', () => {
+    const { container } = render(<FaqSchema faqs={[{ question: 'Q?', answer: 'A.' }]} />);
+    const script = container.querySelector('script[type="application/ld+json"]');
+    expect(script).toBeInTheDocument();
+    const json = JSON.parse(script?.textContent ?? '{}');
+    expect(json['@type']).toBe('FAQPage');
+    expect(json.mainEntity).toHaveLength(1);
+  });
+
+  it('renders nothing when there are no FAQs', () => {
+    const { container } = render(<FaqSchema faqs={[]} />);
+    expect(container.querySelector('script[type="application/ld+json"]')).not.toBeInTheDocument();
   });
 });
 
