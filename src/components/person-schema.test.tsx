@@ -30,6 +30,22 @@ describe('PersonSchema', () => {
     expect(schema.url).toBe('https://carlmlane.com');
   });
 
+  it('has the canonical @id', () => {
+    const schema = getSchema();
+    expect(schema['@id']).toBe('https://carlmlane.com/#person');
+  });
+
+  it('links ProfilePage and WebSite to the canonical person @id', () => {
+    const { container } = render(<PersonSchema />);
+    const schemas = [...container.querySelectorAll('script[type="application/ld+json"]')].map((script) =>
+      JSON.parse(script.textContent ?? '{}'),
+    );
+    const profilePage = schemas.find((s) => s['@type'] === 'ProfilePage');
+    const webSite = schemas.find((s) => s['@type'] === 'WebSite');
+    expect(profilePage?.mainEntity).toEqual({ '@id': 'https://carlmlane.com/#person' });
+    expect(webSite?.publisher).toEqual({ '@id': 'https://carlmlane.com/#person' });
+  });
+
   it('has worksFor organization', () => {
     const schema = getSchema();
     expect(schema.worksFor).toEqual({ '@type': 'Organization', name: 'Marqii', url: 'https://www.marqii.com' });
