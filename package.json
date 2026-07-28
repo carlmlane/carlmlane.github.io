@@ -33,7 +33,7 @@
     "@mdx-js/react": "^3.1.1",
     "@next/mdx": "^16.2.7",
     "@next/third-parties": "^16.2.7",
-    "next": "16.2.7",
+    "next": "16.2.11",
     "posthog-js": "^1.382.0",
     "react": "19.2.7",
     "react-dom": "19.2.7",
