@@ -15,20 +15,20 @@ describe('SdfflRecordBook', () => {
     expect(getByText(/450,709 stat rows behind it/)).toBeInTheDocument();
   });
 
-  it('tiles the headline totals, including a clean record check', () => {
-    const { getByText } = renderBook();
+  it('tiles the headline totals', () => {
+    const { getByText, queryByText } = renderBook();
     expect(getByText('2,562')).toBeInTheDocument();
     expect(getByText('33,135')).toBeInTheDocument();
-    expect(getByText('Clean')).toBeInTheDocument();
+    expect(queryByText('Record check')).toBeNull();
   });
 
   it('renders every rail section as a linkable heading', () => {
     const { getByRole, container } = renderBook();
     const labels = [
-      'Skill and luck',
       'Record book',
       'Every season',
       'Head to head',
+      'Skill and luck',
       'The draft',
       'Roster work',
       'Scoring',
@@ -40,6 +40,12 @@ describe('SdfflRecordBook', () => {
       const id = link.getAttribute('href')?.slice(1);
       expect(container.querySelector(`section#${id}`)).not.toBeNull();
     }
+  });
+
+  it('orders the sections the way the rail lists them, with skill and luck after head to head', () => {
+    const { container } = renderBook();
+    const ids = [...container.querySelectorAll('main > section')].map((section) => section.id);
+    expect(ids).toEqual(['record', 'podium', 'h2h', 'luck', 'draft', 'roster', 'scoring', 'records', 'seasons']);
   });
 
   it('counts the matrix managers in its own copy rather than hard-coding the number', () => {
@@ -55,10 +61,9 @@ describe('SdfflRecordBook', () => {
     expect(getByText(/No slot is reliably better\./)).toBeInTheDocument();
   });
 
-  it('closes with the provenance and the record check across every team-season', () => {
-    const { getByText } = renderBook();
-    expect(getByText(/Extracted with/)).toBeInTheDocument();
-    expect(getByText(new RegExp(`${recordBookView.teamSeasons} team-seasons`))).toBeInTheDocument();
+  it('closes with the generated stamp and no provenance blurb', () => {
+    const { getByText, queryByText } = renderBook();
+    expect(queryByText(/Extracted with/)).toBeNull();
     expect(getByText(`Generated ${recordBookView.generatedAt} · league SD FFL`)).toBeInTheDocument();
   });
 
