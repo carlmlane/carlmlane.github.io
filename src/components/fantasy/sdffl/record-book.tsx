@@ -35,10 +35,10 @@ import SeasonStandings from './season-standings';
 import SortableTable, { type Column } from './sortable-table';
 
 const RAIL_ITEMS: readonly RailItem[] = [
-  { id: 'luck', label: 'Skill and luck' },
   { id: 'record', label: 'Record book' },
   { id: 'podium', label: 'Every season' },
   { id: 'h2h', label: 'Head to head' },
+  { id: 'luck', label: 'Skill and luck' },
   { id: 'draft', label: 'The draft' },
   { id: 'roster', label: 'Roster work' },
   { id: 'scoring', label: 'Scoring' },
@@ -60,19 +60,6 @@ const WithValue = ({ name, value }: { readonly name: string; readonly value: str
     <span>{name}</span>
     <span className={styles.muted}>{`  ${value}`}</span>
   </span>
-);
-
-const CleanCheck = () => (
-  <svg width={15} height={15} viewBox="0 0 16 16" aria-hidden="true">
-    <path
-      d="M3 8.5l3.2 3.2L13 5"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
 );
 
 /* ---------------------------------------------------------------- columns ---- */
@@ -495,85 +482,8 @@ const SdfflRecordBook = ({ view }: { readonly view: RecordBookView }) => {
                 <div className={styles.tileLabel}>{label}</div>
               </div>
             ))}
-            <div className={`${styles.tile} ${styles.tileCheck}`}>
-              <div className={styles.tileValue}>
-                <CleanCheck />
-                <span>{totals.record_mismatches === 0 ? 'Clean' : String(totals.record_mismatches)}</span>
-              </div>
-              <div className={styles.tileLabel}>Record check</div>
-            </div>
           </div>
         </header>
-
-        <section id="luck" className={styles.section}>
-          <SectionHead kicker="Skill and luck" title="Scoring well is not the same as winning">
-            <p className={styles.note}>
-              Head-to-head fantasy hands out wins by who you happened to draw. Two numbers separate how well you scored
-              from how well you were scheduled.
-            </p>
-            <dl className={styles.defs}>
-              <div>
-                <dt>Deserved wins</dt>
-                <dd>
-                  The wins your scoring earned, ignoring the schedule. Every week your score is compared against{' '}
-                  <em>every other team’s</em> score that same week — a win for each team you outscored, half for a tie.
-                  That all-play win rate, multiplied by games played, is your deserved wins. Outscore nine of eleven
-                  opponents in a week and you banked 0.82 of a win, whether or not the one you actually played was among
-                  them.
-                </dd>
-              </div>
-              <div>
-                <dt>Luck</dt>
-                <dd>
-                  Actual wins minus deserved wins. <strong className={styles.pos}>Positive</strong> means the schedule
-                  handed you wins your scoring did not earn — you kept drawing whoever was cold that week.{' '}
-                  <strong className={styles.neg}>Negative</strong> means you scored well and lost anyway, because you
-                  kept running into the week’s high scorer. Over a 13–14 game season, ±2 is a lot.
-                </dd>
-              </div>
-            </dl>
-            <p className={styles.note}>
-              Regular season only: a bracket week has four teams in it, not twelve, so all-play is not comparable there.
-              On the chart below, points above the diagonal won more than they deserved.
-            </p>
-          </SectionHead>
-
-          <PanelToggle
-            chartLabel="Chart"
-            tableLabel="Table"
-            head={
-              <CardHead
-                title="Actual win rate against deserved"
-                note="Regular season only, all 13 completed seasons."
-              />
-            }
-            chart={<LuckScatterChart rows={view.luckCareers} />}
-            table={
-              <SortableTable
-                columns={luckColumns}
-                rows={view.luckCareers}
-                rowKey={(r) => r.manager}
-                sortKey="luck_wins"
-                caption="Four or more seasons. Regular season only."
-              />
-            }
-          />
-
-          <PanelToggle
-            chartLabel="Chart"
-            tableLabel="Table"
-            head={<CardHead title="The luck ledger" note="Wins above or below what the scoring deserved, all time." />}
-            chart={<LuckLedgerChart rows={view.luckCareers} />}
-            table={
-              <SortableTable
-                columns={luckLedgerColumns}
-                rows={view.luckCareers}
-                rowKey={(r) => r.manager}
-                sortKey="luck_wins"
-              />
-            }
-          />
-        </section>
 
         <section id="record" className={styles.section}>
           <SectionHead kicker="The record book" title="All time, every franchise">
@@ -642,6 +552,76 @@ const SdfflRecordBook = ({ view }: { readonly view: RecordBookView }) => {
                 rowKey={(r) => `${r.manager}||${r.opponent}`}
                 sortKey="games"
                 caption="Every pairing between franchises with four or more seasons."
+              />
+            }
+          />
+        </section>
+
+        <section id="luck" className={styles.section}>
+          <SectionHead kicker="Skill and luck" title="Scoring well is not the same as winning">
+            <p className={styles.note}>
+              Head-to-head fantasy hands out wins by who you happened to draw. Two numbers separate how well you scored
+              from how well you were scheduled.
+            </p>
+            <dl className={styles.defs}>
+              <div>
+                <dt>Deserved wins</dt>
+                <dd>
+                  The wins your scoring earned, ignoring the schedule. Every week your score is compared against{' '}
+                  <em>every other team’s</em> score that same week — a win for each team you outscored, half for a tie.
+                  That all-play win rate, multiplied by games played, is your deserved wins. Outscore nine of eleven
+                  opponents in a week and you banked 0.82 of a win, whether or not the one you actually played was among
+                  them.
+                </dd>
+              </div>
+              <div>
+                <dt>Luck</dt>
+                <dd>
+                  Actual wins minus deserved wins. <strong className={styles.pos}>Positive</strong> means the schedule
+                  handed you wins your scoring did not earn — you kept drawing whoever was cold that week.{' '}
+                  <strong className={styles.neg}>Negative</strong> means you scored well and lost anyway, because you
+                  kept running into the week’s high scorer. Over a 13–14 game season, ±2 is a lot.
+                </dd>
+              </div>
+            </dl>
+            <p className={styles.note}>
+              Regular season only: a bracket week has four teams in it, not twelve, so all-play is not comparable there.
+              On the chart below, points above the diagonal won more than they deserved.
+            </p>
+          </SectionHead>
+
+          <PanelToggle
+            chartLabel="Chart"
+            tableLabel="Table"
+            head={
+              <CardHead
+                title="Actual win rate against deserved"
+                note="Regular season only, all 13 completed seasons."
+              />
+            }
+            chart={<LuckScatterChart rows={view.luckCareers} />}
+            table={
+              <SortableTable
+                columns={luckColumns}
+                rows={view.luckCareers}
+                rowKey={(r) => r.manager}
+                sortKey="luck_wins"
+                caption="Four or more seasons. Regular season only."
+              />
+            }
+          />
+
+          <PanelToggle
+            chartLabel="Chart"
+            tableLabel="Table"
+            head={<CardHead title="The luck ledger" note="Wins above or below what the scoring deserved, all time." />}
+            chart={<LuckLedgerChart rows={view.luckCareers} />}
+            table={
+              <SortableTable
+                columns={luckLedgerColumns}
+                rows={view.luckCareers}
+                rowKey={(r) => r.manager}
+                sortKey="luck_wins"
               />
             }
           />
@@ -879,12 +859,6 @@ const SdfflRecordBook = ({ view }: { readonly view: RecordBookView }) => {
         </section>
 
         <div className={styles.colophon}>
-          <p>
-            Extracted with <code>ffl-wiz</code> from the ESPN fantasy API, exported as 18 keyed tables, loaded into
-            DuckDB, and summarised by 34 SQL views. Every record derived from the matchup feed matches the standings
-            ESPN stored — <strong>{int(totals.record_mismatches)}</strong> mismatches across {int(view.teamSeasons)}{' '}
-            team-seasons.
-          </p>
           <p className={styles.muted}>
             Generated {view.generatedAt} · league {totals.league_name}
           </p>
