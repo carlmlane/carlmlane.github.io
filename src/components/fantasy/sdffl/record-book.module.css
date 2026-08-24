@@ -1,0 +1,706 @@
+/*
+ * The record book carries its own token set rather than borrowing Tailwind utilities:
+ * it is a dense data page (mono micro-labels, tabular figures, a colour-mixed heatmap)
+ * and the values below are the site's dark palette, so it reads as part of the site
+ * while keeping its own typographic scale. Chart series follow the site chart palette.
+ */
+.shell {
+  --rb-surface: #151515;
+  --rb-surface-sunken: #1c1c1c;
+  --rb-ink: #ededed;
+  --rb-ink-2: #c9c8c3;
+  --rb-ink-3: #999999;
+  --rb-grid: #262626;
+  --rb-axis: #404040;
+  --rb-rule: #222222;
+  --rb-accent: #5b9ee1;
+  --rb-accent-soft: rgba(91, 158, 225, 0.16);
+  --rb-pos: #5b9ee1;
+  --rb-neg: #e0736c;
+  --rb-mid: #2a2a2a;
+  --rb-series-1: #5b9ee1;
+  --rb-series-2: #e5a853;
+  --rb-good: #5fca7a;
+  --rb-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --rb-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --rb-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 208px minmax(0, 1fr);
+  gap: 40px;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 40px 28px 64px;
+  color: var(--rb-ink);
+  font-family: var(--rb-sans);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.shell > main {
+  min-width: 0;
+}
+
+/* ---- index rail ---- */
+.rail {
+  position: sticky;
+  top: 24px;
+  align-self: start;
+}
+
+.railTitle {
+  margin: 0 0 12px;
+  color: var(--rb-ink-3);
+  font-family: var(--rb-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.railNav {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.railLink {
+  padding: 5px 10px;
+  border-left: 2px solid transparent;
+  border-radius: 5px;
+  color: var(--rb-ink-2);
+  font-size: 13.5px;
+  text-decoration: none;
+}
+
+.railLink:hover {
+  background: var(--rb-surface);
+  color: var(--rb-ink);
+}
+
+.railLinkActive {
+  border-left-color: var(--rb-accent);
+  background: var(--rb-accent-soft);
+  color: var(--rb-ink);
+  font-weight: 550;
+}
+
+/* ---- masthead ---- */
+.masthead {
+  margin-bottom: 36px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--rb-ink-3);
+  font-family: var(--rb-mono);
+  font-size: 11px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0 0 10px;
+  font-size: 34px;
+  font-weight: 650;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.lede {
+  max-width: 62ch;
+  margin: 0;
+  color: var(--rb-ink-2);
+  font-size: 15.5px;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(124px, 1fr));
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.tile {
+  padding: 12px 14px;
+  border: 1px solid var(--rb-rule);
+  border-radius: 8px;
+  background: var(--rb-surface);
+  box-shadow: var(--rb-shadow);
+}
+
+.tileValue {
+  font-size: 25px;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.tileLabel {
+  margin-top: 3px;
+  color: var(--rb-ink-3);
+  font-family: var(--rb-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tileCheck .tileValue {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--rb-good);
+}
+
+.tileCheck svg {
+  flex: none;
+}
+
+/* ---- sections & cards ---- */
+.section {
+  margin-bottom: 44px;
+  scroll-margin-top: 24px;
+}
+
+.sectionHead {
+  margin-bottom: 14px;
+}
+
+.sectionKicker {
+  margin: 0 0 6px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rb-rule);
+  color: var(--rb-ink-3);
+  font-family: var(--rb-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.sectionTitle {
+  margin: 0 0 4px;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.note {
+  max-width: 74ch;
+  margin: 0;
+  color: var(--rb-ink-2);
+  font-size: 14px;
+}
+
+.note strong {
+  color: var(--rb-ink);
+  font-weight: 600;
+}
+
+.card {
+  min-width: 0;
+  margin-top: 12px;
+  padding: 18px;
+  border: 1px solid var(--rb-rule);
+  border-radius: 10px;
+  background: var(--rb-surface);
+  box-shadow: var(--rb-shadow);
+}
+
+.cardHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.cardHead .note {
+  margin-top: 2px;
+  font-size: 13.5px;
+}
+
+.pair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+  gap: 12px;
+}
+
+.pair > .card {
+  margin-top: 0;
+}
+
+/* ---- chart / table toggle ---- */
+.toggle {
+  display: inline-flex;
+  flex: none;
+  overflow: hidden;
+  border: 1px solid var(--rb-rule);
+  border-radius: 6px;
+}
+
+.toggleButton {
+  padding: 5px 10px;
+  border: 0;
+  background: transparent;
+  color: var(--rb-ink-3);
+  font-family: var(--rb-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.toggleButton[aria-pressed="true"] {
+  background: var(--rb-accent-soft);
+  color: var(--rb-ink);
+}
+
+.cardFooter {
+  margin-top: 14px;
+}
+
+.scroller {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.isHidden {
+  display: none;
+}
+
+/* ---- tables ---- */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.table th,
+.table td {
+  padding: 6px 9px;
+  white-space: nowrap;
+}
+
+/* Align on column type, not position: a name in column three is still a name. */
+.table th,
+.table td {
+  text-align: left;
+}
+
+.table th.num,
+.table td.num {
+  text-align: right;
+  font-family: var(--rb-mono);
+  font-size: 12.5px;
+}
+
+.table thead th {
+  position: sticky;
+  top: 0;
+  border-bottom: 1px solid var(--rb-axis);
+  background: var(--rb-surface);
+  color: var(--rb-ink-3);
+  font-family: var(--rb-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.sortButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+.sortButton:hover {
+  color: var(--rb-ink);
+}
+
+.table thead th[aria-sort]:not([aria-sort="none"]) {
+  color: var(--rb-ink);
+}
+
+.arrow {
+  opacity: 0.55;
+  font-size: 9px;
+}
+
+.table tbody tr {
+  border-bottom: 1px solid var(--rb-grid);
+}
+
+.table tbody tr:last-child {
+  border-bottom: 0;
+}
+
+.table tbody tr:hover {
+  background: var(--rb-surface-sunken);
+}
+
+.table td.name {
+  font-weight: 550;
+}
+
+.muted {
+  color: var(--rb-ink-3);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.stack .sub {
+  font-family: var(--rb-mono);
+  font-size: 11.5px;
+}
+
+.pos {
+  color: var(--rb-pos);
+}
+
+.neg {
+  color: var(--rb-neg);
+}
+
+.caption {
+  padding-bottom: 8px;
+  color: var(--rb-ink-3);
+  font-size: 12.5px;
+  text-align: left;
+  caption-side: top;
+}
+
+.pill {
+  display: inline-block;
+  padding: 1px 6px;
+  border: 1px solid var(--rb-rule);
+  border-radius: 999px;
+  color: var(--rb-ink-2);
+  font-family: var(--rb-mono);
+  font-size: 10px;
+  letter-spacing: 0.05em;
+}
+
+.pillTitle {
+  border-color: transparent;
+  background: var(--rb-accent-soft);
+  color: var(--rb-ink);
+  font-weight: 600;
+}
+
+/* ---- charts ---- */
+.chart {
+  display: block;
+  overflow: visible;
+  width: 100%;
+}
+
+.chart text {
+  fill: var(--rb-ink-3);
+  font-family: var(--rb-mono);
+  font-size: 10px;
+}
+
+.tickLabel {
+  font-size: 9.5px;
+}
+
+.axisTitle {
+  fill: var(--rb-ink-2);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.gridline {
+  stroke: var(--rb-grid);
+  stroke-width: 1;
+}
+
+.axisline {
+  stroke: var(--rb-axis);
+  stroke-width: 1;
+}
+
+.refline {
+  stroke: var(--rb-axis);
+  stroke-width: 1;
+}
+
+.pointLabel {
+  fill: var(--rb-ink-2);
+  font-size: 10px;
+  pointer-events: none;
+}
+
+.dot {
+  stroke: var(--rb-surface);
+  stroke-width: 2;
+  pointer-events: none;
+}
+
+.hit {
+  fill: transparent;
+  cursor: pointer;
+}
+
+.hit:hover + .dot {
+  stroke: var(--rb-ink);
+}
+
+.seriesLine {
+  fill: none;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--rb-ink-2);
+  font-size: 12.5px;
+}
+
+.legend i {
+  flex: none;
+  width: 18px;
+  height: 2px;
+  border-radius: 1px;
+}
+
+.scaleLegend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  color: var(--rb-ink-3);
+  font-family: var(--rb-mono);
+  font-size: 10px;
+}
+
+.ramp {
+  width: 150px;
+  height: 8px;
+  border: 1px solid var(--rb-rule);
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--rb-neg), var(--rb-mid), var(--rb-pos));
+}
+
+/* ---- heatmap ---- */
+.matrix {
+  width: auto;
+  border-collapse: separate;
+  border-spacing: 2px;
+  font-variant-numeric: tabular-nums;
+}
+
+.matrix th {
+  padding: 2px 4px;
+  border: 0;
+  background: transparent;
+  color: var(--rb-ink-3);
+  font-family: var(--rb-mono);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.matrix th.rowHead {
+  padding-right: 8px;
+  color: var(--rb-ink-2);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.matrix td {
+  width: 34px;
+  height: 30px;
+  padding: 0;
+  border-radius: 3px;
+  font-family: var(--rb-mono);
+  font-size: 11px;
+  text-align: center;
+}
+
+.matrix td.self {
+  background: var(--rb-surface-sunken);
+}
+
+.matrixCell:hover {
+  outline: 2px solid var(--rb-ink);
+  outline-offset: -2px;
+}
+
+/* ---- tooltip ---- */
+.tip {
+  position: fixed;
+  z-index: 20;
+  max-width: 260px;
+  padding: 8px 10px;
+  border: 1px solid var(--rb-rule);
+  border-radius: 7px;
+  background: var(--rb-surface);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  color: var(--rb-ink);
+  font-family: var(--rb-sans);
+  font-size: 12.5px;
+  pointer-events: none;
+}
+
+.tipName {
+  margin-bottom: 3px;
+  font-weight: 600;
+}
+
+.tipRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  color: var(--rb-ink-2);
+  font-family: var(--rb-mono);
+  font-size: 11.5px;
+}
+
+.tipRow b {
+  color: var(--rb-ink);
+  font-weight: 600;
+}
+
+/* ---- definitions & footer ---- */
+.defs {
+  display: grid;
+  gap: 10px;
+  max-width: 74ch;
+  margin: 14px 0 0;
+}
+
+.defs > div {
+  padding: 2px 0 2px 14px;
+  border-left: 2px solid var(--rb-accent);
+}
+
+.defs dt {
+  margin-bottom: 2px;
+  color: var(--rb-ink);
+  font-family: var(--rb-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.defs dd {
+  margin: 0;
+  color: var(--rb-ink-2);
+  font-size: 14px;
+}
+
+.defs strong.pos {
+  color: var(--rb-pos);
+  font-weight: 600;
+}
+
+.defs strong.neg {
+  color: var(--rb-neg);
+  font-weight: 600;
+}
+
+.colophon {
+  margin-top: 44px;
+  padding-top: 16px;
+  border-top: 1px solid var(--rb-rule);
+  color: var(--rb-ink-3);
+  font-size: 13px;
+}
+
+.colophon code {
+  color: var(--rb-ink-2);
+  font-family: var(--rb-mono);
+  font-size: 12px;
+}
+
+.seasonPick {
+  width: auto;
+  padding: 6px 10px;
+  border: 1px solid var(--rb-rule);
+  border-radius: 6px;
+  background: var(--rb-surface);
+  color: var(--rb-ink-2);
+  font-family: var(--rb-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tip {
+    transition: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .shell {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    padding: 24px 16px 48px;
+  }
+
+  .rail {
+    position: static;
+  }
+
+  .railNav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .railLink {
+    border-left: 0;
+    border-bottom: 2px solid transparent;
+  }
+
+  .railLinkActive {
+    border-left-color: transparent;
+    border-bottom-color: var(--rb-accent);
+  }
+
+  .title {
+    font-size: 27px;
+  }
+}
