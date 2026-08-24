@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { readdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { extname, join, relative, resolve, sep } from 'node:path';
-import sharp from 'sharp';
+import sharp, { type Sharp } from 'sharp';
 
 // AUTO-RUN via `pnpm generate:image-manifest` (chained into `prebuild`).
 // Walks public/blog, re-compresses oversized JPEGs in place, emits resized
@@ -66,11 +66,7 @@ const maybeRecompressJpeg = async (file: string): Promise<void> => {
   }
 };
 
-const ensureVariant = async (
-  source: string,
-  target: string,
-  encode: (img: sharp.Sharp) => sharp.Sharp,
-): Promise<void> => {
+const ensureVariant = async (source: string, target: string, encode: (img: Sharp) => Sharp): Promise<void> => {
   if (!(await isStale(source, target))) return;
   await encode(sharp(source)).toFile(target);
   console.log(`Wrote ${relative(projectRoot, target)}`);
@@ -80,7 +76,7 @@ const buildSrcset = async (
   file: string,
   widths: readonly number[],
   ext: '.webp' | '.avif',
-  encode: (img: sharp.Sharp) => sharp.Sharp,
+  encode: (img: Sharp) => Sharp,
 ): Promise<string> => {
   const parts = await Promise.all(
     widths.map(async (width) => {
