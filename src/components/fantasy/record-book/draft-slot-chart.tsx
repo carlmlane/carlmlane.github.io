@@ -1,7 +1,7 @@
 'use client';
 
-import { num, pct } from '@/lib/sdffl/format';
-import type { DraftSlotBaseline, DraftSlotRow } from '@/lib/sdffl/record-book';
+import { num, pct } from '@/lib/fantasy/format';
+import type { DraftSlotBaseline, DraftSlotRow } from '@/lib/fantasy/record-book';
 import ChartTooltip, { useChartTooltip } from './chart-tooltip';
 import styles from './record-book.module.css';
 

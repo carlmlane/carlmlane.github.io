@@ -1,4 +1,4 @@
-// Formatters shared by the SD FFL record book. They mirror the numeric conventions
+// Formatters shared by every league record book. They mirror the numeric conventions
 // of the source dashboard: an em dash for missing values, fixed decimals rather than
 // locale rounding, and baseball-style win rates with the leading zero stripped.
 

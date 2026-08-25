@@ -1,6 +1,6 @@
 import { cleanup, fireEvent, render } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
-import type { Standing } from '@/lib/sdffl/record-book';
+import type { Standing } from '@/lib/fantasy/record-book';
 import SeasonStandings from './season-standings';
 
 afterEach(cleanup);

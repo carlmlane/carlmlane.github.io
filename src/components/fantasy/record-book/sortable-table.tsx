@@ -1,7 +1,7 @@
 'use client';
 
 import { type ReactNode, useState } from 'react';
-import { num } from '@/lib/sdffl/format';
+import { num } from '@/lib/fantasy/format';
 import styles from './record-book.module.css';
 
 export type CellValue = string | number | null;

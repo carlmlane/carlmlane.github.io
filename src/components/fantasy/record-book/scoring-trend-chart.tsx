@@ -1,7 +1,7 @@
 'use client';
 
-import { num } from '@/lib/sdffl/format';
-import type { Season } from '@/lib/sdffl/record-book';
+import { num } from '@/lib/fantasy/format';
+import type { Season } from '@/lib/fantasy/record-book';
 import ChartTooltip, { useChartTooltip } from './chart-tooltip';
 import styles from './record-book.module.css';
 
