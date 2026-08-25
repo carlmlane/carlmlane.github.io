@@ -1,6 +1,6 @@
 import { cleanup, fireEvent, render } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
-import type { HeadToHeadRow } from '@/lib/sdffl/record-book';
+import type { HeadToHeadRow } from '@/lib/fantasy/record-book';
 import HeadToHeadMatrix from './head-to-head-matrix';
 
 afterEach(cleanup);

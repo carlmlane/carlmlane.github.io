@@ -1,6 +1,6 @@
 import { cleanup, fireEvent, render } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
-import type { DraftRoundRow, DraftSlotBaseline, DraftSlotRow, LuckRow, Season } from '@/lib/sdffl/record-book';
+import type { DraftRoundRow, DraftSlotBaseline, DraftSlotRow, LuckRow, Season } from '@/lib/fantasy/record-book';
 import DraftRoundsChart from './draft-rounds-chart';
 import DraftSlotChart from './draft-slot-chart';
 import LuckLedgerChart from './luck-ledger-chart';

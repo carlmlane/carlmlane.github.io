@@ -40,6 +40,18 @@ This is a personal GitHub Pages site built with **Next.js 16** (App Router) conf
 - `scripts/optimize-images.ts` (`pnpm generate:image-manifest`) — Walks `public/blog`, re-compresses oversized JPEGs in place, emits resized `.webp`/`.avif` variants, and writes `src/lib/image-manifest.json` (dimensions + srcsets). The manifest is **committed**; the generated `.webp`/`.avif` variants are **gitignored** and regenerated at build time.
 - `archive/` — Legacy static HTML files (excluded from linting)
 
+### Fantasy record books
+
+Private, `noindex` league pages under `/fantasy/nfl/records/{league}` (the whole `/fantasy/` tree is disallowed in `robots.txt` and absent from the sitemap). One shared UI serves every league:
+
+- `src/lib/fantasy/record-book.ts` — zod schemas for the export, plus `createRecordBookView(data, config)`. Config sets the "enough seasons to quote a rate" cutoffs (`luckMinSeasons`, `matrixMinSeasons`, `slotMinSeasons`). Newer export fields (`positional`, `totals.seasons_played`) are optional so older exports still validate.
+- `src/lib/{league}/record-book-data.json` + `record-book.ts` — the committed JSON export and the module that parses it. Data only.
+- `src/components/fantasy/record-book/` — the shared client component, charts, sortable table, matrix and CSS module. League-agnostic.
+- `src/components/fantasy/record-book/leagues/{league}.tsx` — that league's `RecordBookCopy`: every sentence stating a league-specific fact. Derive the numbers from the view rather than typing them, so a regenerated export cannot make the prose lie.
+- `src/app/(main)/fantasy/nfl/records/{league}/page.tsx` — thin: metadata plus `<RecordBook view={...} copy={...} />`.
+
+**Adding a league:** drop the `ffl-wiz` JSON exports into `src/lib/{slug}/record-book-data.json` (top-level keys = export filenames, plus `generatedAt`), add a `record-book.ts` calling `createRecordBookView`, write a copy module, add the page, and extend the `LEAGUES` fixture in `e2e/fantasy-record-book.spec.ts`.
+
 ### Key config
 
 - **Path alias:** `@/*` maps to `./src/*` (tsconfig)

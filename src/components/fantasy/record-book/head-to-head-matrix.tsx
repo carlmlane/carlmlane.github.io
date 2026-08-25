@@ -1,7 +1,7 @@
 'use client';
 
-import { pct, signed } from '@/lib/sdffl/format';
-import type { HeadToHeadRow } from '@/lib/sdffl/record-book';
+import { pct, signed } from '@/lib/fantasy/format';
+import type { HeadToHeadRow } from '@/lib/fantasy/record-book';
 import ChartTooltip, { useChartTooltip } from './chart-tooltip';
 import styles from './record-book.module.css';
 

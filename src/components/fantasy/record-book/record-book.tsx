@@ -1,7 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { int, num, pct, signed } from '@/lib/sdffl/format';
+import { int, num, pct, signed } from '@/lib/fantasy/format';
 import type {
   ActivityRow,
   AllTimeRecord,
@@ -16,12 +16,14 @@ import type {
   LuckRow,
   PickupRow,
   PodiumRow,
+  PositionalRow,
   RecordBookView,
   Season,
   StealRow,
   TopPlayerWeek,
   TopTeamWeek,
-} from '@/lib/sdffl/record-book';
+} from '@/lib/fantasy/record-book';
+import type { RecordBookCopy } from './copy';
 import DraftRoundsChart from './draft-rounds-chart';
 import DraftSlotChart from './draft-slot-chart';
 import HeadToHeadMatrix from './head-to-head-matrix';
@@ -352,6 +354,30 @@ const consistencyColumns: readonly Column<ConsistencyRow>[] = [
   { key: 'worst_week', label: 'Worst', type: 'num', digits: 2, value: (r) => r.worst_week },
 ];
 
+const positionalColumns: readonly Column<PositionalRow>[] = [
+  { key: 'manager', label: 'Manager', type: 'text', value: (r) => r.manager },
+  { key: 'position', label: 'Pos', type: 'text', value: (r) => r.position },
+  { key: 'starts', label: 'Starts', type: 'num', digits: 0, value: (r) => r.starts },
+  { key: 'points_per_start', label: 'Pts / start', type: 'num', digits: 2, value: (r) => r.points_per_start },
+  {
+    key: 'league_ppg',
+    label: 'League',
+    type: 'num',
+    digits: 2,
+    value: (r) => r.league_ppg,
+    className: () => styles.muted,
+  },
+  {
+    key: 'edge',
+    label: 'Edge',
+    type: 'num',
+    digits: 2,
+    value: (r) => r.edge,
+    className: (r) => tone(r.edge),
+    render: (r) => signed(r.edge, 2),
+  },
+];
+
 const trendColumns: readonly Column<Season>[] = [
   { key: 'season', label: 'Season', type: 'num', digits: 0, value: (r) => r.season },
   { key: 'avg_score', label: 'Avg score', type: 'num', digits: 2, value: (r) => r.avg_score },
@@ -447,11 +473,13 @@ const TableCard = ({ children }: { readonly children: ReactNode }) => (
   </div>
 );
 
-const SdfflRecordBook = ({ view }: { readonly view: RecordBookView }) => {
-  const { totals, draftSlotBaseline: baseline } = view;
+type Props = {
+  readonly view: RecordBookView;
+  readonly copy: RecordBookCopy;
+};
 
-  const bestSlot = [...view.chartedDraftSlots].sort((a, b) => b.titles - a.titles || a.avg_finish - b.avg_finish)[0];
-  const worstSlot = [...view.chartedDraftSlots].sort((a, b) => b.avg_finish - a.avg_finish)[0];
+const RecordBook = ({ view, copy }: Props) => {
+  const { totals } = view;
 
   return (
     <div className={styles.shell}>
@@ -463,10 +491,7 @@ const SdfflRecordBook = ({ view }: { readonly view: RecordBookView }) => {
             {totals.first_season}–{totals.last_season} · {totals.franchises} managers · {totals.seasons} seasons
           </p>
           <h1 className={styles.title}>{totals.league_name} Record Book</h1>
-          <p className={styles.lede}>
-            Fourteen seasons of a twelve-team league, pulled out of ESPN’s fantasy API and put in one place: every game,
-            every lineup, every pick and every waiver claim. {int(totals.stat_rows)} stat rows behind it.
-          </p>
+          <p className={styles.lede}>{copy.lede}</p>
           <div className={styles.tiles}>
             {(
               [
@@ -487,11 +512,7 @@ const SdfflRecordBook = ({ view }: { readonly view: RecordBookView }) => {
 
         <section id="record" className={styles.section}>
           <SectionHead kicker="The record book" title="All time, every franchise">
-            <p className={styles.note}>
-              Championship bracket kept separate from consolation. ESPN tags any bracket game as a playoff game, and
-              this league has played <strong>more consolation games than championship ones</strong> — counting both
-              together hands a losing team a winning playoff record. Click any column to sort.
-            </p>
+            <p className={styles.note}>{copy.allTimeNote}</p>
           </SectionHead>
           <TableCard>
             <SortableTable
@@ -499,18 +520,14 @@ const SdfflRecordBook = ({ view }: { readonly view: RecordBookView }) => {
               rows={view.allTime}
               rowKey={(r) => r.manager}
               sortKey="titles"
-              caption="Every franchise, all 14 seasons. Title W/L is the championship bracket only."
+              caption={copy.allTimeCaption}
             />
           </TableCard>
         </section>
 
         <section id="podium" className={styles.section}>
           <SectionHead kicker="Every season" title="The podium, and who actually dominated">
-            <p className={styles.note}>
-              Playoff finish and regular-season dominance are different questions, and here they are close to unrelated:{' '}
-              <strong>in 13 seasons the best regular-season record has never won the title</strong>, and neither has the
-              league’s top scorer.
-            </p>
+            <p className={styles.note}>{copy.podiumNote}</p>
           </SectionHead>
           <TableCard>
             <SortableTable
@@ -534,11 +551,7 @@ const SdfflRecordBook = ({ view }: { readonly view: RecordBookView }) => {
 
         <section id="h2h" className={styles.section}>
           <SectionHead kicker="Head to head" title="Who owns whom">
-            <p className={styles.note}>
-              Win rate for the row against the column, regular season and playoffs together — a rivalry does not stop
-              counting in December. Matrix shows the {view.matrixManagers.length} franchises with eight or more seasons;
-              the table has every pairing.
-            </p>
+            <p className={styles.note}>{copy.headToHeadNote}</p>
           </SectionHead>
           <PanelToggle
             chartLabel="Matrix"
@@ -551,7 +564,7 @@ const SdfflRecordBook = ({ view }: { readonly view: RecordBookView }) => {
                 rows={view.headToHead}
                 rowKey={(r) => `${r.manager}||${r.opponent}`}
                 sortKey="games"
-                caption="Every pairing between franchises with four or more seasons."
+                caption={copy.headToHeadCaption}
               />
             }
           />
@@ -566,39 +579,20 @@ const SdfflRecordBook = ({ view }: { readonly view: RecordBookView }) => {
             <dl className={styles.defs}>
               <div>
                 <dt>Deserved wins</dt>
-                <dd>
-                  The wins your scoring earned, ignoring the schedule. Every week your score is compared against{' '}
-                  <em>every other team’s</em> score that same week — a win for each team you outscored, half for a tie.
-                  That all-play win rate, multiplied by games played, is your deserved wins. Outscore nine of eleven
-                  opponents in a week and you banked 0.82 of a win, whether or not the one you actually played was among
-                  them.
-                </dd>
+                <dd>{copy.deservedWinsDef}</dd>
               </div>
               <div>
                 <dt>Luck</dt>
-                <dd>
-                  Actual wins minus deserved wins. <strong className={styles.pos}>Positive</strong> means the schedule
-                  handed you wins your scoring did not earn — you kept drawing whoever was cold that week.{' '}
-                  <strong className={styles.neg}>Negative</strong> means you scored well and lost anyway, because you
-                  kept running into the week’s high scorer. Over a 13–14 game season, ±2 is a lot.
-                </dd>
+                <dd>{copy.luckDef}</dd>
               </div>
             </dl>
-            <p className={styles.note}>
-              Regular season only: a bracket week has four teams in it, not twelve, so all-play is not comparable there.
-              On the chart below, points above the diagonal won more than they deserved.
-            </p>
+            <p className={styles.note}>{copy.luckScopeNote}</p>
           </SectionHead>
 
           <PanelToggle
             chartLabel="Chart"
             tableLabel="Table"
-            head={
-              <CardHead
-                title="Actual win rate against deserved"
-                note="Regular season only, all 13 completed seasons."
-              />
-            }
+            head={<CardHead title="Actual win rate against deserved" note={copy.luckScatterNote} />}
             chart={<LuckScatterChart rows={view.luckCareers} />}
             table={
               <SortableTable
@@ -606,7 +600,7 @@ const SdfflRecordBook = ({ view }: { readonly view: RecordBookView }) => {
                 rows={view.luckCareers}
                 rowKey={(r) => r.manager}
                 sortKey="luck_wins"
-                caption="Four or more seasons. Regular season only."
+                caption={copy.luckScatterCaption}
               />
             }
           />
@@ -629,23 +623,14 @@ const SdfflRecordBook = ({ view }: { readonly view: RecordBookView }) => {
 
         <section id="draft" className={styles.section}>
           <SectionHead kicker="The draft" title="What a pick is worth">
-            <p className={styles.note}>
-              Every draft here is a snake draft — no auction bids, no keepers in any of the 13. Value is measured from
-              2018 on, because earlier seasons return starters only, so a drafted player who sat would read as a bust
-              worth zero.
-            </p>
+            <p className={styles.note}>{copy.draftNote}</p>
           </SectionHead>
 
           <PanelToggle
             chartLabel="Chart"
             tableLabel="Table"
-            head={
-              <CardHead
-                title="Does the draft slot decide the season?"
-                note="Average regular-season wins by round-one pick position, all 13 completed seasons. The line is the league average."
-              />
-            }
-            chart={<DraftSlotChart rows={view.chartedDraftSlots} baseline={baseline} />}
+            head={<CardHead title="Does the draft slot decide the season?" note={copy.draftSlotNote} />}
+            chart={<DraftSlotChart rows={view.chartedDraftSlots} baseline={view.draftSlotBaseline} />}
             table={
               <SortableTable
                 columns={slotColumns}
@@ -653,19 +638,10 @@ const SdfflRecordBook = ({ view }: { readonly view: RecordBookView }) => {
                 rowKey={(r) => String(r.slot)}
                 sortKey="slot"
                 sortDirection="asc"
-                caption="Round-one pick position against how the season ended. Slots 13 and 14 come from 2014's fourteen-team season only."
+                caption={copy.draftSlotCaption}
               />
             }
-            footer={
-              <p className={styles.note}>
-                <strong>Historically slot {bestSlot.slot}</strong> — {bestSlot.titles} titles and the best average
-                finish, while slot {worstSlot.slot} has the worst average finish. But the shaded band is one standard
-                error ({num(baseline.se_slot_mean, 2)} wins) and nearly every slot sits inside it: with about 13 seasons
-                per slot, a spread this size is what chance produces. Expected titles per slot is{' '}
-                {num(baseline.titles_expected_per_slot, 2)}, so a slot with 4 is not yet evidence of anything.{' '}
-                <strong>No slot is reliably better.</strong>
-              </p>
-            }
+            footer={<p className={styles.note}>{copy.draftSlotFooter}</p>}
           />
 
           <PanelToggle
@@ -699,7 +675,7 @@ const SdfflRecordBook = ({ view }: { readonly view: RecordBookView }) => {
                 rows={view.stealsNoQb}
                 rowKey={(r) => `${r.season}-${r.pick}`}
                 sortKey="surplus"
-                caption="Quarterbacks excluded. A late QB who becomes a starter clears the baseline by 300+ points and buries every other position."
+                caption={copy.stealsSkillCaption}
               />
             }
             table={
@@ -708,7 +684,7 @@ const SdfflRecordBook = ({ view }: { readonly view: RecordBookView }) => {
                 rows={view.steals}
                 rowKey={(r) => `${r.season}-${r.pick}`}
                 sortKey="surplus"
-                caption="All positions — and all ten of the biggest steals are quarterbacks."
+                caption={copy.stealsAllCaption}
               />
             }
           />
@@ -720,7 +696,7 @@ const SdfflRecordBook = ({ view }: { readonly view: RecordBookView }) => {
               rowKey={(r) => `${r.season}-${r.pick}`}
               sortKey="surplus"
               sortDirection="asc"
-              caption="Biggest busts. Eight of the ten are running backs; nine went in the first two rounds."
+              caption={copy.bustsCaption}
             />
           </TableCard>
 
@@ -737,10 +713,7 @@ const SdfflRecordBook = ({ view }: { readonly view: RecordBookView }) => {
 
         <section id="roster" className={styles.section}>
           <SectionHead kicker="Roster work" title="Lineups, waivers and trades">
-            <p className={styles.note}>
-              Bench numbers are 2018 onward only — the five seasons before that carry no bench at all, and averaging
-              them in would show half a decade of flawless lineup setting.
-            </p>
+            <p className={styles.note}>{copy.rosterNote}</p>
           </SectionHead>
           <TableCard>
             <SortableTable
@@ -749,7 +722,7 @@ const SdfflRecordBook = ({ view }: { readonly view: RecordBookView }) => {
               rowKey={(r) => r.manager}
               sortKey="avg_swap_regret"
               sortDirection="asc"
-              caption="2018 onward — earlier seasons carry no bench at all. Raw bench points overstate the mistake, since a bench player may not have been legally startable in any open slot; swap regret (best bench minus worst starter) is the honest core of it. Lower is better."
+              caption={copy.benchCaption}
             />
           </TableCard>
           <div className={styles.pair}>
@@ -807,6 +780,20 @@ const SdfflRecordBook = ({ view }: { readonly view: RecordBookView }) => {
               />
             }
           />
+          {view.positional ? (
+            <TableCard>
+              <SortableTable
+                columns={positionalColumns}
+                rows={view.positional}
+                rowKey={(r) => `${r.manager}-${r.position}`}
+                sortKey="edge"
+                caption={
+                  copy.positionalNote ??
+                  'Points per start at each position against what the league averaged there. Edge is the difference — who actually got more out of a roster spot.'
+                }
+              />
+            </TableCard>
+          ) : null}
         </section>
 
         <section id="records" className={styles.section}>
@@ -818,7 +805,7 @@ const SdfflRecordBook = ({ view }: { readonly view: RecordBookView }) => {
                 rows={view.topTeamWeeks}
                 rowKey={(r) => `${r.season}-${r.week}-${r.manager}`}
                 sortKey="score"
-                caption="Highest team scores ever recorded."
+                caption={copy.topTeamWeeksCaption}
               />
             </TableCard>
             <TableCard>
@@ -837,13 +824,13 @@ const SdfflRecordBook = ({ view }: { readonly view: RecordBookView }) => {
               rows={view.hardLuck}
               rowKey={(r) => `${r.season}-${r.week}-${r.manager}`}
               sortKey="score"
-              caption="The biggest scores that still lost."
+              caption={copy.hardLuckCaption}
             />
           </TableCard>
         </section>
 
         <section id="seasons" className={styles.section}>
-          <SectionHead kicker="Season by season" title="Fourteen years">
+          <SectionHead kicker="Season by season" title={copy.seasonsTitle}>
             <p className={styles.note}>Pick a season for its final standings.</p>
           </SectionHead>
           <TableCard>
@@ -868,4 +855,4 @@ const SdfflRecordBook = ({ view }: { readonly view: RecordBookView }) => {
   );
 };
 
-export default SdfflRecordBook;
+export default RecordBook;

@@ -1,8 +1,8 @@
 'use client';
 
 import { useId, useState } from 'react';
-import { signed } from '@/lib/sdffl/format';
-import type { Standing } from '@/lib/sdffl/record-book';
+import { signed } from '@/lib/fantasy/format';
+import type { Standing } from '@/lib/fantasy/record-book';
 import styles from './record-book.module.css';
 import SortableTable, { type Column } from './sortable-table';
 
