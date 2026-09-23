@@ -1,0 +1,320 @@
+import { FAQ } from '@/components/blog/faq';
+
+export const metadata = {
+  title: "Why S3Queue Alone Won't Deduplicate Your ClickHouse Data",
+  date: '2026-09-22',
+  description:
+    'S3Queue reads each S3 file exactly once. That is not the same as a deduplicated table. The four-object pattern that makes incremental ClickHouse ingestion safe.',
+  tags: ['clickhouse', 'data-engineering', 's3queue', 'ingestion', 'data-platform', 'architecture'],
+  published: true,
+  image: 'https://carlmlane.com/blog/s3queue-clickhouse-ingestion-deduplication/hero.jpg',
+};
+
+Most ClickHouse warehouses that read from an S3 lake start the same way: a nightly job runs `INSERT … SELECT FROM s3('.../*.parquet')`, dedupes the result, and swaps the table into place. It works beautifully for about a year. Then the bucket has 10,000 append files in it, the job reads 114 GB to re-derive a table that changed by a few thousand rows, and you are tuning memory limits on a query whose only job is to produce yesterday's answer again.
+
+S3Queue fixes the reading half of that problem completely. It does not fix the other half, and the gap between those two things is where most of the interesting failures live. This is the pattern I run across 300+ tables in production, and the traps I would want to know about before I built it again.
+
+> **TLDR**
+>
+> - S3Queue landed in ClickHouse 23.8 to make incremental S3 loads codeless: it polls the bucket, tracks processed files in Keeper, and streams new ones into a materialized view ([ClickHouse 23.8 release](https://clickhouse.com/blog/clickhouse-release-23-08), 2023)
+> - An S3Queue table **stores nothing at rest** — it is a stream, so you always need three more objects behind it ([ClickHouse docs](https://clickhouse.com/docs/engines/table-engines/integrations/s3queue))
+> - Exactly-once *file reads* is not row-level dedup. `ReplacingMergeTree` plus a `FINAL` view is what makes the table correct, and ReplacingMergeTree only dedupes during background merges ([ClickHouse docs](https://clickhouse.com/docs/guides/replacing-merge-tree))
+> - The version column is the decision that will bite you. Ingest time is not record version, and if you get it wrong the wrong row wins permanently and no read-side fix can repair it
+> - Keeper is now a hard startup dependency: S3Queue tables attach once at server start and never retry a failed attach
+
+## Why Does Rebuilding From S3 Every Day Stop Working?
+
+Full-rebuild cost grows linearly with history while the answer it produces changes by a rounding error. A CDC or incremental-append replication tool writes only changed rows per sync, so a bucket holding two years of history might carry a 46× read amplification — a million raw appended rows collapsing to twenty-five thousand distinct keys. The rebuild reads all million, every run, forever.
+
+That shape has three costs that arrive in order. First S3 GET and transfer charges, which are annoying but survivable. Then wall-clock, which pushes you into serializing the pipeline so two big rebuilds never overlap. Then memory, which is where it actually breaks: a single-node warehouse rebuilding a 114 GB table has to hold the dedupe in RAM, and the fix — dropping columns from the SELECT to make it fit — is how you end up with a warehouse that quietly cannot answer questions about the columns someone dropped eighteen months ago to stop an OOM.
+
+<figure style={{ margin: '2.5rem 0', textAlign: 'center', padding: '1.5rem', borderRadius: '12px' }}>
+  <svg
+    viewBox="0 0 580 300"
+    width="100%"
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-labelledby="amplification-title"
+    style={{ background: 'transparent', fontFamily: 'system-ui, sans-serif' }}
+  >
+    <title id="amplification-title">Read amplification by stream: raw appended rows per distinct key</title>
+    <text x="290" y="26" textAnchor="middle" style={{ fill: '#e5e5e5', fontSize: '15px', fontWeight: 'bold' }}>
+      {'Read Amplification Varies Wildly By Stream'}
+    </text>
+    <text x="290" y="44" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '11px' }}>
+      {'Raw appended rows in S3 per distinct key, measured on one warehouse'}
+    </text>
+
+    <line x1="230" y1="65" x2="230" y2="225" stroke="#222" strokeWidth="0.5" />
+    <line x1="300" y1="65" x2="300" y2="225" stroke="#222" strokeWidth="0.5" />
+    <line x1="370" y1="65" x2="370" y2="225" stroke="#222" strokeWidth="0.5" />
+    <line x1="440" y1="65" x2="440" y2="225" stroke="#222" strokeWidth="0.5" />
+    <line x1="510" y1="65" x2="510" y2="225" stroke="#222" strokeWidth="0.5" />
+
+    <text x="230" y="243" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'0x'}</text>
+    <text x="300" y="243" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'15x'}</text>
+    <text x="370" y="243" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'30x'}</text>
+    <text x="440" y="243" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'45x'}</text>
+    <text x="510" y="243" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'60x'}</text>
+
+    <text x="220" y="96" textAnchor="end" style={{ fill: '#e5e5e5', fontSize: '11px' }}>{'Config table'}</text>
+    <line x1="230" y1="92" x2="445" y2="92" stroke="#5b9ee1" strokeWidth="2" />
+    <circle cx="445" cy="92" r="6" style={{ fill: '#5b9ee1' }} />
+    <text x="459" y="96" style={{ fill: '#5b9ee1', fontSize: '11px', fontWeight: 'bold' }}>{'46x'}</text>
+
+    <text x="220" y="146" textAnchor="end" style={{ fill: '#e5e5e5', fontSize: '11px' }}>{'Account table'}</text>
+    <line x1="230" y1="142" x2="272" y2="142" stroke="#e5a853" strokeWidth="2" />
+    <circle cx="272" cy="142" r="6" style={{ fill: '#e5a853' }} />
+    <text x="286" y="146" style={{ fill: '#e5a853', fontSize: '11px', fontWeight: 'bold' }}>{'9x'}</text>
+
+    <text x="220" y="196" textAnchor="end" style={{ fill: '#e5e5e5', fontSize: '11px' }}>{'Append-only log'}</text>
+    <line x1="230" y1="192" x2="235" y2="192" stroke="#7c6fe0" strokeWidth="2" />
+    <circle cx="235" cy="192" r="6" style={{ fill: '#7c6fe0' }} />
+    <text x="249" y="196" style={{ fill: '#7c6fe0', fontSize: '11px', fontWeight: 'bold' }}>{'1.01x'}</text>
+
+    <text x="290" y="278" textAnchor="middle" style={{ fill: '#666', fontSize: '10px' }}>
+      {'A rebuild reads every raw row. A queue reads each file once. Neither one dedupes.'}
+    </text>
+  </svg>
+  <figcaption style={{ marginTop: '0.75rem', fontSize: '0.85rem', color: '#999' }}>
+    Amplification is a property of the source stream, not of your pipeline. You cannot predict it; you have to measure it per table.
+  </figcaption>
+</figure>
+
+The last row on that chart is the one worth staring at. An append-only event log barely amplifies at all, which means the dedupe machinery you build for the 46× table is nearly pure overhead for that one. Both still need it, because "nearly" is not "never" and replays happen.
+
+## What Does S3Queue Actually Guarantee?
+
+S3Queue guarantees that each object in the bucket is handed to your materialized view once, and it keeps that promise by recording progress in ClickHouse Keeper rather than in the table itself. That is a strong guarantee and a narrow one: it is about *files*, not about *rows*, and certainly not about the *keys* inside those rows.
+
+The mode setting decides what Keeper has to remember. In `unordered` mode ClickHouse tracks the full set of processed files as persistent Keeper nodes, bounded by `tracked_files_limit` (default 1000) and `tracked_file_ttl_sec` (default 0, meaning forever). In `ordered` mode it stores only the maximum lexicographic filename it has successfully consumed, which is a far smaller footprint ([ClickHouse docs](https://clickhouse.com/docs/engines/table-engines/integrations/s3queue)). If your producer names files with a monotonic timestamp prefix — and most replication tools do — ordered mode is the obvious choice, and the Keeper state per table stays down to a single string.
+
+The guarantee has documented holes, and they are all worth reading before you rely on the word "exactly". Duplicates can still appear from parsing exceptions combined with retries, from Keeper session expiry mid-processing, and from abnormal server termination. Persistent processing nodes, always used since v25.8, close the session-expiry case that older versions left open. Running in the other direction there is a rarer loss case: a file is committed as processed the moment the insert finishes, but the target part is not fsynced synchronously by default, so a device-level power loss between those two moments drops rows that will never be re-read. `fsync_after_insert = 1` on the target table is the mitigation, at the obvious cost.
+
+Every one of those holes points the same direction: **make the downstream table idempotent and stop worrying about it.** Which is exactly what the rest of the pattern does.
+
+## Why Does the Pipeline Need Four Objects, Not One?
+
+Because an S3Queue table holds no data. It is a streaming engine in the same family as the Kafka and RabbitMQ engines — rows are read from the object, handed to whatever materialized view is attached, and dropped. Query the queue table directly and you will consume from it, which is almost never what you meant. The docs are explicit that the intended shape is a queue plus a materialized view writing into a real MergeTree table.
+
+In practice I run four objects per stream, and each one has a job the others cannot do:
+
+<figure style={{ margin: '2.5rem 0', textAlign: 'center', padding: '1.5rem', borderRadius: '12px' }}>
+  <svg
+    viewBox="0 0 580 400"
+    width="100%"
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-labelledby="pipeline-title"
+    style={{ background: 'transparent', fontFamily: 'system-ui, sans-serif' }}
+  >
+    <title id="pipeline-title">Four-object S3Queue ingestion pipeline from S3 parquet to a deduplicated view</title>
+    <text x="290" y="24" textAnchor="middle" style={{ fill: '#e5e5e5', fontSize: '15px', fontWeight: 'bold' }}>
+      {'One Stream, Four Objects'}
+    </text>
+
+    <rect x="150" y="42" width="280" height="42" rx="6" style={{ fill: 'none', stroke: '#404040', strokeWidth: 1 }} />
+    <text x="290" y="62" textAnchor="middle" style={{ fill: '#e5e5e5', fontSize: '12px', fontWeight: 'bold' }}>{'S3 prefix'}</text>
+    <text x="290" y="77" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'producer appends YYYY_MM_DD_<epoch>.parquet'}</text>
+    <line x1="290" y1="84" x2="290" y2="106" stroke="#404040" strokeWidth="1" />
+    <polygon points="290,112 286,104 294,104" style={{ fill: '#404040' }} />
+
+    <rect x="150" y="112" width="280" height="52" rx="6" style={{ fill: 'none', stroke: '#5b9ee1', strokeWidth: 1.5 }} />
+    <text x="290" y="132" textAnchor="middle" style={{ fill: '#5b9ee1', fontSize: '12px', fontWeight: 'bold' }}>{'1. S3Queue table   mode = ordered'}</text>
+    <text x="290" y="147" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'Keeper holds the max processed filename'}</text>
+    <text x="290" y="159" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'HOLDS NO DATA AT REST'}</text>
+    <line x1="290" y1="164" x2="290" y2="186" stroke="#404040" strokeWidth="1" />
+    <polygon points="290,192 286,184 294,184" style={{ fill: '#404040' }} />
+
+    <rect x="150" y="192" width="280" height="52" rx="6" style={{ fill: 'none', stroke: '#e5a853', strokeWidth: 1.5 }} />
+    <text x="290" y="212" textAnchor="middle" style={{ fill: '#e5a853', fontSize: '12px', fontWeight: 'bold' }}>{'2. Materialized view'}</text>
+    <text x="290" y="227" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'strips producer metadata, stamps a version,'}</text>
+    <text x="290" y="239" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'derives scalars from blobs it will not store'}</text>
+    <line x1="290" y1="244" x2="290" y2="266" stroke="#404040" strokeWidth="1" />
+    <polygon points="290,272 286,264 294,264" style={{ fill: '#404040' }} />
+
+    <rect x="150" y="272" width="280" height="52" rx="6" style={{ fill: 'none', stroke: '#7c6fe0', strokeWidth: 1.5 }} />
+    <text x="290" y="292" textAnchor="middle" style={{ fill: '#7c6fe0', fontSize: '12px', fontWeight: 'bold' }}>{'3. ReplacingMergeTree(version)'}</text>
+    <text x="290" y="307" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'ORDER BY business key = the dedupe key'}</text>
+    <text x="290" y="319" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'collapses on merge, eventually'}</text>
+    <line x1="290" y1="324" x2="290" y2="346" stroke="#404040" strokeWidth="1" />
+    <polygon points="290,352 286,344 294,344" style={{ fill: '#404040' }} />
+
+    <rect x="150" y="352" width="280" height="40" rx="6" style={{ fill: 'none', stroke: '#5b9ee1', strokeWidth: 1.5 }} />
+    <text x="290" y="370" textAnchor="middle" style={{ fill: '#5b9ee1', fontSize: '12px', fontWeight: 'bold' }}>{'4. View … FROM data FINAL'}</text>
+    <text x="290" y="384" textAnchor="middle" style={{ fill: '#a3a3a3', fontSize: '10px' }}>{'the only name consumers are allowed to know'}</text>
+  </svg>
+  <figcaption style={{ marginTop: '0.75rem', fontSize: '0.85rem', color: '#999' }}>
+    The queue solves reading. The ReplacingMergeTree solves correctness. The view solves the human problem of somebody querying the wrong object.
+  </figcaption>
+</figure>
+
+The fourth object is the one people skip, and skipping it is a mistake. ReplacingMergeTree deduplicates only during background merges, so a plain `SELECT` against the storage table can return duplicate or deleted rows — the docs say outright that you should not rely on it. `FINAL` completes the deduplication as the query runs, at a small overhead that is most noticeable when you are not filtering on primary key columns ([ClickHouse docs](https://clickhouse.com/docs/guides/replacing-merge-tree)). Wrapping that in a view and publishing only the view means nobody has to remember. Counts quoted off the storage table drift downward as merges run; counts off the view are stable. If your BI tool has ever shown two different row counts for the same table an hour apart, this is usually why.
+
+One tuning note if your tables are partitioned: `do_not_merge_across_partitions_select_final` lets ClickHouse process partitions independently under `FINAL`, which is a real speedup — but only if your schema genuinely guarantees that every version of a logical row lands in the same partition. Check that guarantee before you set it.
+
+## How Do You Pick the Version Column, and Why Is It the Trap?
+
+Use the record's own version field, not the time you ingested it. Ingest time and record version agree only while a sync emits at most one row per key — and the day a source starts emitting an object's full history in a single file, that assumption fails silently and permanently.
+
+Here is the shape of it. ReplacingMergeTree keeps the row with the highest value in the version column. If your version column is an ingest timestamp, then the winner is whichever row the reader happened to touch last. A producer that dumps an object's history oldest-last will therefore hand you the *stale* version with the *highest* ingest timestamp:
+
+<table>
+  <thead>
+    <tr>
+      <th>Row in file</th>
+      <th>Record state</th>
+      <th>Record's own <code>updated</code></th>
+      <th>Ingest timestamp</th>
+      <th>Wins?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1–4</td>
+      <td>paid</td>
+      <td>05:02:38</td>
+      <td>11:04:19.772</td>
+      <td>no</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><strong>draft</strong></td>
+      <td><strong>04:01:13</strong></td>
+      <td><strong>11:04:19.785</strong></td>
+      <td><strong>yes — by 13 ms</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+The correct row loses by thirteen milliseconds, and it loses again on every subsequent sync, because the file is re-emitted the same way. I have watched this turn a four-figure count of settled records into drafts and take a headline financial metric in the BI layer down by a double-digit percentage for a full month.
+
+Two things make this much worse than an ordinary data bug.
+
+**The correct rows never persist, so you cannot recover them from the warehouse.** ClickHouse's `optimize_on_insert` defaults to 1, which collapses duplicate keys at insert time — meaning the storage table only ever receives the loser. Twenty thousand rows read, two and a half thousand landed, and the winners among them are the wrong ones.
+
+**A warehouse-only audit finds nothing.** The obvious check — compare `argMax(updated, version)` against `max(updated)` within the table — comes back clean, because the row it would flag was discarded before it was ever stored. The only audit that works reads back through the `s3()` table function and compares against the source objects. That is a genuinely unpleasant thing to discover after the fact.
+
+The fix is to give affected tables a separate version column built from the record's own update timestamp, and leave the ingest timestamp alone as ingest metadata — it is genuinely useful for freshness SLOs, just not for ordering. The cheap screening test before you onboard any new source is one query per table: `count()` versus `uniqExact(<key>)` over a single recent file. If they differ, the source emits multiple versions per sync and you need a real version column. Database replicas that emit one row per key per sync are structurally immune; API-backed sources frequently are not. Re-run the test whenever you add a source, not once when you build the platform.
+
+One more rebuild-shaped trap sits behind this: changing the version column means recreating the storage table, which means the queue must start from a fresh Keeper path. Leave the queue at its existing watermark and your rebuilt table refills with *new files only*, silently discarding the entire history.
+
+## What Does Ordered Mode Assume About Your Filenames?
+
+Ordered mode assumes lexicographic order equals arrival order, which is true for timestamp-prefixed names and false for the part suffixes many writers append. A sync that emits `..._0.parquet` through `..._23.parquet` has a problem: `_9` sorts *above* `_23`. The queue tracks the max name it has seen, so in principle a later part can be skipped.
+
+In practice the cross-sync ordering is still safe — the timestamp prefix increases monotonically, so a new sync always sorts above the previous one's worst-case part. But within a single multi-part sync, ordering is not what you think it is. The operational consequence is about how you validate a backfill: **do not glance at `system.s3queue_log` and call it green.** The log shows you files processed and errors, which is exactly the signal that looks fine when a part was skipped rather than failed. Validate a new table by comparing the deduplicated view's count against the distinct-key count read straight from S3. That is the check that catches a skipped part; nothing in the log will.
+
+If your producer writes multi-part syncs and you want the stronger guarantee, `unordered` mode tracks the full processed set and does not care about names — at the cost of Keeper state proportional to file count, and a `tracked_files_limit` you now have to think about.
+
+## Why Is Keeper the Real Operational Dependency?
+
+Because S3Queue tables attach once, at server startup, and never retry a failed attach. This is the single biggest operational change the engine introduces, and it is not obvious from the documentation.
+
+If Keeper is unreachable in the window when ClickHouse starts, the table lands in `system.asynchronous_loader` with status `FAILED` and stays dead until the server restarts. Every query against it throws a Keeper exception, nothing ingests, and — this is the part that hurts — `system.s3queue_log` shows *nothing at all*, because a table that never attached logs nothing. Log-based monitoring is structurally unable to see this failure. Worse, the cached failure breaks unrelated introspection: any query touching `system.parts` or `system.columns` without a database filter re-raises it.
+
+I learned this the way everyone learns it. A warehouse pod was rescheduled and came back several hours before its Keeper pod. A quarter of the queues failed to attach and stopped ingesting for three days, serving a stale view the whole time while every dashboard stayed green. No data was lost — the queues resumed from their intact Keeper watermarks once restarted, and drained the backlog on their own — but three days of wrong answers is a real incident.
+
+Two guards, both of which I would now install on day one:
+
+1. **An init container that blocks the server until Keeper answers.** Deployment-ordering primitives like Argo sync waves only order the *first* install; they do nothing for a pod reschedule from node consolidation, an upgrade, an OOM kill, or a manual delete — which is how this actually happens. The init container should wait indefinitely on purpose. A warehouse that has not started is better than one with silently dead queues.
+2. **An alert on `system.asynchronous_loader` where status is FAILED.** It is the only signal this failure emits.
+
+That second point generalizes into the monitoring set I would not run this pattern without:
+
+<table>
+  <thead>
+    <tr>
+      <th>Alert</th>
+      <th>Signal</th>
+      <th>Catches</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Async load failed</td>
+      <td><code>system.asynchronous_loader</code> status = FAILED</td>
+      <td>dead attach — the only signal it emits</td>
+    </tr>
+    <tr>
+      <td>Keeper unreachable</td>
+      <td>query error against <code>system.zookeeper</code></td>
+      <td>the leading indicator, before a restart kills queues</td>
+    </tr>
+    <tr>
+      <td>Ingest stalled</td>
+      <td>minutes since last processed file, global</td>
+      <td>producer stopped, dropped MV edge, S3 permissions</td>
+    </tr>
+    <tr>
+      <td>File errors</td>
+      <td><code>status = 'Failed'</code> in <code>system.s3queue_log</code></td>
+      <td>bad parquet, S3 403, schema mismatch after retries</td>
+    </tr>
+    <tr>
+      <td>Pod not ready</td>
+      <td>container readiness</td>
+      <td>the Init hang the Keeper gate can produce</td>
+    </tr>
+  </tbody>
+</table>
+
+Make the stall alert **global, not per-table**. Some streams sync hourly and some are genuinely quiet for a day or more, so a per-table staleness threshold trains everyone to ignore it. Per-table triage is a dashboard's job, not an alert's. That distinction — between the signal that should wake someone and the detail they need once awake — is most of what separates monitoring that [teams actually learn from](/blog/engineering-team-learning) from monitoring they route around.
+
+There is a related trap worth knowing before you ever need to rebuild a queue. ClickHouse caches S3Queue metadata per Keeper path in a process-global registry, and that registration **survives `DROP TABLE`**. Recreate a queue at the same path with a changed schema and you get a metadata mismatch even though the live Keeper node holds the new schema. Two ways out: restart the server to clear the in-memory cache, or recreate the queue at a fresh Keeper path suffix. On a warehouse shared with a dozen other ingesting databases, the second is the only one you can do at 2pm on a Tuesday. Build the suffix into whatever generates your DDL from the start, so the generator and the cluster never disagree about where a queue actually lives.
+
+## What Else Does a Zero-Storage Queue Let You Do?
+
+This is my favourite property of the engine and nobody advertises it: because an S3Queue table holds nothing at rest, a column can be visible to the queue and to the materialized view's SELECT while never becoming a column of anything that persists.
+
+That turns the queue into a privacy primitive. A source table carrying a per-user attribute blob — the kind of JSON dump that contains names, emails, tenant identifiers and everything else the auth provider felt like including — can be streamed through the queue, mined for the two or three non-identifying signals you actually need, and then dropped. The derived scalars land in the storage table. The blob is a column of the queue and of nothing else. It cannot be reached from a BI tool, from a SQL console, or from a `SELECT *`, because it is not there.
+
+The alternative most teams reach for is excluding the column outright, and that is strictly worse when the blob carries signal. On one stream, dropping an attribute blob on privacy grounds also threw away the only marker distinguishing staff sessions from customer sessions — which meant every engagement metric built on that table was majority-staff and nobody knew. Streaming it and deriving a boolean recovered the metric without storing a single identifying field.
+
+Two honest caveats. This governs what reaches ClickHouse, not what exists: the blob is already in the S3 lake, and closing that requires a field-selection change at the replication layer. And derived hashes are pseudonymisation, not anonymisation. But as a default posture, "read it, derive from it, never store it" is meaningfully better than ingesting sensitive columns and asking people not to look — which is a policy in the same way that [reviewing every dependency by hand](/blog/pnpm-and-nx-for-efficient-monorepos-that-are-supply-chain-attack-resistant) is a policy.
+
+## What Does Adopting This Actually Cost You?
+
+Schema evolution is the real trade-off, and it is worth naming plainly. An S3Queue table's schema is fixed at creation. Under the old rebuild, a union schema inference across the whole prefix picked up new columns for free. With a queue, when the producer adds a business column, new data ignores it until you alter the queue, alter the storage table, and recreate the view and the materialized view.
+
+Three things make that manageable rather than miserable. Set `schema_inference_mode = 'union'` and `input_format_parquet_allow_missing_columns = 1` on the queue so older files keep ingesting after a schema change. Infer new table definitions from the single latest file rather than the union across the whole prefix — the union over ten thousand append files is slow, and nested types in producer metadata break compact parsing in ways that produce genuinely baffling errors. And ship drift detection: snapshot `system.columns` daily, diff consecutive snapshots, and alert only on a column removed or retyped under an object that still exists. A new column is informational. An object appearing or disappearing is lifecycle. Neither should page anyone.
+
+The other cost is that you have signed up for a Keeper cluster, with everything that implies about startup ordering, backups, and one more thing that can be down. For a single-node warehouse that previously had no coordination layer at all, that is not nothing.
+
+What you get back is a per-run read that drops from all of history to one new file, ingestion that is continuous rather than daily, and — the part I did not anticipate — the freedom to add tables casually. When onboarding a stream costs a bounded backfill instead of a permanent increase in nightly rebuild time, the calculus changes. Three hundred tables is a number you reach by saying yes to things you would previously have declined, which is roughly the same dynamic as [making the safe path the fast path](/blog/prototype-gate-whole-org) anywhere else in an engineering org.
+
+<FAQ>
+  <div>
+    ### Do I need ReplacingMergeTree if S3Queue reads each file exactly once?
+
+    <p>Yes. Exactly-once file reads say nothing about duplicate keys inside those files — an incremental-append source re-emits changed rows every sync, so the same key arrives many times. S3Queue also has documented duplicate paths: parse-exception retries, Keeper session expiry, and abnormal server termination. An idempotent target table makes all of them harmless.</p>
+  </div>
+  <div>
+    ### Should I use ordered or unordered mode?
+
+    <p>Ordered, if your producer names files with a monotonic timestamp prefix — Keeper then stores one string per table instead of a node per file. Choose unordered when filenames are not reliably sortable, and budget for <code>tracked_files_limit</code> (default 1000) and <code>tracked_file_ttl_sec</code> (default 0, forever) bounding what it remembers (<a href="https://clickhouse.com/docs/engines/table-engines/integrations/s3queue">ClickHouse docs</a>).</p>
+  </div>
+  <div>
+    ### What happens to my data if Keeper loses its state?
+
+    <p>Files replay from the beginning and the ReplacingMergeTree dedupes the replay. You pay a re-drain cost in S3 reads and CPU, not a correctness cost. This is the single best argument for making the target table idempotent by construction rather than trying to make the queue perfect.</p>
+  </div>
+  <div>
+    ### Can I query the S3Queue table directly to check what is in it?
+
+    <p>No — and trying is how people lose data. S3Queue is a streaming engine that stores nothing at rest, so a SELECT against it consumes from the stream. Use <code>system.s3queue_log</code> for file-level status and query the deduplicated view for rows. Validate backfills against S3 distinct-key counts, not against the log.</p>
+  </div>
+  <div>
+    ### How do I know whether my source needs a custom version column?
+
+    <p>Run <code>count()</code> against <code>uniqExact(&lt;key&gt;)</code> over one recent file. If they differ, that source emits multiple versions of a key per sync and ingest order will pick the wrong winner. Database replicas emitting one row per key per sync are structurally safe; API-backed sources often are not. Re-test whenever you add a source.</p>
+  </div>
+</FAQ>
+
+## The Part Worth Remembering
+
+S3Queue is a genuinely excellent piece of engineering that solves one problem completely: it turns "read this bucket" into "read what is new in this bucket," with state small enough to be free and an interface that is four lines of settings. If you are still rebuilding tables from full S3 history on a cron, moving to it is close to a pure win.
+
+What it does not do is make your table correct. Correctness lives in the version column you chose, the `FINAL` view you published instead of the storage table, and the Keeper dependency you either gated at startup or discovered three days into an incident. Those are the decisions, and none of them are settings — they are judgements about what your particular sources actually emit, which you can only make by measuring them.
+
+The engine gives you a fast, cheap, incremental read. Everything after that is still your job, and the failure modes are quiet ones. Build the audits that read back through `s3()` before you need them.

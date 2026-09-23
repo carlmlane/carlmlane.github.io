@@ -94,5 +94,11 @@
     "height": 900,
     "webp": "/blog/prototype-gate-whole-org/team-learning-640.webp 640w, /blog/prototype-gate-whole-org/team-learning-960.webp 960w, /blog/prototype-gate-whole-org/team-learning-1280.webp 1280w, /blog/prototype-gate-whole-org/team-learning-1600.webp 1600w",
     "avif": "/blog/prototype-gate-whole-org/team-learning-640.avif 640w, /blog/prototype-gate-whole-org/team-learning-960.avif 960w, /blog/prototype-gate-whole-org/team-learning-1280.avif 1280w, /blog/prototype-gate-whole-org/team-learning-1600.avif 1600w"
+  },
+  "/blog/s3queue-clickhouse-ingestion-deduplication/hero.jpg": {
+    "width": 1600,
+    "height": 840,
+    "webp": "/blog/s3queue-clickhouse-ingestion-deduplication/hero-640.webp 640w, /blog/s3queue-clickhouse-ingestion-deduplication/hero-960.webp 960w, /blog/s3queue-clickhouse-ingestion-deduplication/hero-1280.webp 1280w, /blog/s3queue-clickhouse-ingestion-deduplication/hero-1600.webp 1600w",
+    "avif": "/blog/s3queue-clickhouse-ingestion-deduplication/hero-640.avif 640w, /blog/s3queue-clickhouse-ingestion-deduplication/hero-960.avif 960w, /blog/s3queue-clickhouse-ingestion-deduplication/hero-1280.avif 1280w, /blog/s3queue-clickhouse-ingestion-deduplication/hero-1600.avif 1600w"
   }
 }
